@@ -1,6 +1,6 @@
 import { SxProps } from "@mui/material";
 
-export const headerBoxWithImageWrapperStyles: SxProps = {
+export const headerBoxWithImageWrapper: SxProps = {
   width: "100%",
   height: "50vh",
   background: `url(/hellbenders_wallpaper.png)`,
@@ -8,7 +8,7 @@ export const headerBoxWithImageWrapperStyles: SxProps = {
   backgroundSize: "cover",
 };
 
-export const headerContentWrapperStyles: SxProps = {
+export const headerContentWrapper: SxProps = {
   height: "100%",
   display: "flex",
   padding: "3vmin",
@@ -16,19 +16,24 @@ export const headerContentWrapperStyles: SxProps = {
   justifyContent: "space-between",
 };
 
-export const leaderboardContentWrapperStlyes: SxProps = {
-  display: "flex",
-  alignItems: "center",
-  flexFlow: "column",
-  alignSelf: "end",
+export const leaderboardContentWrapper = (isProfile: boolean): SxProps => {
+  const styles = {
+    display: "flex",
+    alignItems: "center",
+    flexFlow: "column",
+    alignSelf: "end",
+  };
+
+  if (isProfile) styles.alignSelf = "center";
+
+  return styles;
 };
 
-export const leaderboardTextStyles: SxProps = {
-  fontFamily: "Patched PERSONAL USE ONLY",
+export const leaderboardText: SxProps = {
   letterSpacing: "0.385em",
 };
 
-export const detailsWhenWalletNotConnectedStyles: SxProps = {
+export const detailsWhenWalletNotConnected: SxProps = {
   display: "flex",
   alignItems: "center",
   flexFlow: "column",
@@ -38,6 +43,6 @@ export const detailsWhenWalletNotConnectedStyles: SxProps = {
   textAlign: "center",
 };
 
-export const headerItemsWrapperStyles: SxProps = {
+export const headerItemsWrapper: SxProps = {
   width: "15%",
 };
