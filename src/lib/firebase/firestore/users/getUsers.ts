@@ -34,6 +34,22 @@ export async function getUserByWallet(wallet: string): Promise<User> {
   return user;
 }
 
+export async function getUserByUsername(username: string): Promise<User> {
+  const q = query(usersRef, where("username", "==", username));
+
+  const usersSnapshot = await getDocs(q);
+  const queryResult = usersSnapshot.docs.map((value) => ({
+    id: value.id,
+    ...value.data(),
+  }));
+
+  if (queryResult.length === 0) return {} as User;
+
+  const [user] = queryResult;
+
+  return user;
+}
+
 export async function getUsersThatBelongsToBrood(
   leaderWallet: string
 ): Promise<User[]> {
