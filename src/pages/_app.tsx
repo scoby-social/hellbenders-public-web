@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider>
+      <WalletProvider autoConnect>
         <ThemeProvider theme={CustomTheme()}>
           <Component {...pageProps} />
         </ThemeProvider>

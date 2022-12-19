@@ -43,6 +43,7 @@ export const avatarStyles: SxProps = {
 };
 
 export const cardContentBoxWrapper: SxProps = {
+  minWidth: "45%",
   maxWidth: "60%",
   display: "flex",
   flexFlow: "column",

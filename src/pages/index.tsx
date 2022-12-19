@@ -10,7 +10,7 @@ const headerBoxContainerStyle: SxProps = {
 const Home = () => {
   return (
     <Box sx={headerBoxContainerStyle}>
-      <Header />
+      <Header title="Leaderboard" isProfile={false} />
       <LeaderboardContent />
     </Box>
   );

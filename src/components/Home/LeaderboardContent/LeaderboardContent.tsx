@@ -14,7 +14,9 @@ import {
 const mockCardInformation: UserCardProps[] = [
   {
     id: "1",
-    username: "Elias the super reader",
+    username: "Elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
     avatar:
@@ -26,9 +28,11 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "2",
-    username: "Elias the super reader",
+    username: "Elias",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     avatar:
       "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
     seniority: 123,
@@ -38,9 +42,11 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "3",
-    username: "Elias the super reader",
+    username: "Elias",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     avatar:
       "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
     seniority: 123,
@@ -50,7 +56,9 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "4",
-    username: "Elias the super reader",
+    username: "Elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
     avatar:
@@ -62,7 +70,9 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "5",
-    username: "Elias the super reader",
+    username: "Elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
     avatar:
@@ -74,7 +84,9 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "6",
-    username: "Elias the super reader",
+    username: "Elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
     avatar:
@@ -86,7 +98,9 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "7",
-    username: "Elias the super reader",
+    username: "Elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
     avatar:
@@ -98,7 +112,9 @@ const mockCardInformation: UserCardProps[] = [
   },
   {
     id: "8",
-    username: "Elias the super reader",
+    username: "Elias",
+    amplifier_role: "Super",
+    superpower_role: "Reader",
     bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
     externalLink: "launch.hellbenders.live/elias",
     avatar:
