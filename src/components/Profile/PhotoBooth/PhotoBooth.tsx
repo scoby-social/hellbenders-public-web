@@ -25,17 +25,45 @@ import {
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
+import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
 
 const PhotoBooth = () => {
   const {
     control,
     handleSubmit,
+    setError,
+    watch,
     formState: { errors },
   } = useForm<PhotoBoothFormInputs>({
     resolver: joiResolver(schema),
+    mode: "all",
   });
+  const username = watch("username");
 
-  const submitForm = () => {};
+  const submitForm = (): void => {};
+
+  const validateIfUserExists = async (): Promise<void> => {
+    if (username.length === 0) {
+      setError("username", {
+        message: "Name is required",
+        type: "string.empty",
+      });
+      return;
+    }
+
+    const user = await getUserByUsername(username);
+    if (Object.keys(user).length > 0) {
+      setError(
+        "username",
+        {
+          message: "Username already exists!",
+          type: "onBlur",
+        },
+        { shouldFocus: true }
+      );
+      return;
+    }
+  };
 
   return (
     <Box sx={fakeIDFormContainer}>
@@ -45,16 +73,6 @@ const PhotoBooth = () => {
         </Box>
         <Box sx={formContainer}>
           <Typography variant="h6">The Photobooth: Mint our Fake ID</Typography>
-
-          <Box sx={photoBoothContainer}>
-            <Box sx={photoBoothTitleWrapper}>
-              <Typography>
-                Take your Fake ID Photo<sup>*</sup>
-              </Typography>
-              <Typography>1/10</Typography>
-            </Box>
-            <Box></Box>
-          </Box>
 
           <Grid
             justifyContent="space-around"
@@ -69,14 +87,17 @@ const PhotoBooth = () => {
                 </Typography>
                 <Controller
                   name="username"
+                  defaultValue=""
                   control={control}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       id="username-input"
                       fullWidth
+                      onBlur={validateIfUserExists}
+                      error={!!errors.username}
                       placeholder="How you want to be addressed in one word 10 letters max"
-                      helperText="Example: arcade"
+                      helperText={errors.username?.message || "Example: arcade"}
                       size="small"
                       variant="outlined"
                       inputProps={{ maxLength: 10 }}
@@ -92,30 +113,39 @@ const PhotoBooth = () => {
                   <Typography variant="h6">The</Typography>
                   <Controller
                     name="amplifier_role"
+                    defaultValue=""
                     control={control}
                     render={({ field }) => (
                       <TextField
                         {...field}
                         id="amplifier-input"
                         variant="outlined"
+                        error={!!errors.amplifier_role}
                         placeholder="Amplifier"
+                        helperText={
+                          errors.amplifier_role?.message ||
+                          "Example: Cybernetic"
+                        }
                         size="small"
-                        helperText="Example: Cybernetic"
                       />
                     )}
                   />
 
                   <Controller
                     name="superpower_role"
+                    defaultValue=""
                     control={control}
                     render={({ field }) => (
                       <TextField
                         {...field}
                         id="superpower-input"
                         variant="outlined"
+                        error={!!errors.superpower_role}
                         placeholder="Superpower"
+                        helperText={
+                          errors.superpower_role?.message || "Example: Being"
+                        }
                         size="small"
-                        helperText="Example: Being"
                       />
                     )}
                   />
@@ -128,6 +158,7 @@ const PhotoBooth = () => {
                 <Controller
                   name="pronouns"
                   control={control}
+                  defaultValue={Pronouns.male}
                   render={({ field }) => (
                     <Select
                       {...field}
@@ -135,11 +166,12 @@ const PhotoBooth = () => {
                       fullWidth
                       size="small"
                       defaultValue=""
+                      error={!!errors.pronouns}
                       IconComponent={KeyboardArrowDownIcon}
                     >
-                      {Object.entries(Pronouns).map(([value, index]) => (
-                        <MenuItem key={index} value={value}>
-                          {index}
+                      {Object.values(Pronouns).map((value) => (
+                        <MenuItem key={value} value={value}>
+                          {value}
                         </MenuItem>
                       ))}
                     </Select>
@@ -154,6 +186,7 @@ const PhotoBooth = () => {
                 </Typography>
                 <Controller
                   name="bio"
+                  defaultValue=""
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -163,8 +196,10 @@ const PhotoBooth = () => {
                       minRows={4}
                       maxRows={5}
                       fullWidth
+                      error={!!errors.bio}
                       inputProps={{ maxLength: 160 }}
                       placeholder="bio"
+                      helperText={errors.bio?.message}
                       variant="outlined"
                     />
                   )}
@@ -176,13 +211,16 @@ const PhotoBooth = () => {
                 </Typography>
                 <Controller
                   name="externalLink"
+                  defaultValue=""
                   control={control}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       id="user-url-input"
                       fullWidth
+                      error={!!errors.externalLink}
                       placeholder="URL"
+                      helperText={errors.externalLink?.message}
                       size="small"
                       variant="outlined"
                     />
@@ -194,6 +232,15 @@ const PhotoBooth = () => {
                 <Box></Box>
               </Box>
             </Grid>
+            <Box sx={photoBoothContainer}>
+              <Box sx={photoBoothTitleWrapper}>
+                <Typography>
+                  Take your Fake ID Photo<sup>*</sup>
+                </Typography>
+                <Typography>1/10</Typography>
+              </Box>
+              <Box></Box>
+            </Box>
           </Grid>
         </Box>
       </Form>

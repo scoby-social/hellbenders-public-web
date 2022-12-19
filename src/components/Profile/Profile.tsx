@@ -1,5 +1,9 @@
 import { Box, Grid, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useAtom } from "jotai";
+
+import UserCard from "components/common/UserCard/UserCard";
+import { selectedLeader } from "lib/store";
 
 import {
   boxContainer,
@@ -10,29 +14,16 @@ import {
   mintFakeIDTextDescription,
   mintFakeIDTitle,
 } from "./styles";
-import { UserCardProps } from "components/common/UserCard/types";
-import UserCard from "components/common/UserCard/UserCard";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 
-const val: UserCardProps = {
-  id: "1",
-  bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-  externalLink: "launch.hellbenders.live/elias",
-  avatar:
-    "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-  seniority: 123,
-  brood: 50,
-  royalties: 0,
-  username: "Elias the super reader",
-  isBroodLeader: true,
-};
-
 const Profile = () => {
+  const [leader] = useAtom(selectedLeader);
+
   return (
     <Box sx={{ minHeight: "100vh" }}>
       <Box sx={boxContainer}>
         <Grid container spacing={2} sx={boxWrapper}>
-          <UserCard {...val} />
+          <UserCard {...leader} isBroodLeader />
           <Grid item md={4} sm={8}>
             <Box sx={mintFakeIDHeaderWrapper}>
               <Box sx={mintFakeIDHeaderTitleWrapper}>
@@ -42,7 +33,7 @@ const Profile = () => {
               </Box>
               <Box sx={mintFakeIDContentWrapper}>
                 <Typography variant="h6" sx={mintFakeIDTitle}>
-                  Join Elias's Unit
+                  {`Join ${leader.username}'s Brood`}
                 </Typography>
                 <Typography sx={mintFakeIDTextDescription}>
                   You’re already holding a fake ID in your wallet. If you want
