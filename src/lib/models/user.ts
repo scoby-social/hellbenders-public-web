@@ -7,7 +7,8 @@ export enum Pronouns {
 export interface User {
   id: string;
   username: string; // ID Card name
-  role: string;
+  amplifier_role: string;
+  superpower_role: string;
   pronoun: Pronouns;
   bio: string;
   externalLink: string | undefined;
