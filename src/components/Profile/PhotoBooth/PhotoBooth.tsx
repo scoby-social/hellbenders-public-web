@@ -2,6 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
   Box,
+  Button,
   Grid,
   MenuItem,
   Select,
@@ -9,8 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 import { Pronouns } from "lib/models/user";
+import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
+import { mintFakeID } from "lib/web3/mintFakeID";
+
 import {
   fakeIDFormContainer,
   fakeIDFormArrowWrapper,
@@ -25,9 +30,9 @@ import {
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
-import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
 
 const PhotoBooth = () => {
+  const wallet = useWallet();
   const {
     control,
     handleSubmit,
@@ -240,6 +245,15 @@ const PhotoBooth = () => {
                 <Typography>1/10</Typography>
               </Box>
               <Box></Box>
+            </Box>
+            <Box>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() => mintFakeID(wallet)}
+              >
+                Mint
+              </Button>
             </Box>
           </Grid>
         </Box>

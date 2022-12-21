@@ -64,6 +64,29 @@ export default function CustomTheme() {
           },
         },
       },
+      MuiButtonBase: {
+        styleOverrides: {
+          root: {
+            border: "none !important",
+            fontWeight: "bold !important",
+            borderRadius: "20px !important",
+          },
+        },
+      },
+    },
+    palette: {
+      primary: {
+        light: "rgba(190, 239, 0, 1)",
+        main: "rgba(190, 239, 0, 1)",
+        dark: "rgba(190, 239, 0, 0.7)",
+        contrastText: "#262F36",
+      },
+      secondary: {
+        light: "rgba(190, 239, 0, 0.7)",
+        main: "rgba(190, 239, 0, 0.7)",
+        dark: "rgba(190, 239, 0, 0.5)",
+        contrastText: "#262F36",
+      },
     },
   });
 
