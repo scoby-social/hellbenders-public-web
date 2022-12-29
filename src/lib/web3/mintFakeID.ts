@@ -36,6 +36,7 @@ import { getEdition } from "./getEdition";
 import { createMint } from "./createMint";
 import { getNftsForOwner } from "./getNftsForOwner";
 import { sendTransaction } from "./sendTransaction";
+import { AnchorProvider } from "@project-serum/anchor";
 
 const ParentWallet = new PublicKey(
   "4NCF6k76LThBY5Kx6jUBFeY5b7rLULoFugmGDX9Jx77B"
@@ -54,16 +55,22 @@ const confirmOption: ConfirmOptions = {
 };
 
 export const mintFakeID = async (wallet: any) => {
-  try {
+  //  try {
     // get provider from connection
-    const provider = new anchor.Provider(conn, wallet as any, confirmOption);
-
+    // const provider = new anchor.Provider(conn, wallet as any, confirmOption);
+    console.log("kkk", process.env.BROWSER);
+    const provider = new AnchorProvider(
+      conn, wallet, { commitment: 'processed' }
+    );
+    
     // get fake id nft program
     const program = new anchor.Program(
       FakeIDNFTIdl as any,
       FakeIDNFTProgramId,
       provider
     );
+
+    console.log("kk", program);
 
     // get fake id nft pool
     const poolData = (await program.account.pool.fetch(FakeIDNFTPOOL)) as any;
@@ -163,7 +170,8 @@ export const mintFakeID = async (wallet: any) => {
       FakeIDNFTSYMBOL,
       wallet.publicKey,
       TOKEN_METADATA_PROGRAM_ID,
-      conn
+      conn,
+      wallet
     );
     if (memberships.length != 0)
       throw new Error("Creator Already Have and Fake ID NFT");
@@ -464,7 +472,7 @@ export const mintFakeID = async (wallet: any) => {
       console.log("kkk");
     }
     await sendTransaction(conn, wallet, transaction, signers);
-  } catch (err) {
-    console.log(err);
-  }
+  //  } catch (err) {
+  //    console.log(err);
+  //  }
 };

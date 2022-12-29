@@ -12,6 +12,9 @@ const nextConfig = {
     }
     return config;
   },
+  env: {
+    BROWSER: '',
+  },
 };
 
 module.exports = nextConfig;
