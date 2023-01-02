@@ -18,6 +18,7 @@ const getResponsiveParamsForGrid = (isLeader: boolean) => {
     return {
       md: 4,
       sm: 8,
+      xs: 12,
     };
   }
 

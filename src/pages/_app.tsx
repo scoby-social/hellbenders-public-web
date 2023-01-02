@@ -9,7 +9,10 @@ import { ThemeProvider } from "@mui/material";
 import CustomTheme from "lib/theme";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const network = WalletAdapterNetwork.Mainnet;
+  const network =
+    process.env.NEXT_PUBLIC_SOLANA_CLUSTER === "devnet"
+      ? WalletAdapterNetwork.Mainnet
+      : "mainnet-beta";
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
   const WalletProvider = dynamic(

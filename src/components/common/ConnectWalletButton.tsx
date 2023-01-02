@@ -22,16 +22,21 @@ interface WalletMultiButtonStyledProps {
 
 interface ConnectWalletButtonProps {
   primaryColor: Boolean;
+  blackText?: Boolean;
 }
 
 const WalletButton = styled(WalletMultiButton)<WalletMultiButtonStyledProps>`
   max-height: 3vmax;
-  background-color: ${(props) => (props.primaryColor ? "#5B6876" : "#A0C024")};
+  background-color: ${(props) =>
+    props.primaryColor ? "rgba(190, 239, 0, 1)" : "#5B6876"};
   line-height: 0 !important;
   padding: 1vmin 1.5vmax;
 `;
 
-const ConnectWalletButton = ({ primaryColor }: ConnectWalletButtonProps) => {
+const ConnectWalletButton = ({
+  primaryColor,
+  blackText = false,
+}: ConnectWalletButtonProps) => {
   const { publicKey } = useWallet();
   const [_, setWallet] = useAtom(currentWallet);
   const [__, setCurrentUser] = useAtom(currentUser);
@@ -66,7 +71,7 @@ const ConnectWalletButton = ({ primaryColor }: ConnectWalletButtonProps) => {
 
   return (
     <WalletButton primaryColor={primaryColor}>
-      <Typography>
+      <Typography sx={{ color: blackText ? "#000" : "#fff" }}>
         {publicKey
           ? walletAddressShortener(publicKey?.toString())
           : "Connect your wallet!"}

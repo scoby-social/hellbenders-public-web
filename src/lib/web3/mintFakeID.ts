@@ -47,6 +47,12 @@ const FakeIDNFTPOOL = new PublicKey(
 );
 const FakeIDNFTSYMBOL = "HELLPASS";
 
+// ...  more nfts can be added here
+
+// semi fungible token address and IDL
+
+// ... more sfts can be added here
+
 const confirmOption: ConfirmOptions = {
   commitment: "finalized",
   preflightCommitment: "finalized",
@@ -130,7 +136,6 @@ export const mintFakeID = async (wallet: any) => {
     );
 
     if (sourceTokenAccount[1]) {
-      console.log("transaction source", transaction);
       royaltyList.push(wallet.publicKey.toString());
       createTokenAccountTransaction.add(sourceTokenAccount[1]);
     }
@@ -144,7 +149,6 @@ export const mintFakeID = async (wallet: any) => {
     );
 
     if (scobyUsdcTokenAccount[1]) {
-      console.log("transaction scoby", transaction);
       if (
         royaltyList.findIndex(
           (item) => item == (poolData.scobyWallet as PublicKey).toString()
@@ -206,12 +210,10 @@ export const mintFakeID = async (wallet: any) => {
       let parentMembership = memberships[0];
 
       const creatorMint = poolData.rootNft as PublicKey;
-      console.log(creatorMint.toString());
       const creatorResp = await conn.getTokenLargestAccounts(
         creatorMint,
         "finalized"
       );
-      console.log("creator response", creatorResp);
       if (
         creatorResp == null ||
         creatorResp.value == null ||
@@ -238,7 +240,6 @@ export const mintFakeID = async (wallet: any) => {
       );
 
       if (creatorUsdcTokenAccount[1]) {
-        console.log("transaction creator", transaction);
         createTokenAccountTransaction.add(creatorUsdcTokenAccount[1]);
       }
 
@@ -261,7 +262,6 @@ export const mintFakeID = async (wallet: any) => {
       let accountInfo = AccountLayout.decode(info.data);
       if (Number(accountInfo.amount) == 0)
         throw new Error("Invalid Parent Membership Nft info");
-      console.log(accountInfo.owner);
       const parentMembershipOwner = new PublicKey(accountInfo.owner);
 
       const parentMembershipUsdcTokenAccount =
@@ -274,7 +274,6 @@ export const mintFakeID = async (wallet: any) => {
         );
 
       if (parentMembershipUsdcTokenAccount[1]) {
-        console.log("transaction parent", transaction);
         if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
           royaltyList.push(accountInfo.owner);
           createTokenAccountTransaction.add(
@@ -304,7 +303,6 @@ export const mintFakeID = async (wallet: any) => {
       accountInfo = AccountLayout.decode(info.data);
       if (Number(accountInfo.amount) == 0)
         throw new Error("Invalid Grand Parent Membership Nft info");
-      console.log(accountInfo.owner);
       const grandParentMembershipOwner = new PublicKey(accountInfo.owner);
 
       const grandParentMembershipUsdcTokenAccount =
@@ -317,7 +315,6 @@ export const mintFakeID = async (wallet: any) => {
         );
 
       if (grandParentMembershipUsdcTokenAccount[1]) {
-        console.log("transaction grand parent", transaction);
         if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
           royaltyList.push(accountInfo.owner);
           createTokenAccountTransaction.add(
@@ -359,7 +356,6 @@ export const mintFakeID = async (wallet: any) => {
         );
 
       if (grandGrandParentMembershipUsdcTokenAccount[1]) {
-        console.log("transaction grand parent", transaction);
         if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
           royaltyList.push(accountInfo.owner);
           createTokenAccountTransaction.add(
@@ -403,7 +399,6 @@ export const mintFakeID = async (wallet: any) => {
         );
 
       if (grandGrandGrandParentMembershipUsdcTokenAccount[1]) {
-        console.log("transaction grand parent", transaction);
         if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
           royaltyList.push(accountInfo.owner);
           createTokenAccountTransaction.add(
@@ -450,10 +445,7 @@ export const mintFakeID = async (wallet: any) => {
     }
     // await sendTransaction(tx,[])
 
-    console.log("transaction", transaction);
-    console.log(royaltyList);
     if (createTokenAccountTransaction.instructions.length > 0) {
-      console.log(createTokenAccountTransaction);
       const blockHash = await conn.getRecentBlockhash();
       createTokenAccountTransaction.feePayer = await wallet.publicKey;
       createTokenAccountTransaction.recentBlockhash = blockHash.blockhash;
@@ -461,10 +453,10 @@ export const mintFakeID = async (wallet: any) => {
         createTokenAccountTransaction
       );
       await conn.sendRawTransaction(await signed.serialize());
-      console.log("kkk");
     }
     await sendTransaction(conn, wallet, transaction, signers);
+    console.info("Minted successfully");
   } catch (err) {
-    console.log(err);
+    console.info("Error: ", err);
   }
 };

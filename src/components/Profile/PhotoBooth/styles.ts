@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { SxProps } from "@mui/material";
+import { PhotoBoothFormStyleProps } from "./types";
 
 export const fakeIDFormArrowWrapper: SxProps = {
   padding: "0.75vmax",
@@ -52,18 +53,12 @@ export const photoBoothTitleWrapper: SxProps = {
   justifyContent: "space-between",
 };
 
-export const photoBoothWrapper: SxProps = {
-  padding: "1.5vmax",
-  border: "1px dashed #5B608C",
-  borderRadius: 8,
-};
-
 export const textWithMargin: SxProps = {
   marginBottom: "0.50vmax",
 };
 
-export const Form = styled.form`
-  width: 80%;
+export const Form = styled.form<PhotoBoothFormStyleProps>`
+  width: ${(props) => (props.isMobile ? "100%" : "80%")};
   background-color: #2f3841;
   border-radius: 15px;
 `;

@@ -8,3 +8,7 @@ export interface PhotoBoothFormInputs {
   bio: string;
   externalLink: string;
 }
+
+export interface PhotoBoothFormStyleProps {
+  isMobile: boolean;
+}

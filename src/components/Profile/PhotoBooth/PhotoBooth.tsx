@@ -1,8 +1,8 @@
-import { useForm, Controller } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   MenuItem,
   Select,
@@ -11,10 +11,15 @@ import {
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useWallet } from "@solana/wallet-adapter-react";
+import * as React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useAtom } from "jotai";
 
 import { Pronouns } from "lib/models/user";
 import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
 import { mintFakeID } from "lib/web3/mintFakeID";
+import { photoBoothStep } from "lib/store";
+import useCheckMobileScreen from "lib/hooks/useCheckMobileScreen";
 
 import {
   fakeIDFormContainer,
@@ -30,9 +35,15 @@ import {
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
+import LayerBuilder from "./LayerBuilder/LayerBuilder";
+import { getTotalStepsStartingFromOne } from "./utils/getSteps";
 
 const PhotoBooth = () => {
+  const totalSteps = getTotalStepsStartingFromOne();
   const wallet = useWallet();
+  const isMobile = useCheckMobileScreen();
+  const [currentStep] = useAtom(photoBoothStep);
+  const [loading, setLoading] = React.useState(false);
   const {
     control,
     handleSubmit,
@@ -47,7 +58,7 @@ const PhotoBooth = () => {
 
   const submitForm = (): void => {};
 
-  const validateIfUserExists = async (): Promise<void> => {
+  const validateIfUserExists = React.useCallback(async () => {
     if (username.length === 0) {
       setError("username", {
         message: "Name is required",
@@ -68,14 +79,12 @@ const PhotoBooth = () => {
       );
       return;
     }
-  };
+  }, [username, setError]);
 
   return (
     <Box sx={fakeIDFormContainer}>
-      <Form onSubmit={handleSubmit(submitForm)}>
-        <Box sx={fakeIDFormArrowWrapper}>
-          <KeyboardArrowDownIcon />
-        </Box>
+      <Form isMobile={isMobile} onSubmit={handleSubmit(submitForm)}>
+        <Box sx={fakeIDFormArrowWrapper}></Box>
         <Box sx={formContainer}>
           <Typography variant="h6">The Photobooth: Mint our Fake ID</Typography>
 
@@ -242,17 +251,21 @@ const PhotoBooth = () => {
                 <Typography>
                   Take your Fake ID Photo<sup>*</sup>
                 </Typography>
-                <Typography>1/10</Typography>
+                <Typography>{`${currentStep + 1}/${totalSteps}`}</Typography>
               </Box>
-              <Box></Box>
+              <LayerBuilder />
             </Box>
             <Box>
               <Button
-                color="secondary"
+                color="primary"
                 variant="contained"
-                onClick={() => mintFakeID(wallet)}
+                onClick={async () => {
+                  setLoading(true);
+                  await mintFakeID(wallet);
+                  setLoading(false);
+                }}
               >
-                Mint
+                {loading ? <CircularProgress /> : "Mint"}
               </Button>
             </Box>
           </Grid>

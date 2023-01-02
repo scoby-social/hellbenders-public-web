@@ -31,22 +31,22 @@ export const Header = ({ title, isProfile }: HeaderProps) => {
           {!isProfile && (
             <Box sx={detailsWhenWalletNotConnected}>
               <Typography>
-                Only Members Admitted
+                {`Only Members Admitted`}
                 <br />
                 <br />
-                Connect your Wallet to show your Fake ID at the door.
+                {`Connect your Wallet to show your Fake ID at the door.`}
                 <br />
                 <br />
-                To get in quick, connect with a wallet holding only your
+                {`To get in quick, connect with a wallet holding only your`}
                 <br />
-                Fake ID. We don't need to be digging through your sh*t.
+                {`Fake ID. We don't need to be digging through your sh*t.`}
               </Typography>
-              <ConnectWalletButton primaryColor={false} />
+              <ConnectWalletButton primaryColor />
             </Box>
           )}
         </Box>
         <Box sx={headerItemsWrapper}>
-          <ConnectWalletButton primaryColor />
+          <ConnectWalletButton primaryColor={false} />
         </Box>
       </Box>
     </Box>

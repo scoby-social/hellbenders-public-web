@@ -28,10 +28,6 @@ p {
   font-size: 1.25vmax !important;
 }
 
-h1 {
-  font-size: 3vmax !important;
-}
-
 span {
   font-size: 1vmax !important;
 }
@@ -41,10 +37,6 @@ h6 {
 }
 
 @media (min-width: 600px) {
-  h1 {
-    font-size: 3.5vmax !important;
-  }
-
   p {
     font-size: 0.75vmax !important;
   }

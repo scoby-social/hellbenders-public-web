@@ -22,12 +22,13 @@ export const mintFakeIDHeaderTitleWrapper: SxProps = {
   backgroundColor: "#424E5A",
   display: "flex",
   flexFlow: "row",
-  justifyContent: "space-between",
+  justifyContent: "center",
   alignItems: "center",
   borderRadius: "15px 15px 0 0",
 };
 
 export const mintFakeIDContentWrapper: SxProps = {
+  width: "100%",
   height: "80%",
   padding: "1vmax 0",
   backgroundColor: "#2F3841",
@@ -44,4 +45,20 @@ export const mintFakeIDTitle: SxProps = {
 export const mintFakeIDTextDescription: SxProps = {
   maxWidth: "55%",
   textAlign: "center",
+};
+
+export const connectWalletMessageWrapper: SxProps = {
+  width: "100%",
+  height: "100%",
+  marginTop: "2vmax",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  flexFlow: "column",
+};
+
+export const connectWalletText: SxProps = {
+  margin: "1vmax",
+  textAlign: "center",
+  maxWidth: "50%",
 };

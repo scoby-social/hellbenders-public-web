@@ -1,6 +1,9 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { createBreakpoints } from "@mui/system";
 
 export default function CustomTheme() {
+  const breakpoints = createBreakpoints({});
+
   const theme = createTheme({
     typography: {
       fontFamily: ["Poppins", "Cabin", "Patched"].join(","),
@@ -9,22 +12,32 @@ export default function CustomTheme() {
       },
       h1: {
         fontFamily: "Patched",
+        fontSize: "3vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "3.5vmax",
+        },
       },
       h2: {
         fontFamily: "Patched",
+        [breakpoints.up("sm")]: {
+          fontSize: "2vmax",
+        },
       },
       h6: {
         fontFamily: "Cabin",
+        fontSize: "1.5vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "0.6vmax",
+        },
       },
     },
     components: {
       MuiButton: {
         variants: [
           {
-            props: { variant: "contained" },
+            props: { variant: "outlined" },
             style: {
-              textTransform: "none",
-              border: `10px dashed red`,
+              border: "1px solid rgba(190, 239, 0, 1)",
             },
           },
         ],
@@ -67,7 +80,6 @@ export default function CustomTheme() {
       MuiButtonBase: {
         styleOverrides: {
           root: {
-            border: "none !important",
             fontWeight: "bold !important",
             borderRadius: "20px !important",
           },
@@ -82,10 +94,8 @@ export default function CustomTheme() {
         contrastText: "#262F36",
       },
       secondary: {
-        light: "rgba(190, 239, 0, 0.7)",
-        main: "rgba(190, 239, 0, 0.7)",
-        dark: "rgba(190, 239, 0, 0.5)",
-        contrastText: "#262F36",
+        main: "#485364",
+        contrastText: "#FFF",
       },
     },
   });
