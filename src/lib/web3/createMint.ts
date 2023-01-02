@@ -1,4 +1,4 @@
-import { MintLayout, Token, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { MintLayout, createInitializeMintInstruction, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import {
   Keypair,
   PublicKey,
@@ -15,7 +15,6 @@ export function createMint(
   freezeAuthority: PublicKey,
   signers: Keypair[]
 ) {
-  console.info("Token here: ", Token);
 
   const account = createUninitializedMint(
     instructions,
@@ -25,8 +24,7 @@ export function createMint(
   );
 
   instructions.push(
-    Token.createInitMintInstruction(
-      TOKEN_PROGRAM_ID,
+    createInitializeMintInstruction(
       account,
       decimals,
       owner,

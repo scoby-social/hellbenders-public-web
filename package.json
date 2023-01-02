@@ -20,7 +20,7 @@
     "@mui/icons-material": "5.10.16",
     "@mui/material": "5.10.17",
     "@project-serum/anchor": "0.24.2",
-    "@solana/spl-token": "^0.1.8",
+    "@solana/spl-token": "0.2.0",
     "@solana/wallet-adapter-base": "0.9.20",
     "@solana/wallet-adapter-react": "0.15.26",
     "@solana/wallet-adapter-react-ui": "0.9.25",

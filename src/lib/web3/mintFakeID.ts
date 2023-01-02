@@ -25,9 +25,10 @@ import FakeIDNFTIdl from "./usdc-fake-id.json";
 import {
   AccountLayout,
   MintLayout,
-  Token,
   TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
+  MINT_SIZE,
+  createMintToCheckedInstruction,
+  } from "@solana/spl-token";
 import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
 import { createAssociatedTokenAccountInstruction } from "./createAssociatedTokenAccountInstruction";
 import { getTokenWallet } from "./getTokenWallet";
@@ -84,15 +85,7 @@ export const mintFakeID = async (wallet: any) => {
     const mintRent = await conn.getMinimumBalanceForRentExemption(
       MintLayout.span
     );
-    const mintKey = createMint(
-      instructions,
-      wallet.publicKey,
-      mintRent,
-      0,
-      wallet.publicKey,
-      wallet.publicKey,
-      signers
-    );
+    const mintKey = createMint(instructions, wallet.publicKey,mintRent,0,wallet.publicKey,wallet.publicKey,signers)
     const recipientKey = await getTokenWallet(wallet.publicKey, mintKey);
     createAssociatedTokenAccountInstruction(
       instructions,
@@ -102,13 +95,12 @@ export const mintFakeID = async (wallet: any) => {
       mintKey
     );
     instructions.push(
-      Token.createMintToInstruction(
-        TOKEN_PROGRAM_ID,
+      createMintToCheckedInstruction(
         mintKey,
         recipientKey,
         wallet.publicKey,
-        [],
-        1
+        1,
+        0,
       )
     );
     instructions.forEach((item) => transaction.add(item));
@@ -208,7 +200,8 @@ export const mintFakeID = async (wallet: any) => {
         FakeIDNFTSYMBOL,
         ParentWallet,
         TOKEN_METADATA_PROGRAM_ID,
-        conn
+        conn,
+        wallet
       );
 
       let parentMembership = memberships[0];
