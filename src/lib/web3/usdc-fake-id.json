@@ -1,0 +1,767 @@
+{
+  "version": "0.1.0",
+  "name": "solana_anchor",
+  "instructions": [
+    {
+      "name": "initConfig",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "maxNumberOfLines",
+          "type": "u32"
+        },
+        {
+          "name": "configData",
+          "type": {
+            "defined": "ConfigData"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateConfig",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "configData",
+          "type": {
+            "defined": "ConfigData"
+          }
+        }
+      ]
+    },
+    {
+      "name": "addConfigLines",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "configLines",
+          "type": {
+            "vec": {
+              "defined": "ConfigLine"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateConfigLine",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u32"
+        },
+        {
+          "name": "configLine",
+          "type": {
+            "defined": "ConfigLine"
+          }
+        }
+      ]
+    },
+    {
+      "name": "initPool",
+      "accounts": [
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rand",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        },
+        {
+          "name": "updateAuthority",
+          "type": "publicKey"
+        },
+        {
+          "name": "scobyWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "mintingPrice",
+          "type": "u64"
+        },
+        {
+          "name": "royaltyForMinting",
+          "type": {
+            "defined": "Royalty"
+          }
+        },
+        {
+          "name": "royaltyForTrading",
+          "type": {
+            "defined": "Royalty"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updatePool",
+      "accounts": [
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "updateAuthority",
+          "type": "publicKey"
+        },
+        {
+          "name": "scobyWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "mintingPrice",
+          "type": "u64"
+        },
+        {
+          "name": "royaltyForMinting",
+          "type": {
+            "defined": "Royalty"
+          }
+        },
+        {
+          "name": "royaltyForTrading",
+          "type": {
+            "defined": "Royalty"
+          }
+        }
+      ]
+    },
+    {
+      "name": "mintRoot",
+      "accounts": [
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "masterEdition",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadataExtended",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sourceTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "scobyUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "scobyWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        },
+        {
+          "name": "data",
+          "type": {
+            "defined": "Metadata"
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint",
+      "accounts": [
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nftMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "nftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "masterEdition",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadataExtended",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "parentNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "parentNftMetadataExtended",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grandParentNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grandGrandParentNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grandGrandGrandParentNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "creatorNftAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sourceTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "scobyUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "creatorUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "parentNftUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grandParentNftUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grandGrandParentNftUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grandGrandGrandParentNftUsdcTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        },
+        {
+          "name": "data",
+          "type": {
+            "defined": "Metadata"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "MetadataExtended",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "minter",
+            "type": "publicKey"
+          },
+          {
+            "name": "parentNfp",
+            "type": "publicKey"
+          },
+          {
+            "name": "grandParentNfp",
+            "type": "publicKey"
+          },
+          {
+            "name": "grandGrandParentNfp",
+            "type": "publicKey"
+          },
+          {
+            "name": "grandGrandGrandParentNfp",
+            "type": "publicKey"
+          },
+          {
+            "name": "childrenCount",
+            "type": "u32"
+          },
+          {
+            "name": "number",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Metadata",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "rand",
+            "type": "publicKey"
+          },
+          {
+            "name": "config",
+            "type": "publicKey"
+          },
+          {
+            "name": "countMinting",
+            "type": "u32"
+          },
+          {
+            "name": "mintingPrice",
+            "type": "u64"
+          },
+          {
+            "name": "updateAuthority",
+            "type": "publicKey"
+          },
+          {
+            "name": "rootNft",
+            "type": "publicKey"
+          },
+          {
+            "name": "creatorScout",
+            "type": "publicKey"
+          },
+          {
+            "name": "royaltyForMinting",
+            "type": {
+              "defined": "Royalty"
+            }
+          },
+          {
+            "name": "royaltyForTrading",
+            "type": {
+              "defined": "Royalty"
+            }
+          },
+          {
+            "name": "scobyWallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "maxNumberOfLines",
+            "type": "u32"
+          },
+          {
+            "name": "configData",
+            "type": {
+              "defined": "ConfigData"
+            }
+          },
+          {
+            "name": "configLines",
+            "type": {
+              "vec": {
+                "defined": "ConfigLine"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Royalty",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "scoby",
+            "type": "u16"
+          },
+          {
+            "name": "creator",
+            "type": "u16"
+          },
+          {
+            "name": "parent",
+            "type": "u16"
+          },
+          {
+            "name": "grandParent",
+            "type": "u16"
+          },
+          {
+            "name": "grandGrandParent",
+            "type": "u16"
+          },
+          {
+            "name": "grandGrandGrandParent",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "sellerFee",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigLine",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TokenMintToFailed",
+      "msg": "Token mint to failed"
+    },
+    {
+      "code": 6001,
+      "name": "TokenSetAuthorityFailed",
+      "msg": "Token set authority failed"
+    },
+    {
+      "code": 6002,
+      "name": "TokenTransferFailed",
+      "msg": "Token transfer failed"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidMintAccount",
+      "msg": "Invalid mint account"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidTokenAccount",
+      "msg": "Invalid token account"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidPoolAccount",
+      "msg": "Invalid pool account"
+    },
+    {
+      "code": 6006,
+      "name": "MintAmountIsZero",
+      "msg": "Mint amount is zero"
+    },
+    {
+      "code": 6007,
+      "name": "IndexGreaterThanLength",
+      "msg": "Index greater than length"
+    },
+    {
+      "code": 6008,
+      "name": "NotEnoughSol",
+      "msg": "Not enough sol"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidMintPrerequirement",
+      "msg": "Invalid mint pre requirement"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidOldestMintRequirement",
+      "msg": "Invalid oldest mint requirement"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidOldestMetadataExtended",
+      "msg": "Invalid oldest metadata_extended"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidParent",
+      "msg": "Invalid parent"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidPoolWallet",
+      "msg": "Invalid pool wallet"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidCreatorWallet",
+      "msg": "Invalid creator wallet"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidCreatorScoutRequirement",
+      "msg": "Invalid creator scout account"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidCreatingRoot",
+      "msg": "Invalid creating root"
+    },
+    {
+      "code": 6017,
+      "name": "InvalidAuthority",
+      "msg": "Invalid authority"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidOwner",
+      "msg": "Invalid owner"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidIndex",
+      "msg": "Invalid index"
+    }
+  ]
+}
