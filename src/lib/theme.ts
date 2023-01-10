@@ -9,6 +9,10 @@ export default function CustomTheme() {
       fontFamily: ["Poppins", "Cabin", "Patched"].join(","),
       body1: {
         fontFamily: "Cabin",
+        fontSize: "0.75vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "1vmax",
+        },
       },
       h1: {
         fontFamily: "Patched",
@@ -25,9 +29,15 @@ export default function CustomTheme() {
       },
       h6: {
         fontFamily: "Cabin",
-        fontSize: "1.5vmax",
+        fontSize: "1.2vmax",
+      },
+      subtitle2: {
+        fontSize: "1vmax",
+      },
+      caption: {
+        fontSize: "0.80vmax",
         [breakpoints.up("sm")]: {
-          fontSize: "0.6vmax",
+          fontSize: "0.60vmax",
         },
       },
     },
@@ -57,7 +67,7 @@ export default function CustomTheme() {
           },
           input: {
             padding: "0.50vmax !important",
-            fontSize: "1vmax",
+            fontSize: "0.8vmax",
           },
         },
       },
@@ -66,7 +76,10 @@ export default function CustomTheme() {
           root: {
             minHeight: 0,
             padding: "1vmax 1.25vmax",
-            fontSize: "1vmax",
+            fontSize: "0.8vmax",
+            "& .Mui-selected": {
+              backgroundColor: "#4D515B",
+            },
           },
         },
       },
@@ -81,7 +94,19 @@ export default function CustomTheme() {
         styleOverrides: {
           root: {
             fontWeight: "bold !important",
+            fontSize: "0.8vmax !important",
             borderRadius: "20px !important",
+            "& .Mui-selected": {
+              backgroundColor: "#4D515B",
+            },
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "#485364",
+            color: "#fff",
           },
         },
       },

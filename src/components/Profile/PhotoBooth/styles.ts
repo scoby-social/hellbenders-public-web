@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import { SxProps } from "@mui/material";
+import { CSSProperties } from "react";
+
 import { PhotoBoothFormStyleProps } from "./types";
 
 export const fakeIDFormArrowWrapper: SxProps = {
@@ -38,10 +40,21 @@ export const roleFieldWrapper: SxProps = {
   justifyContent: "space-between",
 };
 
-export const socialButtonsWrapper: SxProps = {
+export const socialButtonsWrapper = (isMobile: boolean): SxProps => ({
+  maxWidth: isMobile ? "80%" : "60%",
   alignSelf: "start",
   display: "flex",
-  justifyContent: "space-evenly",
+  justifyContent: "space-between",
+});
+
+export const socialButtonWrapper: SxProps = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+};
+
+export const socialConnectButton: SxProps = {
+  marginLeft: "1vmin",
 };
 
 export const photoBoothContainer: SxProps = {
@@ -62,3 +75,18 @@ export const Form = styled.form<PhotoBoothFormStyleProps>`
   background-color: #2f3841;
   border-radius: 15px;
 `;
+
+export const mintButtonWrapper: SxProps = {
+  marginTop: "1vmax",
+};
+
+export const iconWrapper: SxProps = {
+  width: "1.5vmax",
+  height: "1.5vmax",
+  position: "relative",
+};
+
+export const imageStyle: CSSProperties = {
+  width: "100%",
+  height: "100%",
+};

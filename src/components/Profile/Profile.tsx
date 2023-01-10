@@ -62,7 +62,7 @@ const Profile = () => {
             variant="h6"
             component="h6"
             sx={connectWalletText}
-          >{`You've been recluted to join ${leader.username}'s brood in the Hellbenders Motorcycle Club`}</Typography>
+          >{`You've been recruited to join ${leader.username}'s brood in the Hellbenders Motorcycle Club`}</Typography>
           <Typography
             variant="h6"
             component="h6"

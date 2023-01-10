@@ -24,29 +24,13 @@ a {
   box-sizing: border-box;
 }
 
-p {
-  font-size: 1.25vmax !important;
-}
-
-span {
-  font-size: 1vmax !important;
-}
-
 h6 {
-  font-size: 1.50vmax !important;
+  font-size: 1.50vmax;
 }
 
 @media (min-width: 600px) {
-  p {
-    font-size: 0.75vmax !important;
-  }
-
   h2 {
-    font-size: 2.0vmax !important;
-  }
-
-  span {
-    font-size: 0.60vmax !important;
+    font-size: 2.0vmax;
   }
 }
 
@@ -56,6 +40,6 @@ h6 {
   }
   body {
     color: white;
-    background: black;
+    background: #262F36;
   }
 }

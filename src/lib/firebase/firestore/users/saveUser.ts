@@ -1,6 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
+import { getSeniorityForUser } from "./getSeniorityForUser";
 import { getUserByWallet } from "./getUsers";
 import { collectionName } from "./userCollectionName";
 
@@ -9,9 +10,19 @@ const commanderSalamanderWallet = process.env
   .NEXT_PUBLIC_COMMANDER_SALAMANDER_WALLET as string;
 
 export async function createUser(
-  user: User,
+  user: Pick<
+    User,
+    | "username"
+    | "amplifier_role"
+    | "superpower_role"
+    | "pronouns"
+    | "bio"
+    | "externalLink"
+    | "wallet"
+    | "avatar"
+  >,
   leaderWallet: string
-): Promise<string> {
+): Promise<User> {
   const creatingUser = await getUserByWallet(user.wallet);
 
   if (Object.keys(creatingUser).length > 0)
@@ -24,12 +35,23 @@ export async function createUser(
   const grandGrandGrandParent =
     leaderUser.grandGrandParent || commanderSalamanderWallet;
 
-  const docRef = await addDoc(collectionRef, {
+  const userSeniority = await getSeniorityForUser();
+
+  const userDoc = {
     ...user,
     parent: parentWallet,
     grandParent,
     grandGrandParent,
     grandGrandGrandParent,
+    brood: 0,
+    seniority: userSeniority,
+    royalties: 0,
+    twitterTokenConnection: "",
+    avatar: user.avatar,
+  };
+
+  const docRef = await addDoc(collectionRef, {
+    ...userDoc,
   });
-  return docRef.id;
+  return { ...userDoc, id: docRef.id };
 }
