@@ -1,6 +1,7 @@
 import { mintFakeID } from "./mintFakeID";
 import { MetadataAttributes, Metadata } from "./types/metadata";
 import { UploadNftParams } from "./types/uploadNftParams";
+import { UploadNFTReturnType } from "./types/uploadNFTReturnType";
 import { saveJsonMetadata, saveMetadataImage } from "./uploadFileToShdwDrive";
 
 export async function uploadNFT({
@@ -9,7 +10,8 @@ export async function uploadNFT({
   formResult,
   leaderWalletAddress,
   wallet,
-}: UploadNftParams): Promise<string> {
+  parentNftAddress,
+}: UploadNftParams): Promise<UploadNFTReturnType> {
   const attributes: MetadataAttributes[] = [];
   const metadata: Metadata = {
     name: `#${0} ${formResult.username} the ${formResult.amplifier_role} ${
@@ -23,7 +25,8 @@ export async function uploadNFT({
     external_link: formResult.externalLink,
     collection_name: "Hellbenders Fake ID",
     family_name: "Mapshifting",
-    recruiter: leaderWalletAddress,
+    parent: leaderWalletAddress,
+    mint_wallet: wallet.publicKey!.toString(),
     twitter_handle: "",
     discord_handle: "",
     username: formResult.username,
@@ -64,9 +67,14 @@ export async function uploadNFT({
 
   console.info("Metadata JSON: ", metadataShdwUrl);
 
-  await mintFakeID(wallet, metadataShdwUrl, metadata.name, leaderWalletAddress);
+  const nftAddress = await mintFakeID(
+    wallet,
+    metadataShdwUrl,
+    metadata.name,
+    parentNftAddress
+  );
 
   URL.revokeObjectURL(blobUri);
 
-  return metadata.image;
+  return { image: metadata.image, nftAddress };
 }

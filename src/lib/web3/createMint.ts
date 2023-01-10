@@ -1,4 +1,8 @@
-import { MintLayout, Token, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import {
+  MintLayout,
+  createInitializeMintInstruction,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 import {
   Keypair,
   PublicKey,
@@ -15,8 +19,6 @@ export function createMint(
   freezeAuthority: PublicKey,
   signers: Keypair[]
 ) {
-  console.info("Token here: ", Token);
-
   const account = createUninitializedMint(
     instructions,
     payer,
@@ -24,14 +26,10 @@ export function createMint(
     signers
   );
 
+  console.log("NFT Address: ", account.toString());
+
   instructions.push(
-    Token.createInitMintInstruction(
-      TOKEN_PROGRAM_ID,
-      account,
-      decimals,
-      owner,
-      freezeAuthority
-    )
+    createInitializeMintInstruction(account, decimals, owner, freezeAuthority)
   );
 
   return account;
@@ -44,6 +42,7 @@ function createUninitializedMint(
   signers: Keypair[]
 ) {
   const account = Keypair.generate();
+
   instructions.push(
     SystemProgram.createAccount({
       fromPubkey: payer,

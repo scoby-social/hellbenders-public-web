@@ -8,7 +8,8 @@ export interface Metadata {
   external_link: string;
   collection_name: string;
   family_name: string;
-  recruiter: string;
+  parent: string;
+  mint_wallet: string;
   twitter_handle: string;
   discord_handle: string;
   username: string;

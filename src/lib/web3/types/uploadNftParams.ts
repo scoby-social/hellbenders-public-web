@@ -8,4 +8,5 @@ export interface UploadNftParams {
   formResult: PhotoBoothFormInputs;
   leaderWalletAddress: string;
   wallet: WalletContextState;
+  parentNftAddress: string;
 }

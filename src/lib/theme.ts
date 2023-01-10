@@ -33,6 +33,9 @@ export default function CustomTheme() {
       },
       subtitle2: {
         fontSize: "1vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "0.80vmax",
+        },
       },
       caption: {
         fontSize: "0.80vmax",

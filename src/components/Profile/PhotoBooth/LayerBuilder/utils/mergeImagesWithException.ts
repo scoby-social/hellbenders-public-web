@@ -76,8 +76,6 @@ export async function mergeImageWithException(
     }
   }
 
-  console.info("Drawed pending layers: ", pendingLayers);
-
   const canvasBlob = await convertToBlob(canvas);
 
   return { resultingImage: URL.createObjectURL(canvasBlob), reversedLayerKey };

@@ -51,7 +51,7 @@ const UserCard = ({
     <Box sx={cardContainer}>
       {isBroodLeader && (
         <Box sx={unitLeaderFlag}>
-          <Typography>Brood Leader</Typography>
+          <Typography variant="subtitle2">Brood Leader</Typography>
         </Box>
       )}
       <Box sx={contentCard(isBroodLeader)}>

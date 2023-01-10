@@ -20,6 +20,7 @@ export async function createUser(
     | "externalLink"
     | "wallet"
     | "avatar"
+    | "fakeIDs"
   >,
   leaderWallet: string
 ): Promise<User> {

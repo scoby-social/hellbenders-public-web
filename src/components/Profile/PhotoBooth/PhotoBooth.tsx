@@ -82,7 +82,9 @@ const PhotoBooth = () => {
 
       console.info("Uploading NFT: ", resultingLayer);
 
-      const userHasFakeID = await checkIfUserHasFakeID(wallet.publicKey!);
+      const userHasFakeID = await checkIfUserHasFakeID(wallet);
+
+      console.info("With fakeID: ", userHasFakeID);
 
       if (userHasFakeID) {
         setMessage({
@@ -92,25 +94,33 @@ const PhotoBooth = () => {
         return;
       }
 
-      const image = await uploadNFT({
+      console.info("Minting with NFT parent: ", leader.fakeIDs[0]);
+
+      const res = await uploadNFT({
         selectedLayers,
         resultingLayer,
         formResult: values,
         leaderWalletAddress: leader.wallet,
+        parentNftAddress: leader.fakeIDs[0],
         wallet,
       });
 
-      console.info("Resulting NFT image: ", image);
+      console.info("Resulting NFT image: ", res);
 
       console.info("Uploading user");
       const user = await createUser(
-        { ...values, wallet: wallet.publicKey!.toString(), avatar: image },
+        {
+          ...values,
+          wallet: wallet.publicKey!.toString(),
+          avatar: res.image,
+          fakeIDs: [res.nftAddress],
+        },
         leader.wallet
       );
 
       console.info("User has been uploaded");
 
-      setCurrentUser({ ...user, avatar: image });
+      setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
       setLoading(false);
     } catch (err) {
       console.error(err);

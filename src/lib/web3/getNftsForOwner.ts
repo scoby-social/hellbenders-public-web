@@ -1,23 +1,14 @@
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import {
-  ConfirmOptions,
-  Connection,
-  Keypair,
-  PublicKey,
-} from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 import { programs } from "@metaplex/js";
 import { getMetadata } from "./getMetadata";
+import { AnchorProvider } from "@project-serum/anchor";
+import { Wallet } from "@project-serum/anchor";
 
 const {
   metadata: { Metadata },
 } = programs;
-
-const confirmOption: ConfirmOptions = {
-  commitment: "finalized",
-  preflightCommitment: "finalized",
-  skipPreflight: false,
-};
 
 export async function getNftsForOwner(
   contractAddress: PublicKey,
@@ -26,7 +17,8 @@ export async function getNftsForOwner(
   symbol: string,
   owner: PublicKey,
   TOKEN_METADATA_PROGRAM_ID: PublicKey,
-  conn: Connection
+  conn: Connection,
+  wallet: Wallet
 ) {
   let allTokens: any[] = [];
   const tokenAccounts = await conn.getParsedTokenAccountsByOwner(
@@ -34,8 +26,11 @@ export async function getNftsForOwner(
     { programId: TOKEN_PROGRAM_ID },
     "finalized"
   );
-  const randWallet = new anchor.Wallet(Keypair.generate());
-  const provider = new anchor.Provider(conn, randWallet, confirmOption);
+  // const randWallet = new Wallet(Keypair.generate());
+  // const provider = new anchor.Provider(conn, randWallet, confirmOption);
+  const provider = new AnchorProvider(conn, wallet, {
+    commitment: "processed",
+  });
   const program = new anchor.Program(contractIdl, contractAddress, provider);
 
   for (let index = 0; index < tokenAccounts.value.length; index++) {
@@ -84,8 +79,6 @@ export async function getNftsForOwner(
     }
     return 0;
   });
-
-  console.info("All tokens got here: ", allTokens);
 
   return allTokens;
 }

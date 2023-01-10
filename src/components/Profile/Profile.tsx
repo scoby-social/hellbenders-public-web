@@ -9,14 +9,10 @@ import {
   boxWrapper,
   connectWalletMessageWrapper,
   connectWalletText,
-  mintFakeIDContentWrapper,
-  mintFakeIDHeaderTitleWrapper,
-  mintFakeIDHeaderWrapper,
-  mintFakeIDTextDescription,
-  mintFakeIDTitle,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import ConnectWalletButton from "components/common/ConnectWalletButton";
+import FakeIDInfo from "./FakeIDInfo/FakeIDInfo";
 
 const Profile = () => {
   const [wallet] = useAtom(currentWallet);
@@ -29,24 +25,7 @@ const Profile = () => {
           <Box sx={boxContainer}>
             <Grid container spacing={2} sx={boxWrapper}>
               <UserCard {...leader} isBroodLeader />
-              <Grid item md={4} sm={8}>
-                <Box sx={mintFakeIDHeaderWrapper}>
-                  <Box sx={mintFakeIDHeaderTitleWrapper}>
-                    <Typography align="center" variant="h6">
-                      {`To join ${leader.username}'s brood, mint a Fake ID`}
-                    </Typography>
-                  </Box>
-                  <Box sx={mintFakeIDContentWrapper}>
-                    <Typography variant="h6" sx={mintFakeIDTitle}>
-                      {`Join ${leader.username}'s Brood`}
-                    </Typography>
-                    <Typography sx={mintFakeIDTextDescription}>
-                      You’re already holding a fake ID in your wallet. If you
-                      want to mint a new one, connect with an empty wallet.
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
+              <FakeIDInfo username={leader.username} />
             </Grid>
           </Box>
           <PhotoBooth />

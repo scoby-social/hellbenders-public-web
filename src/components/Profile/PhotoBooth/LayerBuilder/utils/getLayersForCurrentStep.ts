@@ -79,8 +79,6 @@ export async function getLayersForCurrentStep({
     ...layersWithBlobImages.slice(diff - 1, diff + 1),
   ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
 
-  console.info("Builded selected layers: ", filteredLayers);
-
   return {
     layersToShow,
     completeLayers: layersWithBlobImages,

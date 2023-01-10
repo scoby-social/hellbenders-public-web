@@ -2,9 +2,7 @@ import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { getNftsForOwner } from "./getNftsForOwner";
 import FakeIDNFTIdl from "./usdc-fake-id.json";
 
-export async function checkIfUserHasFakeID(
-  wallet: PublicKey
-): Promise<boolean> {
+export async function checkIfUserHasFakeID(wallet: any): Promise<boolean> {
   const conn = new Connection(clusterApiUrl("devnet"));
   const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
     "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
@@ -22,9 +20,10 @@ export async function checkIfUserHasFakeID(
     FakeIDNFTIdl,
     FakeIDNFTPOOL,
     FakeIDNFTSYMBOL,
-    wallet,
+    wallet.publicKey,
     TOKEN_METADATA_PROGRAM_ID,
-    conn
+    conn,
+    wallet
   );
 
   return fakeIDs.length > 0;

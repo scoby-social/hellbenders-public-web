@@ -13,6 +13,7 @@ export const cardContainer: SxProps = {
 export const unitLeaderFlag: SxProps = {
   maxWidth: "25%",
   padding: "0.3vmax",
+  marginBottom: "0.3vmin",
   display: "flex",
   justifyContent: "center",
   alignSelf: "start",
