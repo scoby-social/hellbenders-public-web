@@ -39,8 +39,8 @@ import { getNftsForOwner } from "./getNftsForOwner";
 import { sendTransaction } from "./sendTransaction";
 import { AnchorProvider } from "@project-serum/anchor";
 
-const ParentWallet = new PublicKey(
-  "4NCF6k76LThBY5Kx6jUBFeY5b7rLULoFugmGDX9Jx77B"
+const ParentNFT = new PublicKey(
+  "3P3eygyzNtQe8ZmYwavmpsQofDmDGPFogYxD9z99C8A4"
 );
 
 // meta data for scoby nft
@@ -192,19 +192,20 @@ export const mintFakeID = async (wallet: any) => {
         } as any)
       );
     } else {
-      // check if parent wallet is holding fake id nft
-      memberships = await getNftsForOwner(
-        FakeIDNFTProgramId,
-        FakeIDNFTIdl,
-        FakeIDNFTPOOL,
-        FakeIDNFTSYMBOL,
-        ParentWallet,
-        TOKEN_METADATA_PROGRAM_ID,
-        conn,
-        wallet
+      
+      let [parentNftMetadataExtended] = await PublicKey.findProgramAddress(
+        [ParentNFT.toBuffer(), FakeIDNFTPOOL.toBuffer()],
+        FakeIDNFTProgramId
       );
 
-      let parentMembership = memberships[0];
+      let parentNftExtendedData = await program.account.metadataExtended.fetch(
+        parentNftMetadataExtended
+      );
+
+      let parentMembership = {
+        metadataExtended: parentNftMetadataExtended,
+        extendedData: parentNftExtendedData
+      };
 
       const creatorMint = poolData.rootNft as PublicKey;
       console.log(creatorMint.toString());

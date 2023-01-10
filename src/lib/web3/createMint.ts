@@ -23,6 +23,9 @@ export function createMint(
     signers
   );
 
+  console.log("kkkk account ", account.toString());
+  console.log("kkkk account ", decimals);
+
   instructions.push(
     createInitializeMintInstruction(
       account,
@@ -42,6 +45,8 @@ function createUninitializedMint(
   signers: Keypair[]
 ) {
   const account = Keypair.generate();
+
+  
   instructions.push(
     SystemProgram.createAccount({
       fromPubkey: payer,
