@@ -1,155 +1,95 @@
-import { Box, Grid, Typography } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
-import { UserCardProps } from "components/common/UserCard/types";
+import ConnectWalletButton from "components/common/ConnectWalletButton";
+import {
+  allLeaderboardUsers,
+  currentWallet,
+  filteredLeaderboardUsers,
+  leaderboardLoading,
+  userHasNoID,
+} from "lib/store";
 
 import {
+  connectWalletMessageWrapper,
+  connectWalletText,
   contentContainerStyles,
-  filterIconStyles,
-  filtersBoxWrapperStyles,
-  filterWrapperStyles,
 } from "./styles";
-
-const mockCardInformation: UserCardProps[] = [
-  {
-    id: "1",
-    username: "Elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "2",
-    username: "Elias",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "3",
-    username: "Elias",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "4",
-    username: "Elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "5",
-    username: "Elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "6",
-    username: "Elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "7",
-    username: "Elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-  {
-    id: "8",
-    username: "Elias",
-    amplifier_role: "Super",
-    superpower_role: "Reader",
-    bio: "Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading. Hello world 🤯🚀, space for reading entertainment in a piece of internet, enjoyable reading.",
-    externalLink: "launch.hellbenders.live/elias",
-    avatar:
-      "https://i.picsum.photos/id/417/200/200.jpg?hmac=urRppSmoZMSijmMMM_igfBcmbcTu_y285erBFfY7jE4",
-    seniority: 123,
-    brood: 50,
-    royalties: 0,
-    isBroodLeader: false,
-  },
-];
+import FilterBar from "components/common/FilterBar/FilterBar";
 
 export const LeaderboardContent = () => {
+  const [wallet] = useAtom(currentWallet);
+  const [missingID] = useAtom(userHasNoID);
+  const [loading] = useAtom(leaderboardLoading);
+  const [allUsers] = useAtom(allLeaderboardUsers);
+  const [filteredUsers, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
+
+  const renderComponent = () => {
+    if (wallet !== "" && !missingID) {
+      return (
+        <Box sx={{ flex: 1 }}>
+          <FilterBar allUsers={allUsers} setFilteredUsers={setFilteredUsers} />
+          <Box>
+            <Grid container alignItems="stretch" spacing={4}>
+              {filteredUsers.map((val) => (
+                <UserCard key={val.id} {...val} isBroodLeader={false} />
+              ))}
+            </Grid>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (wallet === "" && !missingID) {
+      return (
+        <Box sx={connectWalletMessageWrapper}>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Only Members Admitted`}</Typography>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Connect your Wallet to show your Fake ID at the door`}</Typography>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`To get in quick, connect with a wallet holding only your Fake ID. We don't need to be digging through your sh*t`}</Typography>
+          <ConnectWalletButton primaryColor blackText />
+        </Box>
+      );
+    }
+
+    if (wallet !== "" && missingID) {
+      return (
+        <Box sx={connectWalletMessageWrapper}>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Sorry, I don't see your Fake ID.`}</Typography>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Come back when you have one.`}</Typography>
+          <ConnectWalletButton primaryColor blackText />
+        </Box>
+      );
+    }
+  };
+
   return (
     <Box sx={contentContainerStyles}>
-      <Box sx={filtersBoxWrapperStyles}>
-        <Box sx={filterWrapperStyles}>
-          <Typography>Seniority</Typography>
-          <KeyboardArrowDownIcon sx={filterIconStyles} />
-        </Box>
-        <Box sx={filterWrapperStyles}>
-          <Typography>Brood</Typography>
-          <KeyboardArrowDownIcon sx={filterIconStyles} />
-        </Box>
-        <Box sx={filterWrapperStyles}>
-          <Typography>Royalties</Typography>
-          <KeyboardArrowDownIcon sx={filterIconStyles} />
-        </Box>
-      </Box>
-      <Box>
-        <Grid container spacing={4}>
-          {mockCardInformation.map((val) => (
-            <UserCard key={val.id} {...val} />
-          ))}
-        </Grid>
-      </Box>
+      {loading ? (
+        <CircularProgress sx={{ alignSelf: "center" }} />
+      ) : (
+        renderComponent()
+      )}
     </Box>
   );
 };

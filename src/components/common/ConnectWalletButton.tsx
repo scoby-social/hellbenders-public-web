@@ -41,18 +41,18 @@ const ConnectWalletButton = ({
   const [_, setWallet] = useAtom(currentWallet);
   const [__, setCurrentUser] = useAtom(currentUser);
   const [___, setLoadingUser] = useAtom(isLoadingUser);
-  const [____, setUserHasNoWallet] = useAtom(userHasNoID);
+  const [____, setUserHasNoID] = useAtom(userHasNoID);
 
   const getUserByWalletOrRemoveUser =
     React.useCallback(async (): Promise<void> => {
       if (publicKey) {
-        setUserHasNoWallet(false);
+        setUserHasNoID(false);
         setWallet(publicKey.toString());
         const user = await getUserByWallet(publicKey.toString());
         setLoadingUser(true);
 
         if (Object.keys(user).length === 0) {
-          setUserHasNoWallet(true);
+          setUserHasNoID(true);
         }
 
         setLoadingUser(false);
@@ -62,7 +62,7 @@ const ConnectWalletButton = ({
 
       setWallet("");
       setCurrentUser({} as User);
-      setUserHasNoWallet(false);
+      setUserHasNoID(false);
     }, [publicKey]);
 
   React.useEffect(() => {
@@ -74,7 +74,7 @@ const ConnectWalletButton = ({
       <Typography sx={{ color: blackText ? "#000" : "#fff" }}>
         {publicKey
           ? walletAddressShortener(publicKey?.toString())
-          : "Connect your wallet!"}
+          : "Connect Wallet"}
       </Typography>
     </WalletButton>
   );

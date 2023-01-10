@@ -3,10 +3,10 @@ import Image from "next/image";
 
 import ConnectWalletButton from "components/common/ConnectWalletButton";
 import {
-  detailsWhenWalletNotConnected,
   headerBoxWithImageWrapper,
   headerContentWrapper,
-  headerItemsWrapper,
+  headerImageWrapper,
+  imageStyle,
   leaderboardContentWrapper,
   leaderboardText,
 } from "./styles";
@@ -16,36 +16,20 @@ export const Header = ({ title, isProfile }: HeaderProps) => {
   return (
     <Box sx={headerBoxWithImageWrapper}>
       <Box sx={headerContentWrapper}>
-        <Box sx={headerItemsWrapper}>
+        <Box sx={headerImageWrapper}>
           <Image
             src="/hellbenders_token_ico.svg"
             alt="Hellbenders token ico"
-            width="70"
-            height="70"
+            fill
+            style={imageStyle}
           />
         </Box>
         <Box sx={leaderboardContentWrapper(isProfile)}>
           <Typography variant="h1" sx={leaderboardText}>
             {title}
           </Typography>
-          {!isProfile && (
-            <Box sx={detailsWhenWalletNotConnected}>
-              <Typography>
-                {`Only Members Admitted`}
-                <br />
-                <br />
-                {`Connect your Wallet to show your Fake ID at the door.`}
-                <br />
-                <br />
-                {`To get in quick, connect with a wallet holding only your`}
-                <br />
-                {`Fake ID. We don't need to be digging through your sh*t.`}
-              </Typography>
-              <ConnectWalletButton primaryColor />
-            </Box>
-          )}
         </Box>
-        <Box sx={headerItemsWrapper}>
+        <Box>
           <ConnectWalletButton primaryColor={false} />
         </Box>
       </Box>

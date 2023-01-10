@@ -84,5 +84,8 @@ export async function getNftsForOwner(
     }
     return 0;
   });
+
+  console.info("All tokens got here: ", allTokens);
+
   return allTokens;
 }

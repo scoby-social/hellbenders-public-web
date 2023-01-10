@@ -3,7 +3,7 @@ import { User } from "lib/models/user";
 export interface UserCardProps
   extends Omit<
     User,
-    | "pronoun"
+    | "pronouns"
     | "wallet"
     | "parent"
     | "grandParent"

@@ -2,35 +2,42 @@ import { LayerType } from "lib/models/layer";
 
 const steps = [
   [LayerType.BACKGROUND],
-  [LayerType.MEN_BODY, LayerType.WOMEN_BODY],
+  [LayerType.MALE_BODY, LayerType.FEMALE_BODY],
   [LayerType.HAIR],
-  [LayerType.EYE],
+  [LayerType.EYES],
   [LayerType.MOUTH],
   [LayerType.BEARD],
   [LayerType.HAT, LayerType.HELMET, LayerType.MASK],
   [LayerType.LASERS],
-  [LayerType.MEN_SHIRT, LayerType.WOMEN_TOP],
-  [LayerType.MEN_JACKET, LayerType.WOMEN_JACKET],
+  [LayerType.MALE_SHIRT, LayerType.FEMALE_TOP],
+  [LayerType.MALE_JACKET, LayerType.FEMALE_JACKET],
   [LayerType.ACCESORY],
 ];
 
-const stepLabel = [
-  "Background",
-  "Body",
-  "Hair",
-  "Eyes",
-  "Mouth",
-  "Beard",
-  "Hat",
-  "Lasers",
-  "Shirt",
-  "Jacket",
-  "Accessory",
-];
+const stepLabel = {
+  [LayerType.BACKGROUND]: "Background",
+  [LayerType.MALE_BODY]: "Body",
+  [LayerType.FEMALE_BODY]: "Body",
+  [LayerType.ACCESORY]: "Accesory",
+  [LayerType.FEMALE_JACKET]: "Jacket",
+  [LayerType.FEMALE_TOP]: "Top",
+  [LayerType.MALE_JACKET]: "Jacket",
+  [LayerType.MALE_SHIRT]: "Shirt",
+  [LayerType.LASERS]: "Lasers",
+  [LayerType.EYES]: "Eyes",
+  [LayerType.MASK]: "Mask",
+  [LayerType.HELMET]: "Helmet",
+  [LayerType.HAT]: "Hat",
+  [LayerType.HAIR]: "Hair",
+  [LayerType.BEARD]: "Beard",
+  [LayerType.MOUTH]: "Mouth",
+};
 
-const bodyTypeInGender = ["MEN", "WOMEN"];
+const bodyTypeInGender = ["MALE", "FEMALE"];
 
 const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const vowels = ["A", "E", "I", "O", "U"];
 
 export function getIterableSteps(): number[] {
   return iterableForSteps;
@@ -54,6 +61,12 @@ export function getTotalStepsStartingFromOne(): number {
   return steps.length;
 }
 
-export function getStepLabel(idx: number): string {
-  return stepLabel[idx];
+export function getStepLabel(layer: LayerType): string {
+  return stepLabel[layer];
+}
+
+export function getStepLayerArticle(layer: LayerType): string {
+  if (vowels.includes(layer.charAt(0))) return "An";
+
+  return "A";
 }

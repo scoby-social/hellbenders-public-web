@@ -42,7 +42,12 @@ const UserCard = ({
   royalties,
   isBroodLeader,
 }: UserCardProps) => (
-  <Grid item {...getResponsiveParamsForGrid(isBroodLeader)} key={id}>
+  <Grid
+    sx={{ height: "100%" }}
+    item
+    {...getResponsiveParamsForGrid(isBroodLeader)}
+    key={id}
+  >
     <Box sx={cardContainer}>
       {isBroodLeader && (
         <Box sx={unitLeaderFlag}>

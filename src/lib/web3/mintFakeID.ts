@@ -10,17 +10,6 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-
-const conn = new Connection(clusterApiUrl("devnet"));
-
-const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
-);
-
-// membership kind smart contract address and IDL
-const FakeIDNFTProgramId = new PublicKey(
-  "8S18mGzHyNGur85jAPoEjad8P8rywTpjyABbBEdmj2gb"
-);
 import FakeIDNFTIdl from "./usdc-fake-id.json";
 import {
   AccountLayout,
@@ -36,9 +25,17 @@ import { getEdition } from "./getEdition";
 import { createMint } from "./createMint";
 import { getNftsForOwner } from "./getNftsForOwner";
 import { sendTransaction } from "./sendTransaction";
+import { checkIfUserHasFakeID } from "./checkIfUserHasFakeID";
 
-const ParentWallet = new PublicKey(
-  "4NCF6k76LThBY5Kx6jUBFeY5b7rLULoFugmGDX9Jx77B"
+const conn = new Connection(clusterApiUrl("devnet"));
+
+const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
+  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+);
+
+// membership kind smart contract address and IDL
+const FakeIDNFTProgramId = new PublicKey(
+  "8S18mGzHyNGur85jAPoEjad8P8rywTpjyABbBEdmj2gb"
 );
 
 // meta data for scoby nft
@@ -47,20 +44,20 @@ const FakeIDNFTPOOL = new PublicKey(
 );
 const FakeIDNFTSYMBOL = "HELLPASS";
 
-// ...  more nfts can be added here
-
-// semi fungible token address and IDL
-
-// ... more sfts can be added here
-
 const confirmOption: ConfirmOptions = {
   commitment: "finalized",
   preflightCommitment: "finalized",
   skipPreflight: false,
 };
 
-export const mintFakeID = async (wallet: any) => {
+export const mintFakeID = async (
+  wallet: any,
+  metadataUrl: string,
+  name: string,
+  leaderWallet: string
+) => {
   try {
+    const parentWallet = new PublicKey(leaderWallet);
     // get provider from connection
     const provider = new anchor.Provider(conn, wallet as any, confirmOption);
 
@@ -120,11 +117,12 @@ export const mintFakeID = async (wallet: any) => {
     const royaltyList: String[] = [];
 
     const formData = {
-      name: "first fake ID",
-      uri: `https://gateway.pinata.cloud/ipfs/QmYk9gvH54WW6ZTpvjVDuCkhRXiZEwxjk7YhCxq3zYFxCY/1.json`,
+      name,
+      uri: metadataUrl,
     };
+
     const usdcToken = new PublicKey(
-      "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+      process.env.NEXT_PUBLIC_USDC_TOKEN_ADDRESS!
     );
 
     const sourceTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -160,16 +158,7 @@ export const mintFakeID = async (wallet: any) => {
     }
 
     // check if this wallet is holding the fake id nft
-    let memberships = await getNftsForOwner(
-      FakeIDNFTProgramId,
-      FakeIDNFTIdl,
-      FakeIDNFTPOOL,
-      FakeIDNFTSYMBOL,
-      wallet.publicKey,
-      TOKEN_METADATA_PROGRAM_ID,
-      conn
-    );
-    if (memberships.length != 0)
+    if (await checkIfUserHasFakeID(wallet.publicKey))
       throw new Error("Creator Already Have and Fake ID NFT");
 
     if (poolData.countMinting == 0) {
@@ -197,12 +186,12 @@ export const mintFakeID = async (wallet: any) => {
       );
     } else {
       // check if parent wallet is holding fake id nft
-      memberships = await getNftsForOwner(
+      const memberships = await getNftsForOwner(
         FakeIDNFTProgramId,
         FakeIDNFTIdl,
         FakeIDNFTPOOL,
         FakeIDNFTSYMBOL,
-        ParentWallet,
+        parentWallet,
         TOKEN_METADATA_PROGRAM_ID,
         conn
       );
@@ -457,6 +446,6 @@ export const mintFakeID = async (wallet: any) => {
     await sendTransaction(conn, wallet, transaction, signers);
     console.info("Minted successfully");
   } catch (err) {
-    console.info("Error: ", err);
+    throw err;
   }
 };

@@ -6,6 +6,7 @@ export interface LayerInBuilder extends Layer {
   key: string;
   exception: string;
   reverse: boolean;
+  skipped: boolean;
   swapWith?: string;
 }
 
@@ -13,6 +14,7 @@ export interface ScrollPhotoBoothReturnValues {
   layersToShow: LayerInBuilder[];
   combinedLayer: LayerInBuilder;
   stepLayer: LayerInBuilder;
+  reversedKey: string | null;
 }
 
 export interface GetAllLayersForCurrentStepReturnValues {
@@ -20,4 +22,10 @@ export interface GetAllLayersForCurrentStepReturnValues {
   completeLayers: LayerInBuilder[];
   combinedLayer: LayerInBuilder;
   stepLayer: LayerInBuilder;
+  reversedKey: string | null;
+}
+
+export interface MergeImageWithExceptionReturnValues {
+  resultingImage: string;
+  reversedLayerKey: string | null;
 }

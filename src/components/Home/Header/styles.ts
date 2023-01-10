@@ -1,4 +1,5 @@
 import { SxProps } from "@mui/material";
+import { CSSProperties } from "react";
 
 export const headerBoxWithImageWrapper: SxProps = {
   width: "100%",
@@ -21,7 +22,7 @@ export const leaderboardContentWrapper = (isProfile: boolean): SxProps => {
     display: "flex",
     alignItems: "center",
     flexFlow: "column",
-    alignSelf: "end",
+    alignSelf: "center",
   };
 
   if (isProfile) styles.alignSelf = "center";
@@ -31,18 +32,18 @@ export const leaderboardContentWrapper = (isProfile: boolean): SxProps => {
 
 export const leaderboardText: SxProps = {
   letterSpacing: "0.385em",
-};
-
-export const detailsWhenWalletNotConnected: SxProps = {
-  display: "flex",
-  alignItems: "center",
-  flexFlow: "column",
-  backgroundColor: "rgba(104, 104, 104, 0.5)",
-  backdropFilter: "blur(2px)",
-  padding: "1vmin 8vmin",
   textAlign: "center",
+  userSelect: "none",
 };
 
-export const headerItemsWrapper: SxProps = {
-  width: "15%",
+export const headerImageWrapper: SxProps = {
+  width: "4vmax",
+  height: "4vmax",
+  marginLeft: "2vmax",
+  position: "relative",
+};
+
+export const imageStyle: CSSProperties = {
+  width: "100%",
+  height: "100%",
 };

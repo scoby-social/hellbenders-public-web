@@ -1,9 +1,10 @@
 import {
   collection,
   getDocs,
+  limit,
+  orderBy,
   query,
   QueryDocumentSnapshot,
-  where,
 } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
@@ -17,34 +18,17 @@ const converter = {
 
 const usersRef = collection(firestore, collectionName).withConverter(converter);
 
-export async function getUserByWallet(wallet: string): Promise<User> {
-  const q = query(usersRef, where("wallet", "==", wallet));
-
+export async function getSeniorityForUser(): Promise<number> {
+  const q = query(usersRef, orderBy("seniority", "desc"), limit(1));
   const usersSnapshot = await getDocs(q);
   const queryResult = usersSnapshot.docs.map((value) => ({
     id: value.id,
     ...value.data(),
   }));
 
-  if (queryResult.length === 0) return {} as User;
+  if (queryResult.length === 0) return 0;
 
   const [user] = queryResult;
 
-  return user;
-}
-
-export async function getUserByUsername(username: string): Promise<User> {
-  const q = query(usersRef, where("username", "==", username));
-
-  const usersSnapshot = await getDocs(q);
-  const queryResult = usersSnapshot.docs.map((value) => ({
-    id: value.id,
-    ...value.data(),
-  }));
-
-  if (queryResult.length === 0) return {} as User;
-
-  const [user] = queryResult;
-
-  return user;
+  return user.seniority + 1;
 }

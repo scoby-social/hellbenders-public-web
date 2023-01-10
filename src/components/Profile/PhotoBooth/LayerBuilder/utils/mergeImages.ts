@@ -1,7 +1,8 @@
 import { LayerInBuilder } from "../types";
+import { convertToBlob } from "./convertToBlob";
 
 export async function mergeImages(
-  firstImage: LayerInBuilder | undefined,
+  firstImage: LayerInBuilder | null,
   secondImage: LayerInBuilder
 ): Promise<string> {
   if (!firstImage) return secondImage.image;
@@ -31,74 +32,4 @@ export async function mergeImages(
   const canvasBlob = await convertToBlob(canvas);
 
   return URL.createObjectURL(canvasBlob);
-}
-
-export async function mergeImageWithException(
-  exception: LayerInBuilder,
-  selectedLayer: LayerInBuilder,
-  buildedLayers: LayerInBuilder[]
-): Promise<string> {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  const selectedLayerBlob = await (await fetch(selectedLayer.image)).blob();
-  const selectedLayerBitmap = await createImageBitmap(selectedLayerBlob);
-
-  canvas.width = selectedLayerBitmap.width;
-  canvas.height = selectedLayerBitmap.height;
-
-  let pendingLayer;
-
-  for await (const layer of buildedLayers) {
-    if (exception.reverse && layer.name === exception.name) {
-      pendingLayer = layer;
-      continue;
-    }
-
-    if (layer.name !== exception.name && layer.type !== selectedLayer.type) {
-      const layerToCombine = await (await fetch(layer.image)).blob();
-      const layerBitmap = await createImageBitmap(layerToCombine);
-
-      context?.drawImage(
-        layerBitmap,
-        0,
-        0,
-        layerBitmap.width,
-        layerBitmap.height
-      );
-    }
-  }
-
-  context?.drawImage(
-    selectedLayerBitmap,
-    0,
-    0,
-    selectedLayerBitmap.width,
-    selectedLayerBitmap.height
-  );
-
-  if (pendingLayer) {
-    const layerToCombine = await (await fetch(pendingLayer.image)).blob();
-    const layerBitmap = await createImageBitmap(layerToCombine);
-
-    context?.drawImage(
-      layerBitmap,
-      0,
-      0,
-      layerBitmap.width,
-      layerBitmap.height
-    );
-  }
-
-  const canvasBlob = await convertToBlob(canvas);
-
-  return URL.createObjectURL(canvasBlob);
-}
-
-async function convertToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
-  return new Promise((resolve) => {
-    canvas.toBlob((blob) => {
-      if (blob) resolve(blob);
-    });
-  });
 }

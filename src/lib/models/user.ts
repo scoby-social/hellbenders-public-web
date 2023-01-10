@@ -9,7 +9,7 @@ export interface User {
   username: string; // ID Card name
   amplifier_role: string;
   superpower_role: string;
-  pronoun: Pronouns;
+  pronouns: Pronouns;
   bio: string;
   externalLink: string | undefined;
   wallet: string;

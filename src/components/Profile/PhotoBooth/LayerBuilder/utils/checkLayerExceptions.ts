@@ -2,28 +2,22 @@ import { Exception } from "lib/models/layer";
 import { LayerInBuilder } from "../types";
 
 export function checkLayerExceptions(
-  combinedLayers: LayerInBuilder[],
   selectedLayerPerStep: LayerInBuilder[],
   combiningLayer: LayerInBuilder
-): LayerInBuilder[] {
-  let incompatibleLayers: LayerInBuilder[] = [];
+): Array<LayerInBuilder | null> {
+  let incompatibleLayers: Array<LayerInBuilder | null> = [];
   combiningLayer.exceptions.forEach((value) => {
-    incompatibleLayers = checkExceptionInLayer(
-      combiningLayer,
-      value,
-      selectedLayerPerStep
-    );
+    incompatibleLayers.push(checkExceptionInLayer(value, selectedLayerPerStep));
   });
 
   return incompatibleLayers;
 }
 
-export function checkExceptionInLayer(
-  layer: LayerInBuilder,
+function checkExceptionInLayer(
   exception: Exception,
   layers: LayerInBuilder[]
-): LayerInBuilder[] {
-  const exceptionLayers: LayerInBuilder[] = [];
+): LayerInBuilder | null {
+  let exceptionLayer: LayerInBuilder | null = null;
 
   if (Array.isArray(exception.items)) {
     exception.items.forEach((exceptionName) => {
@@ -41,18 +35,15 @@ export function checkExceptionInLayer(
           value.type === exception.type
         ) {
           if (exception.reverse) {
-            exceptionLayers.push({
+            exceptionLayer = {
               ...value,
               reverse: true,
               swapWith: matchingString,
-            });
+            };
           } else {
-            exceptionLayers.push({
+            exceptionLayer = {
               ...value,
-              exception: `The garb you picked doesn't fit with your ${matchingString}. If you want to wear it anyway, you'll have to take off ${
-                layer.name.split(".")[0]
-              }`,
-            });
+            };
           }
         }
       });
@@ -60,17 +51,12 @@ export function checkExceptionInLayer(
   } else {
     layers.forEach((value) => {
       if (value.type === exception.type) {
-        exceptionLayers.push({
+        exceptionLayer = {
           ...value,
-          exception: `The garb you picked doesn't fit with your ${
-            value.name
-          }. If you want to wear it anyway, you'll have to take off ${
-            layer.name.split(".")[0]
-          }`,
-        });
+        };
       }
     });
   }
 
-  return exceptionLayers;
+  return exceptionLayer;
 }

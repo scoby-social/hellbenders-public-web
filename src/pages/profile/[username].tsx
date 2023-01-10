@@ -13,7 +13,6 @@ import { selectedLeader } from "lib/store";
 import { ProfilePageProps } from "../../components/Profile/types";
 
 const headerBoxContainerStyle: SxProps = {
-  backgroundColor: "rgba(217, 217, 217, 0.20)",
   paddingBottom: "1rem",
 };
 
@@ -53,7 +52,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
 
   return (
     <Box sx={headerBoxContainerStyle}>
-      <Header title={`${user.username}'s Brood`} isProfile />
+      <Header title={`The ${user.username} Brood`} isProfile />
       <Profile />
     </Box>
   );

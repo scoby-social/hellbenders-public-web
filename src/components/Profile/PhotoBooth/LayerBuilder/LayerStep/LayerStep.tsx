@@ -6,6 +6,7 @@ import Image from "next/image";
 import {
   allStepLayers,
   combinedLayers,
+  layerType,
   mergeInProcess,
   photoBoothStep,
   renderedSteps,
@@ -19,8 +20,10 @@ import { getLayersForCurrentStep } from "../utils/getLayersForCurrentStep";
 import { scrollPhotoBoothLayers } from "../utils/scrollPhotoBoothLayer";
 import {
   captionTextColor,
-  imageWrapper,
+  layerWrapper,
   layerExceptionCaption,
+  imageWrapper,
+  imageStyle,
 } from "./styles";
 import { LayerStepProps } from "./types";
 import { LayerInBuilder } from "../types";
@@ -34,6 +37,7 @@ const LayerStep = ({ step }: LayerStepProps) => {
   const [selectedLayerIdx] = useAtom(selectedLayerIndexPerStep);
   const [__, setAllStepLayers] = useAtom(allStepLayers);
   const [___, setProcessingMerge] = useAtom(mergeInProcess);
+  const [____, setSelectedLayerType] = useAtom(layerType);
   const [bodyType, setBodyType] = useAtom(selectedBodyType);
   const [stepsRendered, setStepsRendered] = useAtom(renderedSteps);
 
@@ -46,12 +50,15 @@ const LayerStep = ({ step }: LayerStepProps) => {
     (combinedLayer: LayerInBuilder, stepLayer: LayerInBuilder) => {
       if (currentStep === step) {
         if (step === 1) {
-          if (stepLayer.type.includes("WOMEN")) {
+          if (stepLayer.type.includes("FEMALE")) {
             setBodyType(1);
-          } else if (stepLayer.type.includes("MEN")) {
+          } else if (stepLayer.type.includes("MALE")) {
             setBodyType(0);
           }
         }
+
+        const selectedType = stepLayer.type;
+        setSelectedLayerType(selectedType);
 
         setSelectedLayerOnStep((prevLayers) => {
           const newLayers = [...prevLayers];
@@ -70,55 +77,76 @@ const LayerStep = ({ step }: LayerStepProps) => {
         });
       }
     },
-    [
-      currentStep,
-      setAllCombinedLayers,
-      setBodyType,
-      setSelectedLayerOnStep,
-      step,
-    ]
+    // eslint-disable-next-line
+    [currentStep, step]
   );
+
+  const reverseLayerInStepByKey = React.useCallback((key: string | null) => {
+    if (key) {
+      setSelectedLayerOnStep((prev) => {
+        return [...prev].map((val) => {
+          if (val.key === key) return { ...val, reverse: true };
+
+          return val;
+        });
+      });
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const getLayers = React.useCallback(async () => {
     setProcessingMerge(true);
-    const { layersToShow, completeLayers, combinedLayer, stepLayer } =
-      await getLayersForCurrentStep(
-        isMobile ? 1 : 2,
-        currentStep,
-        selectedLayerIdx[step],
-        allCombinedLayers,
-        step,
-        selectedLayersOnStep,
-        bodyType
-      );
-    setProcessingMerge(false);
+    const {
+      layersToShow,
+      completeLayers,
+      combinedLayer,
+      stepLayer,
+      reversedKey,
+    } = await getLayersForCurrentStep({
+      diff: isMobile ? 1 : 2,
+      currentStep,
+      selectedLayer: selectedLayerIdx[step],
+      layersToCombine: allCombinedLayers,
+      step,
+      selectedLayersOnStep,
+      bodyType,
+    });
 
+    setProcessingMerge(false);
+    reverseLayerInStepByKey(reversedKey);
     setAllLayers(completeLayers);
     setAllStepLayers(completeLayers);
     setVisibleLayers(layersToShow);
     addLayerToSelectedOne(combinedLayer, stepLayer);
 
     // eslint-disable-next-line
-  }, [currentStep, isMobile]);
+  }, [
+    currentStep,
+    isMobile,
+    selectedLayersOnStep,
+    allCombinedLayers,
+    selectedLayerIdx,
+    bodyType,
+  ]);
 
   const scrollLayers = React.useCallback(async () => {
     if (currentStep === step) {
-      const { layersToShow, combinedLayer, stepLayer } =
-        await scrollPhotoBoothLayers(
-          isMobile ? 1 : 2,
-          selectedLayerIdx[step],
-          allLayers,
-          allCombinedLayers,
+      const { layersToShow, combinedLayer, stepLayer, reversedKey } =
+        await scrollPhotoBoothLayers({
+          diff: isMobile ? 1 : 2,
+          layerIndex: selectedLayerIdx[step],
+          allStepLayers: allLayers,
+          layersToCombine: allCombinedLayers,
           step,
-          selectedLayersOnStep
-        );
+          selectedLayersOnStep,
+        });
 
+      reverseLayerInStepByKey(reversedKey);
       addLayerToSelectedOne(combinedLayer, stepLayer);
-
       setProcessingMerge(false);
-
       setVisibleLayers(layersToShow);
     }
+    // eslint-disable-next-line
   }, [
     currentStep,
     step,
@@ -127,8 +155,6 @@ const LayerStep = ({ step }: LayerStepProps) => {
     allLayers,
     allCombinedLayers,
     selectedLayersOnStep,
-    addLayerToSelectedOne,
-    setProcessingMerge,
   ]);
 
   /*------------------------------*/
@@ -162,16 +188,6 @@ const LayerStep = ({ step }: LayerStepProps) => {
     if (!stepsRendered[step]) {
       setAllLayers([]);
       setVisibleLayers([]);
-      // setAllCombinedLayers((prevLayers) => {
-      // const newLayers = [...prevLayers].slice(0, -1);
-
-      // return newLayers;
-      // });
-      // setSelectedLayerOnStep((prevLayers) => {
-      // const newLayers = [...prevLayers].slice(0, -1);
-
-      // return newLayers;
-      // });
     }
     // eslint-disable-next-line
   }, [stepsRendered]);
@@ -188,6 +204,13 @@ const LayerStep = ({ step }: LayerStepProps) => {
   React.useEffect(() => {
     if (allLayers.length > 0 && step === currentStep) {
       setAllStepLayers(allLayers);
+
+      setAllCombinedLayers((prev) => {
+        const newLayers = [...prev];
+        newLayers[newLayers.length - 1].skipped = false;
+
+        return newLayers;
+      });
     }
     // eslint-disable-next-line
   }, [currentStep, allLayers]);
@@ -199,14 +222,16 @@ const LayerStep = ({ step }: LayerStepProps) => {
   return (
     <>
       {visibleLayers.map((layer) => (
-        <Box key={layer.key} sx={imageWrapper}>
-          <Image
-            width={layer.selected ? 250 : 150}
-            height={layer.selected ? 250 : 150}
-            key={`${layer.index}-${layer.name}`}
-            alt={layer.name}
-            src={layer.image}
-          />
+        <Box key={layer.key} sx={layerWrapper}>
+          <Box sx={imageWrapper(layer.selected)}>
+            <Image
+              key={`${layer.index}-${layer.name}`}
+              alt={layer.name}
+              src={layer.image}
+              fill
+              style={imageStyle}
+            />
+          </Box>
           <Typography sx={captionTextColor} variant="caption">
             {layer.name.split(".")[0]}
           </Typography>

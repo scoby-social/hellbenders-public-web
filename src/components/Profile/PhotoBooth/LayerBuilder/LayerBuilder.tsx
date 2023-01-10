@@ -6,10 +6,13 @@ import { useAtom } from "jotai";
 
 import {
   allStepLayers,
+  combinedLayers,
+  layerType,
   mergeInProcess,
   photoBoothStep,
   renderedSteps,
   selectedLayerIndexPerStep,
+  selectedLayerPerStep,
 } from "lib/store";
 
 import {
@@ -25,6 +28,7 @@ import {
 import {
   getIterableSteps,
   getStepLabel,
+  getStepLayerArticle,
   getStepsLength,
 } from "../utils/getSteps";
 import LayerStep from "./LayerStep/LayerStep";
@@ -37,7 +41,12 @@ const LayerBuilder = () => {
     selectedLayerIndexPerStep
   );
   const [_, setStepsRendered] = useAtom(renderedSteps);
+  const [__, setAllCombinedLayers] = useAtom(combinedLayers);
+  const [___, setSelectedLayerPerStep] = useAtom(selectedLayerPerStep);
   const [allLayers] = useAtom(allStepLayers);
+  const [selectedLayerType] = useAtom(layerType);
+
+  const [disabledButtons, setDisabledButtons] = React.useState(false);
 
   const selectedLayer = selectedLayerIdxPerStep[currentStep];
 
@@ -57,12 +66,17 @@ const LayerBuilder = () => {
       newSteps[currentStep] = false;
       return newSteps;
     });
+    setDisabledButtons(false);
     changeStep(currentStep - 1);
   }, [currentStep, changeStep, setStepsRendered]);
 
-  const goToNextStep = () => {
+  const goToNextStep = React.useCallback(() => {
+    if (currentStep === maxStepNumber) {
+      setDisabledButtons(true);
+      return;
+    }
     changeStep(currentStep + 1);
-  };
+  }, [changeStep, currentStep, maxStepNumber]);
 
   const scrollLayers = React.useCallback(
     (index: number) => {
@@ -78,6 +92,22 @@ const LayerBuilder = () => {
     [currentStep, setProcessingMerge, setSelectedLayerIdxPerStep, allLayers]
   );
 
+  const skipLayer = React.useCallback(() => {
+    setAllCombinedLayers((prev) => {
+      const newLayers = [...prev];
+      newLayers[newLayers.length - 1].skipped = true;
+
+      return newLayers;
+    });
+    setSelectedLayerPerStep((prev) => {
+      const newLayers = [...prev];
+      newLayers[newLayers.length - 1].skipped = true;
+
+      return newLayers;
+    });
+    goToNextStep();
+  }, [goToNextStep, setAllCombinedLayers, setSelectedLayerPerStep]);
+
   return (
     <Box sx={layerBuilderWrapper}>
       <Box sx={layersContainer}>
@@ -89,7 +119,7 @@ const LayerBuilder = () => {
         <Box sx={layersActionbuttonsWrapper}>
           <Box sx={arrowWrapper}>
             <IconButton
-              disabled={processingMerge}
+              disabled={processingMerge || disabledButtons}
               onClick={() => scrollLayers(selectedLayer - 1)}
             >
               {processingMerge ? (
@@ -101,33 +131,36 @@ const LayerBuilder = () => {
           </Box>
           <Box sx={actionButtonsWrapper}>
             <Button
-              disabled={processingMerge}
+              disabled={processingMerge || disabledButtons}
               onClick={goToNextStep}
               variant="contained"
             >
               {processingMerge ? (
                 <CircularProgress size={20} color="secondary" />
               ) : (
-                `Select ${getStepLabel(currentStep)}`
+                `Choose this ${getStepLabel(selectedLayerType)}`
               )}
             </Button>
             {currentStep > 1 && (
               <Button
                 sx={marginTopButton}
-                disabled={processingMerge}
+                disabled={processingMerge || disabledButtons}
+                onClick={skipLayer}
                 variant="outlined"
               >
                 {processingMerge ? (
                   <CircularProgress size={20} color="secondary" />
                 ) : (
-                  `Don't add ${getStepLabel(currentStep)}`
+                  `Don't add ${getStepLayerArticle(
+                    selectedLayerType
+                  )} ${getStepLabel(selectedLayerType)}`
                 )}
               </Button>
             )}
           </Box>
           <Box sx={arrowWrapper}>
             <IconButton
-              disabled={processingMerge}
+              disabled={processingMerge || disabledButtons}
               onClick={() =>
                 scrollLayers((selectedLayer + 1) % allLayers.length)
               }

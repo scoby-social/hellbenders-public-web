@@ -1,22 +1,26 @@
 import { getLayersByType } from "lib/firebase/firestore/layers/getLayers";
 import { nanoid } from "nanoid";
 import { getStepLayers } from "../../utils/getSteps";
+import { GetLayersForCurrentStepParams } from "../LayerStep/types";
 import {
   GetAllLayersForCurrentStepReturnValues,
   LayerInBuilder,
 } from "../types";
 import { checkLayerExceptions } from "./checkLayerExceptions";
-import { mergeImages, mergeImageWithException } from "./mergeImages";
+import { getFilteredLayers } from "./filterLayersForCombine";
+import { getLayerExceptionText } from "./getLayerExceptionText";
+import { mergeImages } from "./mergeImages";
+import { mergeImageWithException } from "./mergeImagesWithException";
 
-export async function getLayersForCurrentStep(
-  diff: number,
-  currentStep: number,
-  selectedLayer: number,
-  layersToCombine: LayerInBuilder[],
-  step: number,
-  selectedLayersOnStep: LayerInBuilder[],
-  bodyType: number
-): Promise<GetAllLayersForCurrentStepReturnValues> {
+export async function getLayersForCurrentStep({
+  diff,
+  currentStep,
+  selectedLayer,
+  layersToCombine,
+  step,
+  selectedLayersOnStep,
+  bodyType,
+}: GetLayersForCurrentStepParams): Promise<GetAllLayersForCurrentStepReturnValues> {
   const currentLayerStepType = getStepLayers(currentStep, bodyType);
   const layers = await getLayersByType(currentLayerStepType, bodyType);
 
@@ -27,6 +31,7 @@ export async function getLayersForCurrentStep(
     key: nanoid(),
     exception: "",
     reverse: false,
+    skipped: false,
   }));
 
   const layersWithBlobImages = await Promise.all(
@@ -36,28 +41,33 @@ export async function getLayersForCurrentStep(
     }))
   );
 
+  const [stepLayer] = layersWithBlobImages;
+
   const layersLength = layersWithBlobImages.length;
 
   const [{ ...firstLayer }] = layersWithBlobImages;
 
   firstLayer.selected = true;
 
-  const [resultingLayer] = checkLayerExceptions(
-    layersToCombine,
-    selectedLayersOnStep,
-    firstLayer
-  );
+  const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
 
-  if (resultingLayer) {
+  const exceptions = checkLayerExceptions(filteredLayers, firstLayer);
+  let reversedKey: string | null = null;
+
+  if (exceptions.length > 0) {
     const mergedImage = await mergeImageWithException(
-      resultingLayer,
+      exceptions,
       firstLayer,
-      selectedLayersOnStep
+      filteredLayers
     );
-    firstLayer.image = mergedImage;
-    firstLayer.exception = resultingLayer.exception;
+    firstLayer.image = mergedImage.resultingImage;
+    firstLayer.exception = getLayerExceptionText(exceptions, firstLayer.name);
+    reversedKey = mergedImage.reversedLayerKey;
   } else {
-    firstLayer.image = await mergeImages(layersToCombine[step - 1], firstLayer);
+    firstLayer.image = await mergeImages(
+      getLayerToCombine(layersToCombine, step - 1),
+      firstLayer
+    );
   }
 
   const layersToShow = [
@@ -69,10 +79,22 @@ export async function getLayersForCurrentStep(
     ...layersWithBlobImages.slice(diff - 1, diff + 1),
   ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
 
+  console.info("Builded selected layers: ", filteredLayers);
+
   return {
     layersToShow,
     completeLayers: layersWithBlobImages,
-    stepLayer: layersWithBlobImages[0],
+    stepLayer,
     combinedLayer: firstLayer,
+    reversedKey,
   };
+}
+
+function getLayerToCombine(
+  layers: LayerInBuilder[],
+  index: number
+): LayerInBuilder | null {
+  if (index === -1) return null;
+  if (layers[index].skipped) return getLayerToCombine(layers, index - 1);
+  return layers[index];
 }

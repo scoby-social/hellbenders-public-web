@@ -17,8 +17,13 @@ import { useAtom } from "jotai";
 
 import { Pronouns } from "lib/models/user";
 import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
-import { mintFakeID } from "lib/web3/mintFakeID";
-import { photoBoothStep } from "lib/store";
+import {
+  combinedLayers,
+  currentUser,
+  photoBoothStep,
+  selectedLayerPerStep,
+  selectedLeader,
+} from "lib/store";
 import useCheckMobileScreen from "lib/hooks/useCheckMobileScreen";
 
 import {
@@ -32,18 +37,32 @@ import {
   photoBoothTitleWrapper,
   textWithMargin,
   Form,
+  mintButtonWrapper,
+  socialButtonWrapper,
+  socialConnectButton,
+  iconWrapper,
+  imageStyle,
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
 import LayerBuilder from "./LayerBuilder/LayerBuilder";
 import { getTotalStepsStartingFromOne } from "./utils/getSteps";
+import { uploadNFT } from "lib/web3/uploadNFT";
+import { createUser } from "lib/firebase/firestore/users/saveUser";
+import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
+import Image from "next/image";
 
 const PhotoBooth = () => {
   const totalSteps = getTotalStepsStartingFromOne();
   const wallet = useWallet();
   const isMobile = useCheckMobileScreen();
   const [currentStep] = useAtom(photoBoothStep);
+  const [allCombinedLayers] = useAtom(combinedLayers);
+  const [selectedLayers] = useAtom(selectedLayerPerStep);
+  const [_, setCurrentUser] = useAtom(currentUser);
+  const [leader] = useAtom(selectedLeader);
   const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState({});
   const {
     control,
     handleSubmit,
@@ -56,7 +75,48 @@ const PhotoBooth = () => {
   });
   const username = watch("username");
 
-  const submitForm = (): void => {};
+  const submitForm = async (values: PhotoBoothFormInputs) => {
+    try {
+      setLoading(true);
+      const resultingLayer = allCombinedLayers[allCombinedLayers.length - 1];
+
+      console.info("Uploading NFT: ", resultingLayer);
+
+      const userHasFakeID = await checkIfUserHasFakeID(wallet.publicKey!);
+
+      if (userHasFakeID) {
+        setMessage({
+          error: true,
+          message: "This wallet already has a FakeID",
+        });
+        return;
+      }
+
+      const image = await uploadNFT({
+        selectedLayers,
+        resultingLayer,
+        formResult: values,
+        leaderWalletAddress: leader.wallet,
+        wallet,
+      });
+
+      console.info("Resulting NFT image: ", image);
+
+      console.info("Uploading user");
+      const user = await createUser(
+        { ...values, wallet: wallet.publicKey!.toString(), avatar: image },
+        leader.wallet
+      );
+
+      console.info("User has been uploaded");
+
+      setCurrentUser({ ...user, avatar: image });
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
 
   const validateIfUserExists = React.useCallback(async () => {
     if (username.length === 0) {
@@ -207,8 +267,8 @@ const PhotoBooth = () => {
                       {...field}
                       id="biography-input"
                       multiline
-                      minRows={4}
-                      maxRows={5}
+                      minRows={2}
+                      maxRows={3}
                       fullWidth
                       error={!!errors.bio}
                       inputProps={{ maxLength: 160 }}
@@ -241,9 +301,35 @@ const PhotoBooth = () => {
                   )}
                 />
               </Box>
-              <Box sx={socialButtonsWrapper}>
-                <Box></Box>
-                <Box></Box>
+              <Box sx={socialButtonsWrapper(isMobile)}>
+                <Box sx={socialButtonWrapper}>
+                  <Box sx={iconWrapper}>
+                    <Image
+                      src="/twitter_ico.svg"
+                      alt="Twitter icon"
+                      fill
+                      style={imageStyle}
+                    />
+                  </Box>
+
+                  <Button variant="contained" sx={socialConnectButton}>
+                    Connect
+                  </Button>
+                </Box>
+                <Box sx={socialButtonWrapper}>
+                  <Box sx={iconWrapper}>
+                    <Image
+                      src="/discord_ico.svg"
+                      alt="Discord icon"
+                      fill
+                      style={imageStyle}
+                    />
+                  </Box>
+
+                  <Button variant="contained" sx={socialConnectButton}>
+                    Connect
+                  </Button>
+                </Box>
               </Box>
             </Grid>
             <Box sx={photoBoothContainer}>
@@ -255,15 +341,12 @@ const PhotoBooth = () => {
               </Box>
               <LayerBuilder />
             </Box>
-            <Box>
+            <Box sx={mintButtonWrapper}>
               <Button
+                disabled={loading}
                 color="primary"
                 variant="contained"
-                onClick={async () => {
-                  setLoading(true);
-                  await mintFakeID(wallet);
-                  setLoading(false);
-                }}
+                type="submit"
               >
                 {loading ? <CircularProgress /> : "Mint"}
               </Button>
