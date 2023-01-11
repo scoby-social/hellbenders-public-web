@@ -26,7 +26,7 @@ export const LeaderboardContent = () => {
   const [filteredUsers, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
 
   const renderComponent = () => {
-    if (wallet !== "" && !missingID) {
+    if (wallet !== "" && missingID) {
       return (
         <Box sx={{ flex: 1 }}>
           <FilterBar allUsers={allUsers} setFilteredUsers={setFilteredUsers} />
@@ -41,7 +41,7 @@ export const LeaderboardContent = () => {
       );
     }
 
-    if (wallet === "" && !missingID) {
+    if (wallet === "" && missingID) {
       return (
         <Box sx={connectWalletMessageWrapper}>
           <Typography
@@ -64,7 +64,7 @@ export const LeaderboardContent = () => {
       );
     }
 
-    if (wallet !== "" && missingID) {
+    if (wallet !== "" && !missingID) {
       return (
         <Box sx={connectWalletMessageWrapper}>
           <Typography

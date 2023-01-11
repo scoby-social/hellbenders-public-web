@@ -31,7 +31,14 @@ export default function CustomTheme() {
         fontFamily: "Cabin",
         fontSize: "1.2vmax",
       },
+      subtitle1: {
+        fontSize: "1.2vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "1vmax",
+        },
+      },
       subtitle2: {
+        fontFamily: "Cabin",
         fontSize: "1vmax",
         [breakpoints.up("sm")]: {
           fontSize: "0.80vmax",

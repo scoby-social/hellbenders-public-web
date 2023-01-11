@@ -156,7 +156,9 @@ const PhotoBooth = () => {
       <Form isMobile={isMobile} onSubmit={handleSubmit(submitForm)}>
         <Box sx={fakeIDFormArrowWrapper}></Box>
         <Box sx={formContainer}>
-          <Typography variant="h6">The Photobooth: Mint our Fake ID</Typography>
+          <Typography variant="h6">
+            The Photobooth: Mint your Fake ID
+          </Typography>
 
           <Grid
             justifyContent="space-around"

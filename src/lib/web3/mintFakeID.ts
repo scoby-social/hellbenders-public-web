@@ -62,8 +62,6 @@ export const mintFakeID = async (
   // get fake id nft pool
   const poolData = (await program.account.pool.fetch(FakeIDNFTPOOL)) as any;
 
-  // get config data of above pool
-
   const transaction = new Transaction();
   const createTokenAccountTransaction = new Transaction();
   const instructions: TransactionInstruction[] = [];
@@ -417,7 +415,6 @@ export const mintFakeID = async (
       } as any)
     );
   }
-  // await sendTransaction(tx,[])
 
   if (createTokenAccountTransaction.instructions.length > 0) {
     const blockHash = await conn.getRecentBlockhash();

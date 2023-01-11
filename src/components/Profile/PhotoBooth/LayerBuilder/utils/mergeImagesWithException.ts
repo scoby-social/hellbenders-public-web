@@ -51,8 +51,6 @@ export async function mergeImageWithException(
     );
   }
 
-  console.info("Drawed filtered layers: ", filteredLayers);
-
   context?.drawImage(
     selectedLayerBitmap,
     0,

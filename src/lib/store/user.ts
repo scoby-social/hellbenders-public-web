@@ -5,4 +5,4 @@ export const currentUser = atom<User>({} as User);
 export const currentWallet = atom<string>("");
 export const selectedLeader = atom<User>({} as User);
 export const isLoadingUser = atom<boolean>(false);
-export const userHasNoID = atom<boolean>(false);
+export const userHasNoID = atom<boolean>(true);

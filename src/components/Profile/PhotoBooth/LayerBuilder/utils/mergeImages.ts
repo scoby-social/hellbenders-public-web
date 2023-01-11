@@ -20,7 +20,6 @@ export async function mergeImages(
     fetchedImage2.blob(),
   ]);
 
-  console.info("Merging images: ", firstImage, secondImage);
   console.info(image1, image2);
 
   const bitmap1 = await createImageBitmap(image1);

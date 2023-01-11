@@ -85,9 +85,26 @@ export const rightRoyaltyContent: SxProps = {
 
 export const mintFakeIDTitle: SxProps = {
   maxWidth: "45%",
+  flexGrow: 1,
+  textAlign: "center",
 };
 
 export const mintFakeIDTextDescription: SxProps = {
   maxWidth: "55%",
   textAlign: "center",
+};
+
+export const availabilityContainer: SxProps = {
+  flexGrow: 1,
+  marginTop: "2vmin",
+  display: "flex",
+  justifyContent: "space-evenly",
+};
+
+export const availabilityWrapper: SxProps = {
+  minWidth: "30%",
+  display: "flex",
+  flexFlow: "column",
+  justifyContent: "center",
+  alignItems: "center",
 };
