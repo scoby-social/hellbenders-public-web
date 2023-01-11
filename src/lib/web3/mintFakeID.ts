@@ -251,8 +251,11 @@ export const mintFakeID = async (
       );
 
     if (parentMembershipUsdcTokenAccount[1]) {
-      if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
-        royaltyList.push(accountInfo.owner);
+      if (
+        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+        -1
+      ) {
+        royaltyList.push(accountInfo.owner.toString());
         createTokenAccountTransaction.add(parentMembershipUsdcTokenAccount[1]);
       }
     }
@@ -287,8 +290,11 @@ export const mintFakeID = async (
       );
 
     if (grandParentMembershipUsdcTokenAccount[1]) {
-      if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
-        royaltyList.push(accountInfo.owner);
+      if (
+        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+        -1
+      ) {
+        royaltyList.push(accountInfo.owner.toString());
         createTokenAccountTransaction.add(
           grandParentMembershipUsdcTokenAccount[1]
         );
@@ -328,8 +334,11 @@ export const mintFakeID = async (
       );
 
     if (grandGrandParentMembershipUsdcTokenAccount[1]) {
-      if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
-        royaltyList.push(accountInfo.owner);
+      if (
+        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+        -1
+      ) {
+        royaltyList.push(accountInfo.owner.toString());
         createTokenAccountTransaction.add(
           grandGrandParentMembershipUsdcTokenAccount[1]
         );
@@ -371,8 +380,11 @@ export const mintFakeID = async (
       );
 
     if (grandGrandGrandParentMembershipUsdcTokenAccount[1]) {
-      if (royaltyList.findIndex((item) => item == accountInfo.owner) == -1) {
-        royaltyList.push(accountInfo.owner);
+      if (
+        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+        -1
+      ) {
+        royaltyList.push(accountInfo.owner.toString());
         createTokenAccountTransaction.add(
           grandGrandGrandParentMembershipUsdcTokenAccount[1]
         );
