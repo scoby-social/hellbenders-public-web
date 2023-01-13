@@ -29,7 +29,7 @@ export async function getStaticPaths() {
 
   return {
     paths: [...allParams],
-    fallback: false,
+    fallback: true,
   };
 }
 
