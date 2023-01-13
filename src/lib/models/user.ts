@@ -1,17 +1,16 @@
 export enum Pronouns {
   other = "they/them",
-  male = "he/him",
   female = "she/her",
+  male = "he/him",
 }
 
 export interface User {
   id: string;
   username: string; // ID Card name
-  amplifier_role: string;
-  superpower_role: string;
+  amplifierRole: string;
+  superpowerRole: string;
   pronouns: Pronouns;
   bio: string;
-  externalLink: string | undefined;
   wallet: string;
   brood: number;
   seniority: number;
@@ -22,5 +21,7 @@ export interface User {
   grandParent: string;
   grandGrandParent: string;
   grandGrandGrandParent: string;
-  twitterTokenConnection: string;
+  twitterHandle: string;
+  discordHandle: string;
+  telegramHandle: string;
 }

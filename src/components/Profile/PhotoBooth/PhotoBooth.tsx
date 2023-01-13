@@ -32,22 +32,18 @@ import {
   formContainer,
   formWrapper,
   roleFieldWrapper,
-  socialButtonsWrapper,
   photoBoothContainer,
   photoBoothTitleWrapper,
   textWithMargin,
   Form,
   mintButtonWrapper,
-  socialButtonWrapper,
-  socialConnectButton,
-  iconWrapper,
-  imageStyle,
   availabilityContainer,
   availabilityWrapper,
   availabilityDescription,
   photoBoothFooterWrapper,
   mintingMessageWrapper,
   mintingMessage,
+  formWrapperWithoutMargin,
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
@@ -56,7 +52,7 @@ import { getTotalStepsStartingFromOne } from "./utils/getSteps";
 import { uploadNFT } from "lib/web3/uploadNFT";
 import { createUser } from "lib/firebase/firestore/users/saveUser";
 import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
-import Image from "next/image";
+import { getSeniorityForUser } from "lib/firebase/firestore/users/getSeniorityForUser";
 
 const PhotoBooth = () => {
   const totalSteps = getTotalStepsStartingFromOne();
@@ -103,6 +99,8 @@ const PhotoBooth = () => {
         "Please be patient while our machine elves forge your Fake ID."
       );
 
+      const userSeniority = await getSeniorityForUser();
+
       const res = await uploadNFT({
         selectedLayers,
         resultingLayer,
@@ -110,6 +108,7 @@ const PhotoBooth = () => {
         leaderWalletAddress: leader.wallet,
         parentNftAddress: leader.fakeIDs[0],
         wallet,
+        seniority: userSeniority,
       });
 
       console.info("Resulting NFT image: ", res);
@@ -122,7 +121,8 @@ const PhotoBooth = () => {
           avatar: res.image,
           fakeIDs: [res.nftAddress],
         },
-        leader.wallet
+        leader.wallet,
+        userSeniority
       );
 
       console.info("User has been uploaded");
@@ -130,6 +130,9 @@ const PhotoBooth = () => {
       setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
       setLoading(false);
     } catch (err) {
+      setMessage(
+        "I dunno why, but the machine elves f*cked up your mint. Try again later."
+      );
       console.error(err);
       setLoading(false);
     }
@@ -157,6 +160,8 @@ const PhotoBooth = () => {
       return;
     }
   }, [username, setError]);
+
+  console.info("Errors: ", errors);
 
   return (
     <Box sx={fakeIDFormContainer}>
@@ -198,6 +203,7 @@ const PhotoBooth = () => {
                   )}
                 />
               </Box>
+
               <Box sx={formWrapper}>
                 <Typography sx={textWithMargin}>
                   Role in Unit<sup>*</sup>
@@ -205,7 +211,7 @@ const PhotoBooth = () => {
                 <Box sx={roleFieldWrapper}>
                   <Typography variant="h6">The</Typography>
                   <Controller
-                    name="amplifier_role"
+                    name="amplifierRole"
                     defaultValue=""
                     control={control}
                     render={({ field }) => (
@@ -213,11 +219,10 @@ const PhotoBooth = () => {
                         {...field}
                         id="amplifier-input"
                         variant="outlined"
-                        error={!!errors.amplifier_role}
+                        error={!!errors.amplifierRole}
                         placeholder="Amplifier"
                         helperText={
-                          errors.amplifier_role?.message ||
-                          "Example: Cybernetic"
+                          errors.amplifierRole?.message || "Example: Cybernetic"
                         }
                         size="small"
                       />
@@ -225,7 +230,7 @@ const PhotoBooth = () => {
                   />
 
                   <Controller
-                    name="superpower_role"
+                    name="superpowerRole"
                     defaultValue=""
                     control={control}
                     render={({ field }) => (
@@ -233,10 +238,10 @@ const PhotoBooth = () => {
                         {...field}
                         id="superpower-input"
                         variant="outlined"
-                        error={!!errors.superpower_role}
+                        error={!!errors.superpowerRole}
                         placeholder="Superpower"
                         helperText={
-                          errors.superpower_role?.message || "Example: Being"
+                          errors.superpowerRole?.message || "Example: Being"
                         }
                         size="small"
                       />
@@ -244,6 +249,7 @@ const PhotoBooth = () => {
                   />
                 </Box>
               </Box>
+
               <Box sx={formWrapper}>
                 <Typography sx={textWithMargin}>Pronouns</Typography>
                 <Controller
@@ -270,8 +276,9 @@ const PhotoBooth = () => {
                 />
               </Box>
             </Grid>
+
             <Grid flex="1" item xs={12} md={6}>
-              <Box sx={formWrapper}>
+              <Box sx={formWrapperWithoutMargin}>
                 <Typography sx={textWithMargin}>
                   Bio<sup>*</sup>
                 </Typography>
@@ -296,57 +303,67 @@ const PhotoBooth = () => {
                   )}
                 />
               </Box>
-              <Box sx={formWrapper}>
-                <Typography sx={textWithMargin}>External Link</Typography>
+
+              <Box sx={formWrapperWithoutMargin}>
+                <Typography sx={textWithMargin}>Twitter</Typography>
                 <Controller
-                  name="externalLink"
-                  defaultValue={undefined}
+                  name="twitterHandle"
+                  defaultValue=""
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="twitter-input"
+                      fullWidth
+                      onBlur={validateIfUserExists}
+                      placeholder="@username"
+                      size="small"
+                      variant="outlined"
+                      inputProps={{ maxLength: 10 }}
+                    />
+                  )}
+                />
+              </Box>
+
+              <Box sx={formWrapperWithoutMargin}>
+                <Typography sx={textWithMargin}>Discord</Typography>
+                <Controller
+                  name="discordHandle"
+                  defaultValue=""
                   control={control}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       id="user-url-input"
                       fullWidth
-                      error={!!errors.externalLink}
-                      placeholder="URL"
-                      helperText={errors.externalLink?.message}
+                      placeholder="@username#1234"
                       size="small"
                       variant="outlined"
                     />
                   )}
                 />
               </Box>
-              <Box sx={socialButtonsWrapper(isMobile)}>
-                <Box sx={socialButtonWrapper}>
-                  <Box sx={iconWrapper}>
-                    <Image
-                      src="/twitter_ico.svg"
-                      alt="Twitter icon"
-                      fill
-                      style={imageStyle}
-                    />
-                  </Box>
 
-                  <Button variant="contained" sx={socialConnectButton}>
-                    Connect
-                  </Button>
-                </Box>
-                <Box sx={socialButtonWrapper}>
-                  <Box sx={iconWrapper}>
-                    <Image
-                      src="/discord_ico.svg"
-                      alt="Discord icon"
-                      fill
-                      style={imageStyle}
+              <Box sx={formWrapperWithoutMargin}>
+                <Typography sx={textWithMargin}>Telegram</Typography>
+                <Controller
+                  name="telegramHandle"
+                  defaultValue=""
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="user-url-input"
+                      fullWidth
+                      placeholder="@username"
+                      size="small"
+                      variant="outlined"
                     />
-                  </Box>
-
-                  <Button variant="contained" sx={socialConnectButton}>
-                    Connect
-                  </Button>
-                </Box>
+                  )}
+                />
               </Box>
             </Grid>
+
             <Box sx={photoBoothContainer}>
               <Box sx={photoBoothTitleWrapper}>
                 <Typography variant="subtitle1">

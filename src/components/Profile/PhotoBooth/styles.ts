@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { SxProps } from "@mui/material";
-import { CSSProperties } from "react";
 
 import { PhotoBoothFormStyleProps } from "./types";
 
@@ -34,27 +33,17 @@ export const formWrapper: SxProps = {
   flexFlow: "column",
 };
 
+export const formWrapperWithoutMargin: SxProps = {
+  display: "flex",
+  flex: 1,
+  justifyContent: "flex-start",
+  flexFlow: "column",
+};
+
 export const roleFieldWrapper: SxProps = {
   marginLeft: "1.5vmax",
   display: "flex",
   justifyContent: "space-between",
-};
-
-export const socialButtonsWrapper = (isMobile: boolean): SxProps => ({
-  maxWidth: isMobile ? "80%" : "60%",
-  alignSelf: "start",
-  display: "flex",
-  justifyContent: "space-between",
-});
-
-export const socialButtonWrapper: SxProps = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-
-export const socialConnectButton: SxProps = {
-  marginLeft: "1vmin",
 };
 
 export const photoBoothContainer: SxProps = {
@@ -67,7 +56,7 @@ export const photoBoothTitleWrapper: SxProps = {
 };
 
 export const textWithMargin: SxProps = {
-  marginBottom: "0.50vmax",
+  margin: "0.50vmax 0",
 };
 
 export const Form = styled.form<PhotoBoothFormStyleProps>`
@@ -86,17 +75,6 @@ export const mintButtonWrapper: SxProps = {
   marginTop: "1vmax",
   display: "flex",
   justifyContent: "center",
-};
-
-export const iconWrapper: SxProps = {
-  width: "1.5vmax",
-  height: "1.5vmax",
-  position: "relative",
-};
-
-export const imageStyle: CSSProperties = {
-  width: "100%",
-  height: "100%",
 };
 
 export const mintingMessageWrapper: SxProps = {

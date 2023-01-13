@@ -12,6 +12,7 @@ export interface Metadata {
   mint_wallet: string;
   twitter_handle: string;
   discord_handle: string;
+  telegram_handle: string;
   username: string;
   birthday: string;
   time_of_birth: string;
