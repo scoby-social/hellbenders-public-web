@@ -15,7 +15,6 @@ import { mergeImageWithException } from "./mergeImagesWithException";
 export async function getLayersForCurrentStep({
   diff,
   currentStep,
-  selectedLayer,
   layersToCombine,
   step,
   selectedLayersOnStep,
@@ -47,6 +46,27 @@ export async function getLayersForCurrentStep({
 
   const [{ ...firstLayer }] = layersWithBlobImages;
 
+  const firstLeft = layersLength - 1;
+  const firstRight = 1;
+
+  const leftSideLayers = [];
+  const rightSideLayers = [];
+
+  /* Fill the layers to be shown, that are not selected */
+  rightSideLayers.push(layersWithBlobImages[firstRight]);
+
+  if (diff > 1) {
+    const secondLeft = layersLength - diff;
+
+    leftSideLayers.push(layersWithBlobImages[secondLeft]);
+    leftSideLayers.push(layersWithBlobImages[firstLeft]);
+
+    const secondRight = diff;
+    rightSideLayers.push(layersWithBlobImages[secondRight]);
+  } else {
+    leftSideLayers.push(layersWithBlobImages[firstLeft]);
+  }
+
   firstLayer.selected = true;
 
   const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
@@ -70,20 +90,9 @@ export async function getLayersForCurrentStep({
     );
   }
 
-  console.info("Layers with blob images: ", layersWithBlobImages);
-  console.info("diff: ", diff);
-  console.info("selected layer: ", selectedLayer);
-
-  const layersToShow = [
-    ...layersWithBlobImages.slice(
-      layersLength - (diff - selectedLayer),
-      layersLength
-    ),
-    firstLayer,
-    ...layersWithBlobImages.slice(diff - 1, diff + 1),
-  ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
-
-  console.info("Layers to show: ", layersToShow);
+  const layersToShow = [...leftSideLayers, firstLayer, ...rightSideLayers].map(
+    (val, index) => ({ ...val, key: `${nanoid()}-${index}` })
+  );
 
   return {
     layersToShow,

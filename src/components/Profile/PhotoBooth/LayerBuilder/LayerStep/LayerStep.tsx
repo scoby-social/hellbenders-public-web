@@ -24,6 +24,7 @@ import {
   layerExceptionCaption,
   imageWrapper,
   imageStyle,
+  layerCropSquare,
 } from "./styles";
 import { LayerStepProps } from "./types";
 import { LayerInBuilder } from "../types";
@@ -105,7 +106,6 @@ const LayerStep = ({ step }: LayerStepProps) => {
     } = await getLayersForCurrentStep({
       diff: isMobile ? 1 : 2,
       currentStep,
-      selectedLayer: selectedLayerIdx[step],
       layersToCombine: allCombinedLayers,
       step,
       selectedLayersOnStep,
@@ -224,6 +224,7 @@ const LayerStep = ({ step }: LayerStepProps) => {
       {visibleLayers.map((layer) => (
         <Box key={layer.key} sx={layerWrapper}>
           <Box sx={imageWrapper(layer.selected)}>
+            {layer.selected && currentStep > 0 && <Box sx={layerCropSquare} />}
             <Image
               key={`${layer.index}-${layer.name}`}
               alt={layer.name}

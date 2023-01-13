@@ -7,7 +7,6 @@ export interface LayerStepProps {
 export interface GetLayersForCurrentStepParams {
   diff: number;
   currentStep: number;
-  selectedLayer: number;
   layersToCombine: LayerInBuilder[];
   step: number;
   selectedLayersOnStep: LayerInBuilder[];
