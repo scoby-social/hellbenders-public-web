@@ -1,3 +1,4 @@
+import { deleteShadowDriveFile } from "./deleteShadowDriveFile";
 import { mintFakeID } from "./mintFakeID";
 import { MetadataAttributes, Metadata } from "./types/metadata";
 import { UploadNftParams } from "./types/uploadNftParams";
@@ -11,6 +12,7 @@ export async function uploadNFT({
   leaderWalletAddress,
   wallet,
   parentNftAddress,
+  seniority,
 }: UploadNftParams): Promise<UploadNFTReturnType> {
   const attributes: MetadataAttributes[] = [];
 
@@ -23,21 +25,20 @@ export async function uploadNFT({
   const year = today.getFullYear();
 
   const metadata: Metadata = {
-    name: `#${0} ${formResult.username} the ${formResult.amplifier_role} ${
-      formResult.superpower_role
-    }`,
+    name: `#${seniority} ${formResult.username} the ${formResult.amplifierRole} ${formResult.superpowerRole}`,
     symbol: "HELLPASS",
     description: formResult.bio,
     image: resultingLayer.image,
-    seniority: 0,
+    seniority,
     pronouns: formResult.pronouns,
-    external_link: formResult.externalLink,
+    external_link: `www.hellbenders.world/${formResult.username}`,
     collection_name: "Hellbenders Fake ID",
     family_name: "Mapshifting",
     parent: leaderWalletAddress,
     mint_wallet: wallet.publicKey!.toString(),
-    twitter_handle: "",
-    discord_handle: "",
+    twitter_handle: formResult.twitterHandle,
+    discord_handle: formResult.discordHandle,
+    telegram_handle: formResult.telegramHandle,
     username: formResult.username,
     birthday: splittedDate[0],
     time_of_birth: `${splittedTime[0]} UTC`,
@@ -79,12 +80,20 @@ export async function uploadNFT({
 
   console.info("Metadata JSON: ", metadataShdwUrl);
 
-  const nftAddress = await mintFakeID(
-    wallet,
-    metadataShdwUrl,
-    metadata.name,
-    parentNftAddress
-  );
+  let nftAddress = "";
+
+  try {
+    nftAddress = await mintFakeID(
+      wallet,
+      metadataShdwUrl,
+      metadata.name,
+      parentNftAddress
+    );
+  } catch (err) {
+    deleteShadowDriveFile(metadataShdwUrl);
+    deleteShadowDriveFile(metadata.image);
+    throw err;
+  }
 
   URL.revokeObjectURL(blobUri);
 

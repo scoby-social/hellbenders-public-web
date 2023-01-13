@@ -9,4 +9,5 @@ export interface UploadNftParams {
   leaderWalletAddress: string;
   wallet: WalletContextState;
   parentNftAddress: string;
+  seniority: number;
 }
