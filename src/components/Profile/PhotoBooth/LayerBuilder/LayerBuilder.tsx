@@ -42,9 +42,10 @@ const LayerBuilder = () => {
   );
   const [_, setStepsRendered] = useAtom(renderedSteps);
   const [__, setAllCombinedLayers] = useAtom(combinedLayers);
-  const [___, setSelectedLayerPerStep] = useAtom(selectedLayerPerStep);
+  const [selectedLayerOnStep, setSelectedLayerOnStep] =
+    useAtom(selectedLayerPerStep);
   const [allLayers] = useAtom(allStepLayers);
-  const [selectedLayerType] = useAtom(layerType);
+  const [selectedLayerType, setSelectedLayerType] = useAtom(layerType);
 
   const [disabledButtons, setDisabledButtons] = React.useState(false);
 
@@ -66,9 +67,21 @@ const LayerBuilder = () => {
       newSteps[currentStep] = false;
       return newSteps;
     });
+
+    setSelectedLayerType(selectedLayerOnStep[currentStep - 1].type);
     setDisabledButtons(false);
+
+    setSelectedLayerOnStep((prevLayers) => {
+      return [...prevLayers].slice(0, -1);
+    });
+
+    setAllCombinedLayers((prevLayers) => {
+      return [...prevLayers].slice(0, -1);
+    });
+
     changeStep(currentStep - 1);
-  }, [currentStep, changeStep, setStepsRendered]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep, changeStep, allStepLayers, selectedLayerOnStep]);
 
   const goToNextStep = React.useCallback(() => {
     if (currentStep === maxStepNumber) {
@@ -99,14 +112,14 @@ const LayerBuilder = () => {
 
       return newLayers;
     });
-    setSelectedLayerPerStep((prev) => {
+    setSelectedLayerOnStep((prev) => {
       const newLayers = [...prev];
       newLayers[newLayers.length - 1].skipped = true;
 
       return newLayers;
     });
     goToNextStep();
-  }, [goToNextStep, setAllCombinedLayers, setSelectedLayerPerStep]);
+  }, [goToNextStep, setAllCombinedLayers, setSelectedLayerOnStep]);
 
   return (
     <Box sx={layerBuilderWrapper}>
@@ -138,7 +151,7 @@ const LayerBuilder = () => {
               {processingMerge ? (
                 <CircularProgress size={20} color="secondary" />
               ) : (
-                `Choose this ${getStepLabel(selectedLayerType)}`
+                `Choose ${getStepLabel(selectedLayerType)}`
               )}
             </Button>
             {currentStep > 1 && (

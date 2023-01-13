@@ -13,6 +13,9 @@ export interface Metadata {
   twitter_handle: string;
   discord_handle: string;
   username: string;
+  birthday: string;
+  time_of_birth: string;
+  season: string;
 }
 
 export interface MetadataAttributes {

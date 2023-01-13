@@ -42,6 +42,12 @@ import {
   socialConnectButton,
   iconWrapper,
   imageStyle,
+  availabilityContainer,
+  availabilityWrapper,
+  availabilityDescription,
+  photoBoothFooterWrapper,
+  mintingMessageWrapper,
+  mintingMessage,
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
@@ -62,7 +68,7 @@ const PhotoBooth = () => {
   const [_, setCurrentUser] = useAtom(currentUser);
   const [leader] = useAtom(selectedLeader);
   const [loading, setLoading] = React.useState(false);
-  const [message, setMessage] = React.useState({});
+  const [message, setMessage] = React.useState("");
   const {
     control,
     handleSubmit,
@@ -87,14 +93,15 @@ const PhotoBooth = () => {
       console.info("With fakeID: ", userHasFakeID);
 
       if (userHasFakeID) {
-        setMessage({
-          error: true,
-          message: "This wallet already has a FakeID",
-        });
+        setMessage("This wallet already has a FakeID");
         return;
       }
 
       console.info("Minting with NFT parent: ", leader.fakeIDs[0]);
+
+      setMessage(
+        "Please be patient while our machine elves forge your Fake ID."
+      );
 
       const res = await uploadNFT({
         selectedLayers,
@@ -238,13 +245,11 @@ const PhotoBooth = () => {
                 </Box>
               </Box>
               <Box sx={formWrapper}>
-                <Typography sx={textWithMargin}>
-                  Pronouns<sup>*</sup>
-                </Typography>
+                <Typography sx={textWithMargin}>Pronouns</Typography>
                 <Controller
                   name="pronouns"
                   control={control}
-                  defaultValue={Pronouns.male}
+                  defaultValue={Pronouns.other}
                   render={({ field }) => (
                     <Select
                       {...field}
@@ -292,12 +297,10 @@ const PhotoBooth = () => {
                 />
               </Box>
               <Box sx={formWrapper}>
-                <Typography sx={textWithMargin}>
-                  External Link<sup>*</sup>
-                </Typography>
+                <Typography sx={textWithMargin}>External Link</Typography>
                 <Controller
                   name="externalLink"
-                  defaultValue=""
+                  defaultValue={undefined}
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -346,22 +349,51 @@ const PhotoBooth = () => {
             </Grid>
             <Box sx={photoBoothContainer}>
               <Box sx={photoBoothTitleWrapper}>
-                <Typography>
+                <Typography variant="subtitle1">
                   Take your Fake ID Photo<sup>*</sup>
                 </Typography>
-                <Typography>{`${currentStep + 1}/${totalSteps}`}</Typography>
+                <Typography variant="subtitle1">{`Step ${
+                  currentStep + 1
+                } of ${totalSteps}`}</Typography>
               </Box>
               <LayerBuilder />
             </Box>
-            <Box sx={mintButtonWrapper}>
-              <Button
-                disabled={loading}
-                color="primary"
-                variant="contained"
-                type="submit"
-              >
-                {loading ? <CircularProgress /> : "Mint"}
-              </Button>
+            <Box sx={photoBoothFooterWrapper}>
+              <Box sx={mintButtonWrapper}>
+                <Button
+                  disabled={loading}
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                >
+                  {loading ? <CircularProgress /> : "Mint"}
+                </Button>
+              </Box>
+              {message && (
+                <Box sx={mintingMessageWrapper}>
+                  <Typography sx={mintingMessage} variant="subtitle2">
+                    {message}
+                  </Typography>
+                </Box>
+              )}
+              <Box sx={availabilityContainer}>
+                <Box sx={availabilityWrapper}>
+                  <Typography variant={"h6"} sx={availabilityDescription}>
+                    Available
+                  </Typography>
+                  <Typography variant={"h6"} sx={availabilityDescription}>
+                    232/3333
+                  </Typography>
+                </Box>
+                <Box sx={availabilityWrapper}>
+                  <Typography variant={"h6"} sx={availabilityDescription}>
+                    Price
+                  </Typography>
+                  <Typography variant={"h6"} sx={availabilityDescription}>
+                    6.66 USDC
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
           </Grid>
         </Box>

@@ -1,7 +1,7 @@
 export enum Pronouns {
+  other = "they/them",
   male = "he/him",
   female = "she/her",
-  other = "they/them",
 }
 
 export interface User {

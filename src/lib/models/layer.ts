@@ -24,7 +24,7 @@ export interface LayerException {
 }
 
 export interface Exception {
-  type: LayerType;
+  type: LayerType | "*";
   items: string[] | "*";
   reverse: boolean;
 }

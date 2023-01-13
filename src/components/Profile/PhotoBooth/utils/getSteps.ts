@@ -7,7 +7,8 @@ const steps = [
   [LayerType.EYES],
   [LayerType.MOUTH],
   [LayerType.BEARD],
-  [LayerType.HAT, LayerType.HELMET, LayerType.MASK],
+  [LayerType.HAT, LayerType.HELMET],
+  [LayerType.MASK],
   [LayerType.LASERS],
   [LayerType.MALE_SHIRT, LayerType.FEMALE_TOP],
   [LayerType.MALE_JACKET, LayerType.FEMALE_JACKET],
@@ -15,27 +16,27 @@ const steps = [
 ];
 
 const stepLabel = {
-  [LayerType.BACKGROUND]: "Background",
-  [LayerType.MALE_BODY]: "Body",
-  [LayerType.FEMALE_BODY]: "Body",
-  [LayerType.ACCESORY]: "Accesory",
-  [LayerType.FEMALE_JACKET]: "Jacket",
-  [LayerType.FEMALE_TOP]: "Top",
-  [LayerType.MALE_JACKET]: "Jacket",
-  [LayerType.MALE_SHIRT]: "Shirt",
-  [LayerType.LASERS]: "Lasers",
-  [LayerType.EYES]: "Eyes",
-  [LayerType.MASK]: "Mask",
-  [LayerType.HELMET]: "Helmet",
-  [LayerType.HAT]: "Hat",
-  [LayerType.HAIR]: "Hair",
-  [LayerType.BEARD]: "Beard",
-  [LayerType.MOUTH]: "Mouth",
+  [LayerType.BACKGROUND]: "this Background",
+  [LayerType.MALE_BODY]: "this Body",
+  [LayerType.FEMALE_BODY]: "this Body",
+  [LayerType.ACCESORY]: "this Accesory",
+  [LayerType.FEMALE_JACKET]: "this Jacket",
+  [LayerType.FEMALE_TOP]: "this Top",
+  [LayerType.MALE_JACKET]: "this Jacket",
+  [LayerType.MALE_SHIRT]: "this Shirt",
+  [LayerType.LASERS]: "these Lasers",
+  [LayerType.EYES]: "these Eyes",
+  [LayerType.MASK]: "this Mask",
+  [LayerType.HELMET]: "this Helmet",
+  [LayerType.HAT]: "this Hat",
+  [LayerType.HAIR]: "this Hair",
+  [LayerType.BEARD]: "this Beard",
+  [LayerType.MOUTH]: "this Mouth",
 };
 
 const bodyTypeInGender = ["MALE", "FEMALE"];
 
-const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 const vowels = ["A", "E", "I", "O", "U"];
 
@@ -66,6 +67,7 @@ export function getStepLabel(layer: LayerType): string {
 }
 
 export function getStepLayerArticle(layer: LayerType): string {
+  if (layer.charAt(layer.length - 1) === "S") return "";
   if (vowels.includes(layer.charAt(0))) return "An";
 
   return "A";

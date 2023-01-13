@@ -13,6 +13,15 @@ export async function uploadNFT({
   parentNftAddress,
 }: UploadNftParams): Promise<UploadNFTReturnType> {
   const attributes: MetadataAttributes[] = [];
+
+  const today = new Date();
+  const UTCDate = today.toJSON();
+  const splittedDate = UTCDate.split("T");
+  const splittedTime = splittedDate[1].split(".");
+
+  const quarter = Math.floor((today.getMonth() + 3) / 3);
+  const year = today.getFullYear();
+
   const metadata: Metadata = {
     name: `#${0} ${formResult.username} the ${formResult.amplifier_role} ${
       formResult.superpower_role
@@ -30,6 +39,9 @@ export async function uploadNFT({
     twitter_handle: "",
     discord_handle: "",
     username: formResult.username,
+    birthday: splittedDate[0],
+    time_of_birth: `${splittedTime[0]} UTC`,
+    season: `Q${quarter} ${year}`,
   };
 
   selectedLayers.forEach((layer) => {

@@ -20,15 +20,14 @@ export async function mergeImages(
     fetchedImage2.blob(),
   ]);
 
-  console.info(image1, image2);
-
   const bitmap1 = await createImageBitmap(image1);
   const bitmap2 = await createImageBitmap(image2);
 
-  canvas.width = bitmap1.width;
-  canvas.height = bitmap1.height;
+  canvas.width = bitmap2.width;
+  canvas.height = bitmap2.height;
 
   context!.drawImage(bitmap1, 0, 0, bitmap1.width, bitmap1.height);
+
   context!.drawImage(bitmap2, 0, 0, bitmap2.width, bitmap2.height);
 
   const canvasBlob = await convertToBlob(canvas);

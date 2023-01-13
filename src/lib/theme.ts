@@ -28,11 +28,11 @@ export default function CustomTheme() {
         },
       },
       h6: {
-        fontFamily: "Cabin",
         fontSize: "1.2vmax",
       },
       subtitle1: {
         fontSize: "1.2vmax",
+        fontFamily: "Cabin",
         [breakpoints.up("sm")]: {
           fontSize: "1vmax",
         },

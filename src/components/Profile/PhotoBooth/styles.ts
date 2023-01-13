@@ -76,8 +76,16 @@ export const Form = styled.form<PhotoBoothFormStyleProps>`
   border-radius: 15px;
 `;
 
+export const photoBoothFooterWrapper: SxProps = {
+  display: "flex",
+  flexGrow: 1,
+  flexFlow: "column",
+};
+
 export const mintButtonWrapper: SxProps = {
   marginTop: "1vmax",
+  display: "flex",
+  justifyContent: "center",
 };
 
 export const iconWrapper: SxProps = {
@@ -89,4 +97,37 @@ export const iconWrapper: SxProps = {
 export const imageStyle: CSSProperties = {
   width: "100%",
   height: "100%",
+};
+
+export const mintingMessageWrapper: SxProps = {
+  marginTop: "1vmin",
+  marginBottom: "1vmax",
+  display: "flex",
+  justifyContent: "center",
+};
+
+export const mintingMessage: SxProps = {
+  maxWidth: "20%",
+  textAlign: "center",
+};
+
+export const availabilityContainer: SxProps = {
+  flexGrow: 1,
+  marginTop: "2vmin",
+  display: "flex",
+  justifyContent: "center",
+};
+
+export const availabilityWrapper: SxProps = {
+  minWidth: "20%",
+  display: "flex",
+  flexFlow: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+export const availabilityDescription: SxProps = {
+  maxWidth: "55%",
+  textAlign: "center",
+  fontWeight: "900",
 };

@@ -41,7 +41,7 @@ export async function getLayersForCurrentStep({
     }))
   );
 
-  const [stepLayer] = layersWithBlobImages;
+  const [{ ...stepLayer }] = layersWithBlobImages;
 
   const layersLength = layersWithBlobImages.length;
 
@@ -57,7 +57,7 @@ export async function getLayersForCurrentStep({
   if (exceptions.length > 0) {
     const mergedImage = await mergeImageWithException(
       exceptions,
-      firstLayer,
+      stepLayer,
       filteredLayers
     );
     firstLayer.image = mergedImage.resultingImage;
@@ -66,9 +66,13 @@ export async function getLayersForCurrentStep({
   } else {
     firstLayer.image = await mergeImages(
       getLayerToCombine(layersToCombine, step - 1),
-      firstLayer
+      stepLayer
     );
   }
+
+  console.info("Layers with blob images: ", layersWithBlobImages);
+  console.info("diff: ", diff);
+  console.info("selected layer: ", selectedLayer);
 
   const layersToShow = [
     ...layersWithBlobImages.slice(
@@ -78,6 +82,8 @@ export async function getLayersForCurrentStep({
     firstLayer,
     ...layersWithBlobImages.slice(diff - 1, diff + 1),
   ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
+
+  console.info("Layers to show: ", layersToShow);
 
   return {
     layersToShow,

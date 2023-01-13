@@ -50,9 +50,10 @@ function checkExceptionInLayer(
     });
   } else {
     layers.forEach((value) => {
-      if (value.type === exception.type) {
+      if (value.type === exception.type || exception.type === "*") {
         exceptionLayer = {
           ...value,
+          reverse: exception.reverse,
         };
       }
     });
