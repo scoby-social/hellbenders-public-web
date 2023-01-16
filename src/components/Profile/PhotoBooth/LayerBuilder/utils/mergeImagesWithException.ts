@@ -1,5 +1,6 @@
 import { LayerType } from "lib/models/layer";
 import { LayerInBuilder, MergeImageWithExceptionReturnValues } from "../types";
+import { checkAndFilterExceptionsInBuildedLayers } from "./checkAndFilterExceptionsInBuildedLayers";
 import { convertToBlob } from "./convertToBlob";
 
 export async function mergeImageWithException(
@@ -13,44 +14,8 @@ export async function mergeImageWithException(
   canvas.width = 5100;
   canvas.height = 5100;
 
-  const firstLayers: LayerInBuilder[] = [];
-  const pendingLayers: LayerInBuilder[] = [];
-  const filteredLayers: LayerInBuilder[] = [];
-  let reversedLayerKey: string | null = null;
-
-  buildedLayers.forEach((layer) => {
-    if (
-      layer.type === LayerType.BACKGROUND ||
-      [
-        LayerType.MALE_BODY,
-        LayerType.FEMALE_BODY,
-        LayerType.MALE_SHIRT,
-        LayerType.FEMALE_TOP,
-      ].includes(layer.type)
-    ) {
-      firstLayers.push(layer);
-      return;
-    }
-
-    if (layer.reverse) {
-      pendingLayers.push(layer);
-      return;
-    }
-
-    const hasException = !!exceptions.find((exception) => {
-      if (!exception) return false;
-
-      if (exception.reverse && exception.name === layer.name) {
-        pendingLayers.push(layer);
-        reversedLayerKey = layer.key;
-        return false;
-      }
-
-      if (exception.name === layer.name) return true;
-    });
-
-    if (!hasException) filteredLayers.push(layer);
-  });
+  const { firstLayers, pendingLayers, filteredLayers, reversedLayerKey } =
+    checkAndFilterExceptionsInBuildedLayers(buildedLayers, exceptions);
 
   if (
     [LayerType.MALE_SHIRT, LayerType.FEMALE_TOP].includes(selectedLayer.type)

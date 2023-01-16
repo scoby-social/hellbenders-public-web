@@ -29,3 +29,10 @@ export interface MergeImageWithExceptionReturnValues {
   resultingImage: string;
   reversedLayerKey: string | null;
 }
+
+export interface FilterExceptionsReturnValues {
+  firstLayers: LayerInBuilder[];
+  pendingLayers: LayerInBuilder[];
+  filteredLayers: LayerInBuilder[];
+  reversedLayerKey: string | null;
+}

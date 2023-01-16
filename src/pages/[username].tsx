@@ -10,7 +10,7 @@ import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
 import { getUsersForStaticPaths } from "lib/firebase/firestore/users/getUsersForStaticPaths";
 import { selectedLeader } from "lib/store";
 
-import { ProfilePageProps } from "../../components/Profile/types";
+import { ProfilePageProps } from "../components/Profile/types";
 
 const headerBoxContainerStyle: SxProps = {
   paddingBottom: "1rem",

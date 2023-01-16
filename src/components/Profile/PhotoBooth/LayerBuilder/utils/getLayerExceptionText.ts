@@ -14,7 +14,9 @@ export function getLayerExceptionText(
 
   if (layerNames.length === 0) return "";
 
-  return `The garb you picked doesn't fit with your ${layerNames.join(
+  return `The ${
+    selectedLayerName.split(".")[0]
+  } you picked doesn't fit with your ${layerNames.join(
     ", "
   )}. If you want to wear it anyway, you'll have to take off ${
     selectedLayerName.split(".")[0]

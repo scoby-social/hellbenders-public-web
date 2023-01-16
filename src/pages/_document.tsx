@@ -12,6 +12,7 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Cabin&display=swap"
         />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <body>
         <Main />

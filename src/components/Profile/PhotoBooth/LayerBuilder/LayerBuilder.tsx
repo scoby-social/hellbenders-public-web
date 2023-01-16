@@ -79,6 +79,12 @@ const LayerBuilder = () => {
       return [...prevLayers].slice(0, -1);
     });
 
+    setSelectedLayerIdxPerStep((prev) => {
+      const newValues = [...prev];
+      newValues[currentStep] = 0;
+      return newValues;
+    });
+
     changeStep(currentStep - 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, changeStep, allStepLayers, selectedLayerOnStep]);

@@ -161,8 +161,6 @@ const PhotoBooth = () => {
     }
   }, [username, setError]);
 
-  console.info("Errors: ", errors);
-
   return (
     <Box sx={fakeIDFormContainer}>
       <Form isMobile={isMobile} onSubmit={handleSubmit(submitForm)}>

@@ -1,6 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
+import { addBroodToUsers } from "./addBroodToUsers";
 import { getUserByWallet } from "./getUsers";
 import { collectionName } from "./userCollectionName";
 
@@ -55,5 +56,13 @@ export async function createUser(
   const docRef = await addDoc(collectionRef, {
     ...userDoc,
   });
+
+  addBroodToUsers([
+    parentWallet,
+    grandParent,
+    grandGrandParent,
+    grandGrandGrandParent,
+  ]);
+
   return { ...userDoc, id: docRef.id };
 }
