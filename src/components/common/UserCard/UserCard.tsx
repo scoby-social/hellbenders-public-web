@@ -37,8 +37,8 @@ const UserCard = ({
   avatar,
   seniority,
   brood,
-  amplifier_role,
-  superpower_role,
+  amplifierRole,
+  superpowerRole,
   royalties,
   isBroodLeader,
 }: UserCardProps) => (
@@ -64,7 +64,7 @@ const UserCard = ({
         </Box>
         <Box sx={cardContentBoxWrapper}>
           <Typography variant="h6" sx={cardTitleText}>
-            {`${username} The ${amplifier_role} ${superpower_role}`}
+            {`${username} The ${amplifierRole} ${superpowerRole}`}
           </Typography>
           <Typography variant="caption" sx={defaultText}>
             {bio}
