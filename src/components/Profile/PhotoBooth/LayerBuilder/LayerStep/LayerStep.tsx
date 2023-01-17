@@ -6,7 +6,6 @@ import Image from "next/image";
 import {
   allStepLayers,
   combinedLayers,
-  layerType,
   mergeInProcess,
   photoBoothStep,
   renderedSteps,
@@ -38,7 +37,6 @@ const LayerStep = ({ step }: LayerStepProps) => {
   const [selectedLayerIdx] = useAtom(selectedLayerIndexPerStep);
   const [__, setAllStepLayers] = useAtom(allStepLayers);
   const [___, setProcessingMerge] = useAtom(mergeInProcess);
-  const [____, setSelectedLayerType] = useAtom(layerType);
   const [bodyType, setBodyType] = useAtom(selectedBodyType);
   const [stepsRendered, setStepsRendered] = useAtom(renderedSteps);
 
@@ -57,9 +55,6 @@ const LayerStep = ({ step }: LayerStepProps) => {
             setBodyType(0);
           }
         }
-
-        const selectedType = stepLayer.type;
-        setSelectedLayerType(selectedType);
 
         setSelectedLayerOnStep((prevLayers) => {
           const newLayers = [...prevLayers];

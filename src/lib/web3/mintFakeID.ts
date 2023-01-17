@@ -174,7 +174,6 @@ export const mintFakeID = async (
       } as any)
     );
   } else {
-    console.info("Parent NFT address: ", parentNFT.toString());
     const [parentNftMetadataExtended] = await PublicKey.findProgramAddress(
       [parentNFT.toBuffer(), FakeIDNFTPOOL.toBuffer()],
       FakeIDNFTProgramId

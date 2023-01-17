@@ -2,9 +2,9 @@ import Joi from "joi";
 import { Pronouns } from "lib/models/user";
 
 export const schema = Joi.object({
-  username: Joi.string().alphanum().max(10).required().messages({
+  username: Joi.string().alphanum().max(15).required().messages({
     "string.empty": "Name is required",
-    "string.max": "Name must be less than 10 characters long!",
+    "string.max": "Name must be less than 15 characters long!",
   }),
   amplifierRole: Joi.string().alphanum().required().messages({
     "string.empty": "Amplifier role is required",

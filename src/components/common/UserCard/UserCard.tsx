@@ -33,7 +33,6 @@ const UserCard = ({
   id,
   username,
   bio,
-  externalLink,
   avatar,
   seniority,
   brood,
@@ -70,7 +69,7 @@ const UserCard = ({
             {bio}
           </Typography>
           <Typography sx={cardLinkText} variant="caption">
-            {externalLink}
+            {`www.hellbenders.world/${username}`}
           </Typography>
           <Box sx={userRankWrapper}>
             <Typography variant="caption">{`Seniority: ${seniority}`}</Typography>

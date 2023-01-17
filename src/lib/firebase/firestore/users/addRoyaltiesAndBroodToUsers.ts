@@ -1,17 +1,26 @@
+import { Royalties } from "lib/models/user";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
 import { getUserByWallet } from "./getUsers";
 import { collectionName } from "./userCollectionName";
 
-export async function addBroodToUsers(wallets: string[]): Promise<void> {
-  wallets.forEach(async (userWallet) => {
-    const user = await getUserByWallet(userWallet);
+interface RoyaltyWithWalletParams {
+  wallet: string;
+  type: Royalties;
+}
+
+export async function addRoyaltiesAndBroodToUsers(
+  values: RoyaltyWithWalletParams[]
+) {
+  values.forEach(async (val) => {
+    const user = await getUserByWallet(val.wallet);
 
     const reference = doc(firestore, collectionName, user.id);
 
     const updatedUser = { ...user } as Partial<User>;
     updatedUser.brood! += 1;
+    updatedUser.royalties! += val.type;
     delete updatedUser.id;
 
     await setDoc(reference, updatedUser);

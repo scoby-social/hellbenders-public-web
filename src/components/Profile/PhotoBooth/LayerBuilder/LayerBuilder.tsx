@@ -2,12 +2,13 @@ import { Box, Button, CircularProgress, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import * as React from "react";
+import Image from "next/image";
 import { useAtom } from "jotai";
 
 import {
   allStepLayers,
   combinedLayers,
-  layerType,
+  finalCroppedImage,
   mergeInProcess,
   photoBoothStep,
   renderedSteps,
@@ -19,19 +20,17 @@ import {
   actionButtonsWrapper,
   arrowIcons,
   arrowWrapper,
+  imageStyle,
+  imageWrapper,
   layerBuilderWrapper,
   layersActionButtonsContainer,
   layersActionbuttonsWrapper,
   layersContainer,
-  marginTopButton,
+  layerWrapper,
 } from "./styles";
-import {
-  getIterableSteps,
-  getStepLabel,
-  getStepLayerArticle,
-  getStepsLength,
-} from "../utils/getSteps";
+import { getIterableSteps, getStepsLength } from "../utils/getSteps";
 import LayerStep from "./LayerStep/LayerStep";
+import { cropImage } from "./utils/cropImage";
 
 const LayerBuilder = () => {
   const maxStepNumber = getStepsLength();
@@ -41,11 +40,11 @@ const LayerBuilder = () => {
     selectedLayerIndexPerStep
   );
   const [_, setStepsRendered] = useAtom(renderedSteps);
-  const [__, setAllCombinedLayers] = useAtom(combinedLayers);
+  const [allCombinedLayers, setAllCombinedLayers] = useAtom(combinedLayers);
   const [selectedLayerOnStep, setSelectedLayerOnStep] =
     useAtom(selectedLayerPerStep);
   const [allLayers] = useAtom(allStepLayers);
-  const [selectedLayerType, setSelectedLayerType] = useAtom(layerType);
+  const [croppedImage, setCroppedImage] = useAtom(finalCroppedImage);
 
   const [disabledButtons, setDisabledButtons] = React.useState(false);
 
@@ -53,12 +52,11 @@ const LayerBuilder = () => {
 
   const changeStep = React.useCallback(
     (step: number) => {
-      if (step > maxStepNumber) return;
       if (step < 0) return;
 
       setCurrentStep(step);
     },
-    [maxStepNumber, setCurrentStep]
+    [setCurrentStep]
   );
 
   const returnOneStep = React.useCallback(() => {
@@ -68,7 +66,6 @@ const LayerBuilder = () => {
       return newSteps;
     });
 
-    setSelectedLayerType(selectedLayerOnStep[currentStep - 1].type);
     setDisabledButtons(false);
 
     setSelectedLayerOnStep((prevLayers) => {
@@ -90,12 +87,8 @@ const LayerBuilder = () => {
   }, [currentStep, changeStep, allStepLayers, selectedLayerOnStep]);
 
   const goToNextStep = React.useCallback(() => {
-    if (currentStep === maxStepNumber) {
-      setDisabledButtons(true);
-      return;
-    }
     changeStep(currentStep + 1);
-  }, [changeStep, currentStep, maxStepNumber]);
+  }, [changeStep, currentStep]);
 
   const scrollLayers = React.useCallback(
     (index: number) => {
@@ -111,21 +104,15 @@ const LayerBuilder = () => {
     [currentStep, setProcessingMerge, setSelectedLayerIdxPerStep, allLayers]
   );
 
-  const skipLayer = React.useCallback(() => {
-    setAllCombinedLayers((prev) => {
-      const newLayers = [...prev];
-      newLayers[newLayers.length - 1].skipped = true;
-
-      return newLayers;
-    });
-    setSelectedLayerOnStep((prev) => {
-      const newLayers = [...prev];
-      newLayers[newLayers.length - 1].skipped = true;
-
-      return newLayers;
-    });
-    goToNextStep();
-  }, [goToNextStep, setAllCombinedLayers, setSelectedLayerOnStep]);
+  React.useEffect(() => {
+    if (currentStep > maxStepNumber) {
+      (async () => {
+        const image = await cropImage(allCombinedLayers[maxStepNumber].image);
+        setCroppedImage(image);
+      })();
+    }
+    // eslint-disable-next-line
+  }, [currentStep]);
 
   return (
     <Box sx={layerBuilderWrapper}>
@@ -133,67 +120,52 @@ const LayerBuilder = () => {
         {getIterableSteps().map((val) => (
           <LayerStep key={val} step={val} />
         ))}
+        {currentStep > maxStepNumber && croppedImage && (
+          <Box sx={layerWrapper}>
+            <Box sx={imageWrapper}>
+              <Image
+                alt={allCombinedLayers[maxStepNumber].name}
+                src={croppedImage}
+                fill
+                style={imageStyle}
+              />
+            </Box>
+          </Box>
+        )}
       </Box>
       <Box sx={layersActionButtonsContainer}>
-        <Box sx={layersActionbuttonsWrapper}>
-          <Box sx={arrowWrapper}>
-            <IconButton
-              disabled={processingMerge || disabledButtons}
-              onClick={() => scrollLayers(selectedLayer - 1)}
-            >
-              {processingMerge ? (
-                <CircularProgress size={20} />
-              ) : (
-                <ArrowBackIcon sx={arrowIcons} />
-              )}
-            </IconButton>
-          </Box>
-          <Box sx={actionButtonsWrapper}>
-            <Button
-              disabled={processingMerge || disabledButtons}
-              onClick={goToNextStep}
-              variant="contained"
-            >
-              {processingMerge ? (
-                <CircularProgress size={20} color="secondary" />
-              ) : (
-                `Choose ${getStepLabel(selectedLayerType)}`
-              )}
-            </Button>
-            {currentStep > 1 && (
-              <Button
-                sx={marginTopButton}
+        {currentStep <= maxStepNumber && (
+          <Box sx={layersActionbuttonsWrapper}>
+            <Box sx={arrowWrapper}>
+              <IconButton
                 disabled={processingMerge || disabledButtons}
-                onClick={skipLayer}
-                variant="outlined"
+                onClick={() => scrollLayers(selectedLayer - 1)}
               >
                 {processingMerge ? (
-                  <CircularProgress size={20} color="secondary" />
+                  <CircularProgress size={20} />
                 ) : (
-                  `Don't add ${getStepLayerArticle(
-                    selectedLayerType
-                  )} ${getStepLabel(selectedLayerType)}`
+                  <ArrowBackIcon sx={arrowIcons} />
                 )}
-              </Button>
-            )}
+              </IconButton>
+            </Box>
+            <Box sx={arrowWrapper}>
+              <IconButton
+                disabled={processingMerge || disabledButtons}
+                onClick={() =>
+                  scrollLayers((selectedLayer + 1) % allLayers.length)
+                }
+              >
+                {processingMerge ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  <ArrowForwardIcon sx={arrowIcons} />
+                )}
+              </IconButton>
+            </Box>
           </Box>
-          <Box sx={arrowWrapper}>
-            <IconButton
-              disabled={processingMerge || disabledButtons}
-              onClick={() =>
-                scrollLayers((selectedLayer + 1) % allLayers.length)
-              }
-            >
-              {processingMerge ? (
-                <CircularProgress size={20} />
-              ) : (
-                <ArrowForwardIcon sx={arrowIcons} />
-              )}
-            </IconButton>
-          </Box>
-        </Box>
+        )}
       </Box>
-      <Box>
+      <Box sx={actionButtonsWrapper}>
         <Button
           onClick={returnOneStep}
           disabled={currentStep === 0 || processingMerge}
@@ -202,6 +174,20 @@ const LayerBuilder = () => {
         >
           Go Back
         </Button>
+        {currentStep <= maxStepNumber && (
+          <Button
+            disabled={processingMerge}
+            onClick={goToNextStep}
+            variant="contained"
+            color="secondary"
+          >
+            {processingMerge ? (
+              <CircularProgress size={20} color="primary" />
+            ) : (
+              "Next Trait"
+            )}
+          </Button>
+        )}
       </Box>
     </Box>
   );

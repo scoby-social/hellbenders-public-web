@@ -46,13 +46,14 @@ const ConnectWalletButton = ({
   const getUserByWalletOrRemoveUser =
     React.useCallback(async (): Promise<void> => {
       if (publicKey) {
-        setUserHasNoID(false);
         setWallet(publicKey.toString());
         const user = await getUserByWallet(publicKey.toString());
         setLoadingUser(true);
 
         if (Object.keys(user).length === 0) {
           setUserHasNoID(true);
+        } else {
+          setUserHasNoID(false);
         }
 
         setLoadingUser(false);

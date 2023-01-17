@@ -20,6 +20,7 @@ import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
 import {
   combinedLayers,
   currentUser,
+  finalCroppedImage,
   photoBoothStep,
   selectedLayerPerStep,
   selectedLeader,
@@ -48,23 +49,30 @@ import {
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
 import LayerBuilder from "./LayerBuilder/LayerBuilder";
-import { getTotalStepsStartingFromOne } from "./utils/getSteps";
+import { getStepsLength, getTotalStepsStartingFromOne } from "./utils/getSteps";
 import { uploadNFT } from "lib/web3/uploadNFT";
 import { createUser } from "lib/firebase/firestore/users/saveUser";
 import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
 import { getSeniorityForUser } from "lib/firebase/firestore/users/getSeniorityForUser";
+import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
 
 const PhotoBooth = () => {
+  const maxStepNumber = getStepsLength();
   const totalSteps = getTotalStepsStartingFromOne();
   const wallet = useWallet();
   const isMobile = useCheckMobileScreen();
+
   const [currentStep] = useAtom(photoBoothStep);
   const [allCombinedLayers] = useAtom(combinedLayers);
   const [selectedLayers] = useAtom(selectedLayerPerStep);
   const [_, setCurrentUser] = useAtom(currentUser);
   const [leader] = useAtom(selectedLeader);
+  const [croppedImage] = useAtom(finalCroppedImage);
+
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
+  const [mintedCount, setMintedCount] = React.useState(0);
+
   const {
     control,
     handleSubmit,
@@ -80,20 +88,17 @@ const PhotoBooth = () => {
   const submitForm = async (values: PhotoBoothFormInputs) => {
     try {
       setLoading(true);
-      const resultingLayer = allCombinedLayers[allCombinedLayers.length - 1];
-
-      console.info("Uploading NFT: ", resultingLayer);
+      const resultingLayer = {
+        ...allCombinedLayers[allCombinedLayers.length - 1],
+      };
+      resultingLayer.image = croppedImage!;
 
       const userHasFakeID = await checkIfUserHasFakeID(wallet);
-
-      console.info("With fakeID: ", userHasFakeID);
 
       if (userHasFakeID) {
         setMessage("This wallet already has a FakeID");
         return;
       }
-
-      console.info("Minting with NFT parent: ", leader.fakeIDs[0]);
 
       setMessage(
         "Please be patient while our machine elves forge your Fake ID."
@@ -109,11 +114,9 @@ const PhotoBooth = () => {
         parentNftAddress: leader.fakeIDs[0],
         wallet,
         seniority: userSeniority,
+        updateMessage: setMessage,
       });
 
-      console.info("Resulting NFT image: ", res);
-
-      console.info("Uploading user");
       const user = await createUser(
         {
           ...values,
@@ -124,8 +127,6 @@ const PhotoBooth = () => {
         leader.wallet,
         userSeniority
       );
-
-      console.info("User has been uploaded");
 
       setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
       setLoading(false);
@@ -161,6 +162,22 @@ const PhotoBooth = () => {
     }
   }, [username, setError]);
 
+  const getStepTitle = React.useCallback(() => {
+    if (currentStep > maxStepNumber) return "Last Step";
+
+    return `Step ${currentStep + 1} of ${totalSteps}`;
+    // eslint-disable-next-line
+  }, [currentStep]);
+
+  React.useEffect(() => {
+    (async () => {
+      if (wallet.publicKey) {
+        const count = await getPoolMintedCount(wallet);
+        setMintedCount(count);
+      }
+    })();
+  }, [wallet]);
+
   return (
     <Box sx={fakeIDFormContainer}>
       <Form isMobile={isMobile} onSubmit={handleSubmit(submitForm)}>
@@ -192,11 +209,11 @@ const PhotoBooth = () => {
                       fullWidth
                       onBlur={validateIfUserExists}
                       error={!!errors.username}
-                      placeholder="How you want to be addressed in one word 10 letters max"
+                      placeholder="How you want to be addressed in one word 15 letters max"
                       helperText={errors.username?.message || "Example: arcade"}
                       size="small"
                       variant="outlined"
-                      inputProps={{ maxLength: 10 }}
+                      inputProps={{ maxLength: 15 }}
                     />
                   )}
                 />
@@ -317,7 +334,6 @@ const PhotoBooth = () => {
                       placeholder="@username"
                       size="small"
                       variant="outlined"
-                      inputProps={{ maxLength: 10 }}
                     />
                   )}
                 />
@@ -334,7 +350,7 @@ const PhotoBooth = () => {
                       {...field}
                       id="user-url-input"
                       fullWidth
-                      placeholder="@username#1234"
+                      placeholder="username#1234"
                       size="small"
                       variant="outlined"
                     />
@@ -367,16 +383,14 @@ const PhotoBooth = () => {
                 <Typography variant="subtitle1">
                   Take your Fake ID Photo<sup>*</sup>
                 </Typography>
-                <Typography variant="subtitle1">{`Step ${
-                  currentStep + 1
-                } of ${totalSteps}`}</Typography>
+                <Typography variant="subtitle1">{getStepTitle()}</Typography>
               </Box>
               <LayerBuilder />
             </Box>
             <Box sx={photoBoothFooterWrapper}>
               <Box sx={mintButtonWrapper}>
                 <Button
-                  disabled={loading}
+                  disabled={loading || currentStep <= maxStepNumber}
                   color="primary"
                   variant="contained"
                   type="submit"
@@ -394,10 +408,10 @@ const PhotoBooth = () => {
               <Box sx={availabilityContainer}>
                 <Box sx={availabilityWrapper}>
                   <Typography variant={"h6"} sx={availabilityDescription}>
-                    Available
+                    {"ID's minted"}
                   </Typography>
                   <Typography variant={"h6"} sx={availabilityDescription}>
-                    232/3333
+                    {mintedCount}
                   </Typography>
                 </Box>
                 <Box sx={availabilityWrapper}>

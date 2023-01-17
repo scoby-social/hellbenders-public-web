@@ -1,10 +1,13 @@
 import { Exception } from "lib/models/layer";
 import { LayerInBuilder } from "../types";
+import { filterLayersToCheckNewExceptions } from "./filterLayersToCheckNewExceptions";
 
 export function checkLayerExceptions(
   selectedLayerPerStep: LayerInBuilder[],
   combiningLayer: LayerInBuilder
 ): Array<LayerInBuilder | null> {
+  if (combiningLayer.standard) return [];
+
   let incompatibleLayers: Array<LayerInBuilder | null> = [];
   combiningLayer.exceptions.forEach((value) => {
     incompatibleLayers.push(checkExceptionInLayer(value, selectedLayerPerStep));
@@ -19,6 +22,10 @@ function checkExceptionInLayer(
 ): LayerInBuilder | null {
   let exceptionLayer: LayerInBuilder | null = null;
 
+  console.info("Got layers to check exceptions: ", layers);
+  const filteredLayers = [...layers];
+  filterLayersToCheckNewExceptions(filteredLayers);
+
   if (Array.isArray(exception.items)) {
     exception.items.forEach((exceptionName) => {
       let matchingString = "";
@@ -29,10 +36,11 @@ function checkExceptionInLayer(
         matchingString = exceptionName;
       }
 
-      layers.forEach((value) => {
+      filteredLayers.forEach((value) => {
         if (
           value.name.includes(matchingString) &&
-          value.type === exception.type
+          value.type === exception.type &&
+          !value.standard
         ) {
           if (exception.reverse) {
             exceptionLayer = {
@@ -49,8 +57,11 @@ function checkExceptionInLayer(
       });
     });
   } else {
-    layers.forEach((value) => {
-      if (value.type === exception.type || exception.type === "*") {
+    filteredLayers.forEach((value) => {
+      if (
+        !value.standard &&
+        (value.type === exception.type || exception.type === "*")
+      ) {
         exceptionLayer = {
           ...value,
           reverse: exception.reverse,

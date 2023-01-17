@@ -24,6 +24,7 @@ export async function mergeImageWithException(
   }
 
   for await (const layer of firstLayers) {
+    if (layer.standard) continue;
     const layerToCombine = await (await fetch(layer.image)).blob();
     const layerBitmap = await createImageBitmap(layerToCombine);
 
@@ -37,6 +38,7 @@ export async function mergeImageWithException(
   }
 
   for await (const layer of filteredLayers) {
+    if (layer.standard) continue;
     const layerToCombine = await (await fetch(layer.image)).blob();
     const layerBitmap = await createImageBitmap(layerToCombine);
 
@@ -65,6 +67,7 @@ export async function mergeImageWithException(
   }
 
   for await (const pendingLayer of pendingLayers) {
+    if (pendingLayer.standard) continue;
     const layerToCombine = await (await fetch(pendingLayer.image)).blob();
     const layerBitmap = await createImageBitmap(layerToCombine);
 

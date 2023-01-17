@@ -7,6 +7,7 @@ export interface LayerInBuilder extends Layer {
   exception: string;
   reverse: boolean;
   skipped: boolean;
+  standard: boolean;
   swapWith?: string;
 }
 

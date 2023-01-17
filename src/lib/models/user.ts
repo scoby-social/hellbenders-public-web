@@ -4,6 +4,14 @@ export enum Pronouns {
   male = "he/him",
 }
 
+export enum Royalties {
+  parent = 0.2,
+  grandParent = 0.1,
+  grandGrandParent = 0.07,
+  grandGrandGrandParent = 0.03,
+  commanderSalamander = 0.6,
+}
+
 export interface User {
   id: string;
   username: string; // ID Card name
@@ -24,5 +32,4 @@ export interface User {
   twitterHandle: string;
   discordHandle: string;
   telegramHandle: string;
-  externalLink?: string;
 }

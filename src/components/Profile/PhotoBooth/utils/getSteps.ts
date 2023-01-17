@@ -7,7 +7,8 @@ const steps = [
   [LayerType.EYES],
   [LayerType.MOUTH],
   [LayerType.BEARD],
-  [LayerType.HAT, LayerType.HELMET],
+  [LayerType.HAT],
+  [LayerType.HELMET],
   [LayerType.MASK],
   [LayerType.LASERS],
   [LayerType.MALE_SHIRT, LayerType.FEMALE_TOP],
@@ -15,43 +16,26 @@ const steps = [
   [LayerType.ACCESORY],
 ];
 
-const stepLabel = {
-  [LayerType.BACKGROUND]: "this Background",
-  [LayerType.MALE_BODY]: "this Body",
-  [LayerType.FEMALE_BODY]: "this Body",
-  [LayerType.ACCESORY]: "this Accesory",
-  [LayerType.FEMALE_JACKET]: "this Jacket",
-  [LayerType.FEMALE_TOP]: "this Top",
-  [LayerType.MALE_JACKET]: "this Jacket",
-  [LayerType.MALE_SHIRT]: "this Shirt",
-  [LayerType.LASERS]: "these Lasers",
-  [LayerType.EYES]: "these Eyes",
-  [LayerType.MASK]: "this Mask",
-  [LayerType.HELMET]: "this Helmet",
-  [LayerType.HAT]: "this Hat",
-  [LayerType.HAIR]: "this Hair",
-  [LayerType.BEARD]: "this Beard",
-  [LayerType.MOUTH]: "this Mouth",
-};
-
 const bodyTypeInGender = ["MALE", "FEMALE"];
 
-const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-
-const vowels = ["A", "E", "I", "O", "U"];
+const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export function getIterableSteps(): number[] {
   return iterableForSteps;
 }
 
 export function getStepLayers(idx: number, bodyType: number): LayerType[] {
-  const body = bodyTypeInGender[bodyType];
-  return steps[idx].filter(
-    (value) =>
-      value.toString().split("_")[0] === body ||
-      (!value.toString().includes(bodyTypeInGender[1]) &&
-        !value.toString().includes(bodyTypeInGender[0]))
-  );
+  if (idx > 1) {
+    const body = bodyTypeInGender[bodyType];
+    return steps[idx].filter(
+      (value) =>
+        value.toString().split("_")[0] === body ||
+        (!value.toString().includes(bodyTypeInGender[1]) &&
+          !value.toString().includes(bodyTypeInGender[0]))
+    );
+  }
+
+  return steps[idx];
 }
 
 export function getStepsLength(): number {
@@ -60,15 +44,4 @@ export function getStepsLength(): number {
 
 export function getTotalStepsStartingFromOne(): number {
   return steps.length;
-}
-
-export function getStepLabel(layer: LayerType): string {
-  return stepLabel[layer];
-}
-
-export function getStepLayerArticle(layer: LayerType): string {
-  if (layer.charAt(layer.length - 1) === "S") return "";
-  if (vowels.includes(layer.charAt(0))) return "An";
-
-  return "A";
 }

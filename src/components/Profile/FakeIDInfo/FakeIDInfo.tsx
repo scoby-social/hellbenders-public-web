@@ -96,7 +96,7 @@ const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
                   <Typography variant="caption">10% Scout</Typography>
                   <Typography variant="caption">7% Recruiter</Typography>
                   <Typography variant="caption">3% OG</Typography>
-                  <Typography variant="caption">60% DAO</Typography>
+                  <Typography variant="caption">60% Club</Typography>
                 </Box>
               </Box>
               <Box sx={royaltyWrapper}>
@@ -104,11 +104,11 @@ const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
                   <Typography variant="subtitle2">Trading</Typography>
                 </Box>
                 <Box sx={rightRoyaltyContent}>
-                  <Typography variant="caption">85% Seller</Typography>
+                  <Typography variant="caption">85% Enjoyer</Typography>
                   <Typography variant="caption">5% Promoter</Typography>
                   <Typography variant="caption">2% Scout</Typography>
                   <Typography variant="caption">1% Recruiter</Typography>
-                  <Typography variant="caption">7% DAO</Typography>
+                  <Typography variant="caption">7% Club</Typography>
                 </Box>
               </Box>
             </Box>

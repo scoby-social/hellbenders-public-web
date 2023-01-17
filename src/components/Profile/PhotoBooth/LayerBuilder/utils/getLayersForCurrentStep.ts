@@ -9,6 +9,7 @@ import {
 import { checkLayerExceptions } from "./checkLayerExceptions";
 import { getFilteredLayers } from "./filterLayersForCombine";
 import { getLayerExceptionText } from "./getLayerExceptionText";
+import { getStandardTraitLayer } from "./getStandardTraitLayer";
 import { mergeImages } from "./mergeImages";
 import { mergeImageWithException } from "./mergeImagesWithException";
 
@@ -31,6 +32,7 @@ export async function getLayersForCurrentStep({
     exception: "",
     reverse: false,
     skipped: false,
+    standard: false,
   }));
 
   const layersWithBlobImages = await Promise.all(
@@ -39,6 +41,15 @@ export async function getLayersForCurrentStep({
       image: URL.createObjectURL(await (await fetch(val.image)).blob()),
     }))
   );
+
+  if (currentStep > 1) {
+    const currentLayer = getStandardTraitLayer(
+      layersToCombine,
+      currentLayerStepType[0]
+    );
+    currentLayer.exception = "";
+    layersWithBlobImages.unshift(currentLayer);
+  }
 
   const [{ ...stepLayer }] = layersWithBlobImages;
 
@@ -67,28 +78,31 @@ export async function getLayersForCurrentStep({
     leftSideLayers.push(layersWithBlobImages[firstLeft]);
   }
 
-  firstLayer.selected = true;
-
-  const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
-
-  const exceptions = checkLayerExceptions(filteredLayers, firstLayer);
   let reversedKey: string | null = null;
 
-  if (exceptions.length > 0) {
-    const mergedImage = await mergeImageWithException(
-      exceptions,
-      stepLayer,
-      filteredLayers
-    );
-    firstLayer.image = mergedImage.resultingImage;
-    firstLayer.exception = getLayerExceptionText(exceptions, firstLayer.name);
-    reversedKey = mergedImage.reversedLayerKey;
-  } else {
-    firstLayer.image = await mergeImages(
-      getLayerToCombine(layersToCombine, step - 1),
-      stepLayer
-    );
+  if (currentStep <= 1) {
+    const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
+
+    const exceptions = checkLayerExceptions(filteredLayers, firstLayer);
+
+    if (exceptions.length > 0) {
+      const mergedImage = await mergeImageWithException(
+        exceptions,
+        stepLayer,
+        filteredLayers
+      );
+      firstLayer.image = mergedImage.resultingImage;
+      firstLayer.exception = getLayerExceptionText(exceptions, firstLayer.name);
+      reversedKey = mergedImage.reversedLayerKey;
+    } else {
+      firstLayer.image = await mergeImages(
+        getLayerToCombine(layersToCombine, step - 1),
+        stepLayer
+      );
+    }
   }
+
+  firstLayer.selected = true;
 
   const layersToShow = [...leftSideLayers, firstLayer, ...rightSideLayers].map(
     (val, index) => ({ ...val, key: `${nanoid()}-${index}` })

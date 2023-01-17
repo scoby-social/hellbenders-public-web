@@ -13,6 +13,7 @@ export async function uploadNFT({
   wallet,
   parentNftAddress,
   seniority,
+  updateMessage,
 }: UploadNftParams): Promise<UploadNFTReturnType> {
   const attributes: MetadataAttributes[] = [];
 
@@ -54,6 +55,8 @@ export async function uploadNFT({
     }
   });
 
+  updateMessage("Your image is being deployed to the blockchain.");
+
   metadata.image = await saveMetadataImage(
     metadata.image,
     `${metadata.username}.png`
@@ -72,6 +75,8 @@ export async function uploadNFT({
 
   const blobUri = URL.createObjectURL(blob);
 
+  updateMessage("Your identity is being concealed from the authorities.");
+
   const metadataShdwUrl = await saveJsonMetadata(
     blob,
     blobUri,
@@ -81,6 +86,8 @@ export async function uploadNFT({
   console.info("Metadata JSON: ", metadataShdwUrl);
 
   let nftAddress = "";
+
+  updateMessage("Your Fake ID is being minted.");
 
   try {
     nftAddress = await mintFakeID(

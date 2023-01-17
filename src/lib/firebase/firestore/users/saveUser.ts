@@ -1,7 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
-import { User } from "lib/models/user";
-import { addBroodToUsers } from "./addBroodToUsers";
+import { Royalties, User } from "lib/models/user";
+import { addRoyaltiesAndBroodToUsers } from "./addRoyaltiesAndBroodToUsers";
 import { getUserByWallet } from "./getUsers";
 import { collectionName } from "./userCollectionName";
 
@@ -57,11 +57,12 @@ export async function createUser(
     ...userDoc,
   });
 
-  addBroodToUsers([
-    parentWallet,
-    grandParent,
-    grandGrandParent,
-    grandGrandGrandParent,
+  addRoyaltiesAndBroodToUsers([
+    { wallet: parentWallet, type: Royalties.parent },
+    { wallet: grandParent, type: Royalties.grandParent },
+    { wallet: grandGrandParent, type: Royalties.grandGrandParent },
+    { wallet: grandGrandGrandParent, type: Royalties.grandGrandGrandParent },
+    { wallet: commanderSalamanderWallet, type: Royalties.commanderSalamander },
   ]);
 
   return { ...userDoc, id: docRef.id };
