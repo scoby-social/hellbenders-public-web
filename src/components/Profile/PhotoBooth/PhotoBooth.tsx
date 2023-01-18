@@ -93,16 +93,16 @@ const PhotoBooth = () => {
       };
       resultingLayer.image = croppedImage!;
 
+      setMessage(
+        "Please be patient while our machine elves forge your Fake ID."
+      );
+
       const userHasFakeID = await checkIfUserHasFakeID(wallet);
 
       if (userHasFakeID) {
         setMessage("This wallet already has a FakeID");
         return;
       }
-
-      setMessage(
-        "Please be patient while our machine elves forge your Fake ID."
-      );
 
       const userSeniority = await getSeniorityForUser();
 

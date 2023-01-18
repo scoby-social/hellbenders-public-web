@@ -13,6 +13,7 @@ export function getStandardTraitLayer(
     ...layer,
     selected: false,
     standard: true,
+    type: currentType,
     name: getStandardName(currentType),
   };
 }

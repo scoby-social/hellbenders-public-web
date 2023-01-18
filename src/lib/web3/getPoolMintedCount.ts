@@ -1,19 +1,19 @@
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { Cluster, clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 
 import FakeIDNFTIdl from "./usdc-fake-id.json";
 
 const FakeIDNFTProgramId = new PublicKey(
-  "8S18mGzHyNGur85jAPoEjad8P8rywTpjyABbBEdmj2gb"
+  process.env.NEXT_PUBLIC_FAKE_ID_PROGRAM_ID!
 );
 // meta data for scoby nft
-const FakeIDNFTPOOL = new PublicKey(
-  "6TVrWdVQAegLFUewKJLeZ7qsB43qXXwWxJmAu6ztsDmV"
-);
-
-const conn = new Connection(clusterApiUrl("devnet"));
+const FakeIDNFTPOOL = new PublicKey(process.env.NEXT_PUBLIC_FAKE_ID_NFT_POOL!);
 
 export async function getPoolMintedCount(wallet: any): Promise<number> {
+  const conn = new Connection(
+    clusterApiUrl(process.env.NEXT_PUBLIC_SOLANA_CLUSTER! as Cluster)
+  );
+
   const provider = new anchor.AnchorProvider(conn, wallet, {
     commitment: "processed",
   });

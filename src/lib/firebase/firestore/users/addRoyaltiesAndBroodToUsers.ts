@@ -20,7 +20,7 @@ export async function addRoyaltiesAndBroodToUsers(
 
     const updatedUser = { ...user } as Partial<User>;
     updatedUser.brood! += 1;
-    updatedUser.royalties! += val.type;
+    updatedUser.royalties! += (updatedUser.royalties || 0) + val.type * 6.66;
     delete updatedUser.id;
 
     await setDoc(reference, updatedUser);

@@ -1,4 +1,5 @@
 import {
+  Cluster,
   clusterApiUrl,
   Connection,
   Keypair,
@@ -26,20 +27,17 @@ import { AnchorProvider } from "@project-serum/anchor";
 import { sendTransaction } from "./sendTransaction";
 import { checkIfUserHasFakeID } from "./checkIfUserHasFakeID";
 
-const conn = new Connection(clusterApiUrl("devnet"));
-
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+  process.env.NEXT_PUBLIC_TOKEN_METADATA_PROGRAM_ID!
 );
 
 // membership kind smart contract address and IDL
 const FakeIDNFTProgramId = new PublicKey(
-  "8S18mGzHyNGur85jAPoEjad8P8rywTpjyABbBEdmj2gb"
+  process.env.NEXT_PUBLIC_FAKE_ID_PROGRAM_ID!
 );
+
 // meta data for scoby nft
-const FakeIDNFTPOOL = new PublicKey(
-  "6TVrWdVQAegLFUewKJLeZ7qsB43qXXwWxJmAu6ztsDmV"
-);
+const FakeIDNFTPOOL = new PublicKey(process.env.NEXT_PUBLIC_FAKE_ID_NFT_POOL!);
 
 export const mintFakeID = async (
   wallet: any,
@@ -47,6 +45,10 @@ export const mintFakeID = async (
   name: string,
   leaderNftAddress: string
 ): Promise<string> => {
+  const conn = new Connection(
+    clusterApiUrl(process.env.NEXT_PUBLIC_SOLANA_CLUSTER! as Cluster)
+  );
+
   const parentNFT = new PublicKey(leaderNftAddress);
   const provider = new AnchorProvider(conn, wallet, {
     commitment: "processed",

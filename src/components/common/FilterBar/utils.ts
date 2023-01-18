@@ -7,7 +7,7 @@ export const filters: Filter[] = [
     value: FilterValue.DEACTIVATED,
   },
   {
-    label: "Brood",
+    label: "Brood Size",
     property: "brood",
     value: FilterValue.DEACTIVATED,
   },

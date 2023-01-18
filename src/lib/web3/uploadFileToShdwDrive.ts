@@ -6,13 +6,12 @@ import { Keypair, PublicKey } from "@solana/web3.js";
 
 const SHDW_DRIVE_ENDPOINT = "https://shadow-storage.genesysgo.net";
 
+const shdwDrivePrivateKey = process.env
+  .NEXT_PUBLIC_SHDW_DRIVE_ACC_SECRET_KEY!.split(",")
+  .map((val) => Number(val));
+
 const SECRET_KEY_ARR = Keypair.fromSecretKey(
-  new Uint8Array([
-    190, 232, 206, 101, 230, 160, 211, 224, 30, 255, 242, 75, 134, 10, 124, 110,
-    199, 156, 114, 92, 170, 20, 125, 3, 139, 15, 140, 192, 182, 222, 130, 136,
-    221, 207, 66, 143, 19, 206, 1, 193, 85, 49, 200, 177, 99, 194, 186, 162, 52,
-    249, 76, 152, 55, 113, 189, 82, 15, 97, 228, 34, 60, 24, 159, 48,
-  ])
+  new Uint8Array(shdwDrivePrivateKey)
 );
 
 export async function saveMetadataImage(

@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import {
   allStepLayers,
   combinedLayers,
+  currentWallet,
   finalCroppedImage,
   mergeInProcess,
   photoBoothStep,
@@ -39,11 +40,12 @@ const LayerBuilder = () => {
   const [selectedLayerIdxPerStep, setSelectedLayerIdxPerStep] = useAtom(
     selectedLayerIndexPerStep
   );
+  const [wallet] = useAtom(currentWallet);
   const [_, setStepsRendered] = useAtom(renderedSteps);
   const [allCombinedLayers, setAllCombinedLayers] = useAtom(combinedLayers);
   const [selectedLayerOnStep, setSelectedLayerOnStep] =
     useAtom(selectedLayerPerStep);
-  const [allLayers] = useAtom(allStepLayers);
+  const [allLayers, setAllLayers] = useAtom(allStepLayers);
   const [croppedImage, setCroppedImage] = useAtom(finalCroppedImage);
 
   const [disabledButtons, setDisabledButtons] = React.useState(false);
@@ -81,6 +83,7 @@ const LayerBuilder = () => {
       newValues[currentStep] = 0;
       return newValues;
     });
+    setCroppedImage(null);
 
     changeStep(currentStep - 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,6 +116,18 @@ const LayerBuilder = () => {
     }
     // eslint-disable-next-line
   }, [currentStep]);
+
+  React.useEffect(() => {
+    setAllLayers([]);
+    setAllCombinedLayers([]);
+    setSelectedLayerIdxPerStep([...getIterableSteps().map(() => 0)]);
+    setSelectedLayerOnStep([]);
+    setStepsRendered([...getIterableSteps().map(() => false)]);
+    setProcessingMerge(false);
+    setCurrentStep(0);
+    setCroppedImage(null);
+    // eslint-disable-next-line
+  }, [wallet]);
 
   return (
     <Box sx={layerBuilderWrapper}>

@@ -9,7 +9,6 @@ import {
   boxWrapper,
   connectWalletMessageWrapper,
   connectWalletText,
-  contentContainerStyles,
   emptyBroodText,
   emptyBroodWrapper,
 } from "./styles";

@@ -74,9 +74,11 @@ const UserCard = ({
           <Box sx={userRankWrapper}>
             <Typography variant="caption">{`Seniority: ${seniority}`}</Typography>
             <Divider orientation="vertical" flexItem />
-            <Typography variant="caption">{`Brood: ${brood}`}</Typography>
+            <Typography variant="caption">{`Brood Size: ${brood}`}</Typography>
             <Divider orientation="vertical" flexItem />
-            <Typography variant="caption">{`Royalties: $${royalties}`}</Typography>
+            <Typography variant="caption">{`Royalties: $${royalties.toFixed(
+              2
+            )}`}</Typography>
           </Box>
         </Box>
       </Box>

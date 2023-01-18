@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <Box sx={headerBoxContainerStyle}>
-      <Header title="The Brood" isProfile={false} />
+      <Header title="The Club" isProfile={false} />
       <LeaderboardContent />
     </Box>
   );
