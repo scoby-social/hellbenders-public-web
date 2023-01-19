@@ -351,21 +351,6 @@
           "isSigner": false
         },
         {
-          "name": "grandParentNftAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "grandGrandParentNftAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "grandGrandGrandParentNftAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "creatorNftAccount",
           "isMut": true,
           "isSigner": false
