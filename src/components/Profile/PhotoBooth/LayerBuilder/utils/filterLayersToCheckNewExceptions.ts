@@ -25,7 +25,6 @@ export function filterLayersToCheckNewExceptions(
               arr[i].type === exception.type &&
               !arr[i].standard
             ) {
-              console.info("Removing array element: ", arr[i]);
               arr.splice(i, 1);
             }
           }
@@ -35,7 +34,6 @@ export function filterLayersToCheckNewExceptions(
           if (i > arr.length - 1) break;
 
           if (arr[i].type === exception.type && !arr[i].standard) {
-            console.info("Removing array element: ", arr[i]);
             arr.splice(i, 1);
           }
         }

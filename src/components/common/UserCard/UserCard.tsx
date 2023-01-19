@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Divider, Grid, Link, Typography } from "@mui/material";
 import {
   avatarStyles,
   avatarWrapper,
@@ -68,9 +68,9 @@ const UserCard = ({
           <Typography variant="caption" sx={defaultText}>
             {bio}
           </Typography>
-          <Typography sx={cardLinkText} variant="caption">
-            {`www.hellbenders.world/${username}`}
-          </Typography>
+          <Link
+            href={`/${username}`}
+          >{`www.hellbenders.world/${username}`}</Link>
           <Box sx={userRankWrapper}>
             <Typography variant="caption">{`Seniority: ${seniority}`}</Typography>
             <Divider orientation="vertical" flexItem />

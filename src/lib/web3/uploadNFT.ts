@@ -1,3 +1,4 @@
+import { filterLayersToCheckNewExceptions } from "components/Profile/PhotoBooth/LayerBuilder/utils/filterLayersToCheckNewExceptions";
 import { deleteShadowDriveFile } from "./deleteShadowDriveFile";
 import { mintFakeID } from "./mintFakeID";
 import { MetadataAttributes, Metadata } from "./types/metadata";
@@ -46,7 +47,11 @@ export async function uploadNFT({
     season: `Q${quarter} ${year}`,
   };
 
-  selectedLayers.forEach((layer) => {
+  const filteredLayers = [...selectedLayers];
+
+  filterLayersToCheckNewExceptions(filteredLayers);
+
+  filteredLayers.forEach((layer) => {
     if (layer && !layer.skipped) {
       attributes.push({
         trait_type: layer.type.toString(),

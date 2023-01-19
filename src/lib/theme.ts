@@ -52,6 +52,17 @@ export default function CustomTheme() {
       },
     },
     components: {
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            fontFamily: "Poppins",
+            fontSize: "0.80vmax",
+            [breakpoints.up("sm")]: {
+              fontSize: "0.60vmax",
+            },
+          },
+        },
+      },
       MuiButton: {
         variants: [
           {

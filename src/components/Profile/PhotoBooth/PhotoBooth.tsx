@@ -55,6 +55,7 @@ import { createUser } from "lib/firebase/firestore/users/saveUser";
 import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
 import { getSeniorityForUser } from "lib/firebase/firestore/users/getSeniorityForUser";
 import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
+import { getWalletBalance } from "lib/web3/getWalletBalance";
 
 const PhotoBooth = () => {
   const maxStepNumber = getStepsLength();
@@ -88,6 +89,19 @@ const PhotoBooth = () => {
   const submitForm = async (values: PhotoBoothFormInputs) => {
     try {
       setLoading(true);
+
+      const walletBalance = await getWalletBalance(
+        wallet.publicKey!.toString()
+      );
+
+      if (walletBalance.usdc < 6.66) {
+        setMessage(
+          "Hey! We checked your wallet and you don't have enough crypto to mint. Come back later when you've earned some bread and try again."
+        );
+        setLoading(false);
+        return;
+      }
+
       const resultingLayer = {
         ...allCombinedLayers[allCombinedLayers.length - 1],
       };
@@ -101,6 +115,7 @@ const PhotoBooth = () => {
 
       if (userHasFakeID) {
         setMessage("This wallet already has a FakeID");
+        setLoading(false);
         return;
       }
 

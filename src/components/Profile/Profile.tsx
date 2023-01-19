@@ -98,7 +98,7 @@ const Profile = () => {
             variant="h6"
             component="h6"
             sx={connectWalletText}
-          >{`To get in quick, connect a wallet holding your Fake ID or use a burner wallet holding nothing at all. We don't need to be digging through your sh*t`}</Typography>
+          >{`To get in quick, connect a wallet holding your Fake ID or use a burner wallet holding nothing at all. We don't need to be digging through your sh*t.`}</Typography>
           <ConnectWalletButton primaryColor blackText />
         </Box>
       );

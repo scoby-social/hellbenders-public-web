@@ -58,7 +58,7 @@ export const LeaderboardContent = () => {
             variant="h6"
             component="h6"
             sx={connectWalletText}
-          >{`To get in quick, connect with a wallet holding only your Fake ID. We don't need to be digging through your sh*t`}</Typography>
+          >{`To get in quick, connect with a wallet holding only your Fake ID. We don't need to be digging through your sh*t.`}</Typography>
           <ConnectWalletButton primaryColor blackText />
         </Box>
       );

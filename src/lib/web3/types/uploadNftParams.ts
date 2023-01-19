@@ -4,7 +4,7 @@ import { PhotoBoothFormInputs } from "components/Profile/PhotoBooth/types";
 import { Dispatch, SetStateAction } from "react";
 
 export interface UploadNftParams {
-  selectedLayers: Array<LayerInBuilder | null>;
+  selectedLayers: LayerInBuilder[];
   resultingLayer: LayerInBuilder;
   formResult: PhotoBoothFormInputs;
   leaderWalletAddress: string;
