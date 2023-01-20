@@ -1,4 +1,4 @@
-import { Cluster, clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 
 import FakeIDNFTIdl from "./usdc-fake-id.json";
@@ -10,9 +10,7 @@ const FakeIDNFTProgramId = new PublicKey(
 const FakeIDNFTPOOL = new PublicKey(process.env.NEXT_PUBLIC_FAKE_ID_NFT_POOL!);
 
 export async function getPoolMintedCount(wallet: any): Promise<number> {
-  const conn = new Connection(
-    clusterApiUrl(process.env.NEXT_PUBLIC_SOLANA_CLUSTER! as Cluster)
-  );
+  const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
 
   const provider = new anchor.AnchorProvider(conn, wallet, {
     commitment: "processed",

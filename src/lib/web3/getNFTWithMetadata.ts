@@ -1,10 +1,8 @@
 import { Metaplex } from "@metaplex-foundation/js";
-import { Cluster, clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 
 export async function getNFTWithMetadata(nftAddress: string) {
-  const conn = new Connection(
-    clusterApiUrl(process.env.NEXT_PUBLIC_SOLANA_CLUSTER! as Cluster)
-  );
+  const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
   const mintAddress = new PublicKey(nftAddress);
 
   const metaplex = new Metaplex(conn);

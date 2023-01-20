@@ -7,7 +7,6 @@ import { Header } from "components/Home/Header/Header";
 import Profile from "components/Profile/Profile";
 
 import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
-import { getUsersForStaticPaths } from "lib/firebase/firestore/users/getUsersForStaticPaths";
 import { selectedLeader } from "lib/store";
 
 import { ProfilePageProps } from "../components/Profile/types";
@@ -16,25 +15,13 @@ const headerBoxContainerStyle: SxProps = {
   paddingBottom: "1rem",
 };
 
-interface StaticPathParam {
+interface ServerSidePropsParams {
   params: { username: string };
 }
 
-export async function getStaticPaths() {
-  const allUsers = await getUsersForStaticPaths();
-
-  const allParams = allUsers.map((value) => {
-    return { params: { username: value } };
-  });
-
-  return {
-    paths: [...allParams],
-    fallback: true,
-  };
-}
-
-export async function getStaticProps({ params }: StaticPathParam) {
-  const user = await getUserByUsername(params.username);
+export async function getServerSideProps({ params }: ServerSidePropsParams) {
+  const { username } = params;
+  const user = await getUserByUsername(username);
 
   return {
     props: {

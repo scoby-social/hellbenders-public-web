@@ -1,6 +1,4 @@
 import {
-  Cluster,
-  clusterApiUrl,
   Connection,
   Keypair,
   PublicKey,
@@ -45,9 +43,7 @@ export const mintFakeID = async (
   name: string,
   leaderNftAddress: string
 ): Promise<string> => {
-  const conn = new Connection(
-    clusterApiUrl(process.env.NEXT_PUBLIC_SOLANA_CLUSTER! as Cluster)
-  );
+  const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
 
   const parentNFT = new PublicKey(leaderNftAddress);
   const provider = new AnchorProvider(conn, wallet, {

@@ -1,19 +1,11 @@
 import { getAssociatedTokenAddress } from "@solana/spl-token";
-import {
-  Cluster,
-  clusterApiUrl,
-  Connection,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-} from "@solana/web3.js";
+import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { GetWalletBalanceReturnType } from "./types/getWalletBalanceReturnType";
 
 export async function getWalletBalance(
   wallet: string
 ): Promise<GetWalletBalanceReturnType> {
-  const conn = new Connection(
-    clusterApiUrl(process.env.NEXT_PUBLIC_SOLANA_CLUSTER! as Cluster)
-  );
+  const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
   const usdcToken = new PublicKey(process.env.NEXT_PUBLIC_USDC_TOKEN_ADDRESS!);
 
   const usdcTokenAccount = await getAssociatedTokenAddress(

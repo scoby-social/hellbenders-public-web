@@ -29,8 +29,6 @@ export async function uploadNFT({
   const name = `${formResult.username} the ${formResult.amplifierRole} ${formResult.superpowerRole}`;
   const croppedName = name.slice(0, 28);
 
-  console.info("Sending name: ", croppedName);
-
   const metadata: Metadata = {
     name: croppedName,
     symbol: "HELLPASS",
