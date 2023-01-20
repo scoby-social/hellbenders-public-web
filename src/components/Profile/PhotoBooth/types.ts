@@ -2,11 +2,13 @@ import { Pronouns } from "lib/models/user";
 
 export interface PhotoBoothFormInputs {
   username: string;
-  amplifier_role: string;
-  superpower_role: string;
+  amplifierRole: string;
+  superpowerRole: string;
   pronouns: Pronouns;
   bio: string;
-  externalLink: string;
+  twitterHandle: string;
+  discordHandle: string;
+  telegramHandle: string;
 }
 
 export interface PhotoBoothFormStyleProps {

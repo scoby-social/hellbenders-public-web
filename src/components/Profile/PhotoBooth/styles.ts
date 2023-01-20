@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { SxProps } from "@mui/material";
+
 import { PhotoBoothFormStyleProps } from "./types";
 
 export const fakeIDFormArrowWrapper: SxProps = {
@@ -32,16 +33,17 @@ export const formWrapper: SxProps = {
   flexFlow: "column",
 };
 
+export const formWrapperWithoutMargin: SxProps = {
+  display: "flex",
+  flex: 1,
+  justifyContent: "flex-start",
+  flexFlow: "column",
+};
+
 export const roleFieldWrapper: SxProps = {
   marginLeft: "1.5vmax",
   display: "flex",
   justifyContent: "space-between",
-};
-
-export const socialButtonsWrapper: SxProps = {
-  alignSelf: "start",
-  display: "flex",
-  justifyContent: "space-evenly",
 };
 
 export const photoBoothContainer: SxProps = {
@@ -54,7 +56,7 @@ export const photoBoothTitleWrapper: SxProps = {
 };
 
 export const textWithMargin: SxProps = {
-  marginBottom: "0.50vmax",
+  margin: "0.50vmax 0",
 };
 
 export const Form = styled.form<PhotoBoothFormStyleProps>`
@@ -62,3 +64,48 @@ export const Form = styled.form<PhotoBoothFormStyleProps>`
   background-color: #2f3841;
   border-radius: 15px;
 `;
+
+export const photoBoothFooterWrapper: SxProps = {
+  display: "flex",
+  flexGrow: 1,
+  flexFlow: "column",
+};
+
+export const mintButtonWrapper: SxProps = {
+  marginTop: "1vmax",
+  display: "flex",
+  justifyContent: "center",
+};
+
+export const mintingMessageWrapper: SxProps = {
+  marginTop: "1vmin",
+  marginBottom: "1vmax",
+  display: "flex",
+  justifyContent: "center",
+};
+
+export const mintingMessage: SxProps = {
+  maxWidth: "20%",
+  textAlign: "center",
+};
+
+export const availabilityContainer: SxProps = {
+  flexGrow: 1,
+  marginTop: "2vmin",
+  display: "flex",
+  justifyContent: "center",
+};
+
+export const availabilityWrapper: SxProps = {
+  minWidth: "20%",
+  display: "flex",
+  flexFlow: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+export const availabilityDescription: SxProps = {
+  maxWidth: "55%",
+  textAlign: "center",
+  fontWeight: "900",
+};

@@ -1,10 +1,9 @@
-import { Avatar, Box, Divider, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Divider, Grid, Link, Typography } from "@mui/material";
 import {
   avatarStyles,
   avatarWrapper,
   cardContainer,
   cardContentBoxWrapper,
-  cardLinkText,
   cardTitleText,
   contentCard,
   defaultText,
@@ -33,20 +32,24 @@ const UserCard = ({
   id,
   username,
   bio,
-  externalLink,
   avatar,
   seniority,
   brood,
-  amplifier_role,
-  superpower_role,
+  amplifierRole,
+  superpowerRole,
   royalties,
   isBroodLeader,
 }: UserCardProps) => (
-  <Grid item {...getResponsiveParamsForGrid(isBroodLeader)} key={id}>
+  <Grid
+    sx={{ height: "100%" }}
+    item
+    {...getResponsiveParamsForGrid(isBroodLeader)}
+    key={id}
+  >
     <Box sx={cardContainer}>
       {isBroodLeader && (
         <Box sx={unitLeaderFlag}>
-          <Typography>Brood Leader</Typography>
+          <Typography variant="subtitle2">Brood Leader</Typography>
         </Box>
       )}
       <Box sx={contentCard(isBroodLeader)}>
@@ -59,20 +62,22 @@ const UserCard = ({
         </Box>
         <Box sx={cardContentBoxWrapper}>
           <Typography variant="h6" sx={cardTitleText}>
-            {`${username} The ${amplifier_role} ${superpower_role}`}
+            {`${username} The ${amplifierRole} ${superpowerRole}`}
           </Typography>
           <Typography variant="caption" sx={defaultText}>
             {bio}
           </Typography>
-          <Typography sx={cardLinkText} variant="caption">
-            {externalLink}
-          </Typography>
+          <Link
+            href={`/${username}`}
+          >{`www.hellbenders.world/${username}`}</Link>
           <Box sx={userRankWrapper}>
             <Typography variant="caption">{`Seniority: ${seniority}`}</Typography>
             <Divider orientation="vertical" flexItem />
-            <Typography variant="caption">{`Brood: ${brood}`}</Typography>
+            <Typography variant="caption">{`Brood Size: ${brood}`}</Typography>
             <Divider orientation="vertical" flexItem />
-            <Typography variant="caption">{`Royalties: $${royalties}`}</Typography>
+            <Typography variant="caption">{`Royalties: $${royalties.toFixed(
+              2
+            )}`}</Typography>
           </Box>
         </Box>
       </Box>

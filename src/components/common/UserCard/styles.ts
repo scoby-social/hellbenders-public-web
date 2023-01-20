@@ -13,6 +13,7 @@ export const cardContainer: SxProps = {
 export const unitLeaderFlag: SxProps = {
   maxWidth: "25%",
   padding: "0.3vmax",
+  marginBottom: "0.3vmin",
   display: "flex",
   justifyContent: "center",
   alignSelf: "start",
@@ -47,14 +48,6 @@ export const cardContentBoxWrapper: SxProps = {
   maxWidth: "60%",
   display: "flex",
   flexFlow: "column",
-};
-
-export const cardLinkText: SxProps = {
-  ...defaultText,
-  color: "#A0C024",
-  textDecoration: "underline",
-
-  cursor: "pointer",
 };
 
 export const cardTitleText: SxProps = {

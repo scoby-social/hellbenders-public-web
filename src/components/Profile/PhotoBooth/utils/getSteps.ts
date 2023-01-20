@@ -2,48 +2,40 @@ import { LayerType } from "lib/models/layer";
 
 const steps = [
   [LayerType.BACKGROUND],
-  [LayerType.MEN_BODY, LayerType.WOMEN_BODY],
+  [LayerType.MALE_BODY, LayerType.FEMALE_BODY],
   [LayerType.HAIR],
-  [LayerType.EYE],
+  [LayerType.EYES],
   [LayerType.MOUTH],
   [LayerType.BEARD],
-  [LayerType.HAT, LayerType.HELMET, LayerType.MASK],
+  [LayerType.HAT],
+  [LayerType.HELMET],
+  [LayerType.MASK],
   [LayerType.LASERS],
-  [LayerType.MEN_SHIRT, LayerType.WOMEN_TOP],
-  [LayerType.MEN_JACKET, LayerType.WOMEN_JACKET],
+  [LayerType.MALE_SHIRT, LayerType.FEMALE_TOP],
+  [LayerType.MALE_JACKET, LayerType.FEMALE_JACKET],
   [LayerType.ACCESORY],
 ];
 
-const stepLabel = [
-  "Background",
-  "Body",
-  "Hair",
-  "Eyes",
-  "Mouth",
-  "Beard",
-  "Hat",
-  "Lasers",
-  "Shirt",
-  "Jacket",
-  "Accessory",
-];
+const bodyTypeInGender = ["MALE", "FEMALE"];
 
-const bodyTypeInGender = ["MEN", "WOMEN"];
-
-const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const iterableForSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export function getIterableSteps(): number[] {
   return iterableForSteps;
 }
 
 export function getStepLayers(idx: number, bodyType: number): LayerType[] {
-  const body = bodyTypeInGender[bodyType];
-  return steps[idx].filter(
-    (value) =>
-      value.toString().split("_")[0] === body ||
-      (!value.toString().includes(bodyTypeInGender[1]) &&
-        !value.toString().includes(bodyTypeInGender[0]))
-  );
+  if (idx > 1) {
+    const body = bodyTypeInGender[bodyType];
+    return steps[idx].filter(
+      (value) =>
+        value.toString().split("_")[0] === body ||
+        (!value.toString().includes(bodyTypeInGender[1]) &&
+          !value.toString().includes(bodyTypeInGender[0]))
+    );
+  }
+
+  return steps[idx];
 }
 
 export function getStepsLength(): number {
@@ -52,8 +44,4 @@ export function getStepsLength(): number {
 
 export function getTotalStepsStartingFromOne(): number {
   return steps.length;
-}
-
-export function getStepLabel(idx: number): string {
-  return stepLabel[idx];
 }

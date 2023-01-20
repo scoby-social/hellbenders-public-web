@@ -1,4 +1,5 @@
 import { SxProps } from "@mui/material";
+import { CSSProperties } from "react";
 
 export const layerBuilderWrapper: SxProps = {
   padding: "1.5vmax 1vmax",
@@ -43,11 +44,24 @@ export const arrowIcons: SxProps = {
 
 export const actionButtonsWrapper: SxProps = {
   display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+};
+
+export const layerWrapper: SxProps = {
+  display: "flex",
   flexFlow: "column",
   justifyContent: "center",
   alignItems: "center",
 };
 
-export const marginTopButton: SxProps = {
-  marginTop: "0.75vmin",
+export const imageWrapper: SxProps = {
+  width: "12vmax",
+  height: "12vmax",
+  position: "relative",
+};
+
+export const imageStyle: CSSProperties = {
+  width: "100%",
+  height: "100%",
 };

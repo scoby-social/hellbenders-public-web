@@ -2,19 +2,19 @@ export enum LayerType {
   ACCESORY = "ACCESORY",
   BACKGROUND = "BACKGROUND",
   BEARD = "BEARD",
-  EYE = "EYE",
+  EYES = "EYES",
   HAT = "HAT",
   HAIR = "HAIR",
   HELMET = "HELMET",
   LASERS = "LASERS",
   MASK = "MASK",
   MOUTH = "MOUTH",
-  MEN_BODY = "MEN_BODY",
-  MEN_SHIRT = "MEN_SHIRT",
-  MEN_JACKET = "MEN_JACKET",
-  WOMEN_BODY = "WOMEN_BODY",
-  WOMEN_TOP = "WOMEN_TOP",
-  WOMEN_JACKET = "WOMEN_JACKET",
+  MALE_BODY = "MALE_BODY",
+  MALE_SHIRT = "MALE_SHIRT",
+  MALE_JACKET = "MALE_JACKET",
+  FEMALE_BODY = "FEMALE_BODY",
+  FEMALE_TOP = "FEMALE_TOP",
+  FEMALE_JACKET = "FEMALE_JACKET",
 }
 
 export interface LayerException {
@@ -24,7 +24,7 @@ export interface LayerException {
 }
 
 export interface Exception {
-  type: LayerType;
+  type: LayerType | "*";
   items: string[] | "*";
   reverse: boolean;
 }

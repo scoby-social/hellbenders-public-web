@@ -8,26 +8,23 @@ export const defaultTextStyles: SxProps = {
 export const contentContainerStyles: SxProps = {
   marginTop: "1rem",
   margin: "0 3rem",
-};
-
-export const filtersBoxWrapperStyles: SxProps = {
-  padding: "1vmax 3vmax",
-  marginTop: "1vmax",
-  marginBottom: "1.5vmax",
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  background: "rgba(217, 217, 217, 0.14)",
-  borderTop: "1px solid #393C45",
-};
-
-export const filterWrapperStyles: SxProps = {
-  display: "flex",
-  justifyContent: "space-evenly",
+  justifyContent: "center",
   alignItems: "center",
 };
 
-export const filterIconStyles: SxProps = {
-  height: "1.5vmax",
-  width: "1.5vmax",
+export const connectWalletMessageWrapper: SxProps = {
+  width: "100%",
+  height: "100%",
+  marginTop: "2vmax",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  flexFlow: "column",
+};
+
+export const connectWalletText: SxProps = {
+  margin: "1vmax",
+  textAlign: "center",
+  maxWidth: "50%",
 };

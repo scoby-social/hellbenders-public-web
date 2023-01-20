@@ -1,18 +1,22 @@
 @font-face {
   font-family: 'Patched';
-  src: url('/fonts/PatchedMedium_PERSONAL_USE_ONLY.otf')
+  src: url('/fonts/Patched-Medium.otf')
 }
 
 html {
   padding: 0;
   margin: 0;
   background-color: rgba(217, 217, 217, 0.20);
+  color-scheme: dark;
 }
 
 body {
   padding: 0;
   margin: 0;
   min-height: 100vh;
+  color: white;
+  background: #262F36;
+
 }
 
 a {
@@ -24,38 +28,12 @@ a {
   box-sizing: border-box;
 }
 
-p {
-  font-size: 1.25vmax !important;
-}
-
-span {
-  font-size: 1vmax !important;
-}
-
 h6 {
-  font-size: 1.50vmax !important;
+  font-size: 1.50vmax;
 }
 
 @media (min-width: 600px) {
-  p {
-    font-size: 0.75vmax !important;
-  }
-
   h2 {
-    font-size: 2.0vmax !important;
-  }
-
-  span {
-    font-size: 0.60vmax !important;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
+    font-size: 2.0vmax;
   }
 }

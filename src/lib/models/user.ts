@@ -1,25 +1,35 @@
 export enum Pronouns {
-  male = "he/him",
-  female = "she/her",
   other = "they/them",
+  female = "she/her",
+  male = "he/him",
+}
+
+export enum Royalties {
+  parent = 0.2,
+  grandParent = 0.1,
+  grandGrandParent = 0.07,
+  grandGrandGrandParent = 0.03,
+  commanderSalamander = 0.6,
 }
 
 export interface User {
   id: string;
   username: string; // ID Card name
-  amplifier_role: string;
-  superpower_role: string;
-  pronoun: Pronouns;
+  amplifierRole: string;
+  superpowerRole: string;
+  pronouns: Pronouns;
   bio: string;
-  externalLink: string | undefined;
   wallet: string;
   brood: number;
   seniority: number;
   royalties: number;
   avatar: string;
   parent: string;
+  fakeIDs: string[];
   grandParent: string;
   grandGrandParent: string;
   grandGrandGrandParent: string;
-  twitterTokenConnection: string;
+  twitterHandle: string;
+  discordHandle: string;
+  telegramHandle: string;
 }

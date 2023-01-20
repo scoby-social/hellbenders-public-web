@@ -7,7 +7,6 @@ import {
 } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
-import { combineUsersFromSnapshot } from "./extractAndCombineUsers";
 import { collectionName } from "./userCollectionName";
 
 const converter = {
@@ -48,31 +47,4 @@ export async function getUserByUsername(username: string): Promise<User> {
   const [user] = queryResult;
 
   return user;
-}
-
-export async function getUsersThatBelongsToBrood(
-  leaderWallet: string
-): Promise<User[]> {
-  const queryForChildren = query(usersRef, where("parent", "==", leaderWallet));
-  const queryForGrandChildren = query(
-    usersRef,
-    where("grandChildren", "==", leaderWallet)
-  );
-  const queryForGrandGrandChildren = query(
-    usersRef,
-    where("grandGrandChildren", "==", leaderWallet)
-  );
-  const queryForGrandGrandGrandChildren = query(
-    usersRef,
-    where("grandGrandGrandChildren", "==", leaderWallet)
-  );
-
-  const result = await Promise.all([
-    getDocs(queryForChildren),
-    getDocs(queryForGrandChildren),
-    getDocs(queryForGrandGrandChildren),
-    getDocs(queryForGrandGrandGrandChildren),
-  ]);
-
-  return combineUsersFromSnapshot(result);
 }

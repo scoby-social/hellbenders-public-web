@@ -1,6 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
-import { User } from "lib/models/user";
+import { Royalties, User } from "lib/models/user";
+import { addRoyaltiesAndBroodToUsers } from "./addRoyaltiesAndBroodToUsers";
 import { getUserByWallet } from "./getUsers";
 import { collectionName } from "./userCollectionName";
 
@@ -9,9 +10,23 @@ const commanderSalamanderWallet = process.env
   .NEXT_PUBLIC_COMMANDER_SALAMANDER_WALLET as string;
 
 export async function createUser(
-  user: User,
-  leaderWallet: string
-): Promise<string> {
+  user: Pick<
+    User,
+    | "username"
+    | "amplifierRole"
+    | "superpowerRole"
+    | "pronouns"
+    | "bio"
+    | "wallet"
+    | "avatar"
+    | "fakeIDs"
+    | "twitterHandle"
+    | "discordHandle"
+    | "telegramHandle"
+  >,
+  leaderWallet: string,
+  seniority: number
+): Promise<User> {
   const creatingUser = await getUserByWallet(user.wallet);
 
   if (Object.keys(creatingUser).length > 0)
@@ -24,12 +39,31 @@ export async function createUser(
   const grandGrandGrandParent =
     leaderUser.grandGrandParent || commanderSalamanderWallet;
 
-  const docRef = await addDoc(collectionRef, {
+  const userDoc = {
     ...user,
     parent: parentWallet,
     grandParent,
     grandGrandParent,
     grandGrandGrandParent,
+    brood: 0,
+    seniority,
+    royalties: 0,
+    twitterHandle: user.twitterHandle,
+    discordHandle: user.discordHandle,
+    avatar: user.avatar,
+  };
+
+  const docRef = await addDoc(collectionRef, {
+    ...userDoc,
   });
-  return docRef.id;
+
+  addRoyaltiesAndBroodToUsers([
+    { wallet: parentWallet, type: Royalties.parent },
+    { wallet: grandParent, type: Royalties.grandParent },
+    { wallet: grandGrandParent, type: Royalties.grandGrandParent },
+    { wallet: grandGrandGrandParent, type: Royalties.grandGrandGrandParent },
+    { wallet: commanderSalamanderWallet, type: Royalties.commanderSalamander },
+  ]);
+
+  return { ...userDoc, id: docRef.id };
 }

@@ -12,39 +12,12 @@ export const boxWrapper: SxProps = {
   justifyContent: "space-around",
 };
 
-export const mintFakeIDHeaderWrapper: SxProps = {
-  backgroundColor: "#2F3841",
-  borderRadius: "15px 15px",
-};
-
-export const mintFakeIDHeaderTitleWrapper: SxProps = {
-  padding: "0.75vmin 1vmin",
-  backgroundColor: "#424E5A",
+export const loaderWrapperStyles: SxProps = {
+  marginTop: "1rem",
+  margin: "0 3rem",
   display: "flex",
-  flexFlow: "row",
   justifyContent: "center",
   alignItems: "center",
-  borderRadius: "15px 15px 0 0",
-};
-
-export const mintFakeIDContentWrapper: SxProps = {
-  width: "100%",
-  height: "80%",
-  padding: "1vmax 0",
-  backgroundColor: "#2F3841",
-  display: "flex",
-  justifyContent: "space-around",
-  alignItems: "center",
-  borderRadius: "0 0 15px 15px",
-};
-
-export const mintFakeIDTitle: SxProps = {
-  maxWidth: "45%",
-};
-
-export const mintFakeIDTextDescription: SxProps = {
-  maxWidth: "55%",
-  textAlign: "center",
 };
 
 export const connectWalletMessageWrapper: SxProps = {
@@ -57,8 +30,19 @@ export const connectWalletMessageWrapper: SxProps = {
   flexFlow: "column",
 };
 
+export const emptyBroodWrapper: SxProps = {
+  display: "flex",
+  flexFlow: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
 export const connectWalletText: SxProps = {
   margin: "1vmax",
   textAlign: "center",
   maxWidth: "50%",
+};
+
+export const emptyBroodText: SxProps = {
+  margin: "1vmin 0",
 };

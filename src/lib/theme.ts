@@ -9,6 +9,10 @@ export default function CustomTheme() {
       fontFamily: ["Poppins", "Cabin", "Patched"].join(","),
       body1: {
         fontFamily: "Cabin",
+        fontSize: "0.75vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "1vmax",
+        },
       },
       h1: {
         fontFamily: "Patched",
@@ -24,14 +28,41 @@ export default function CustomTheme() {
         },
       },
       h6: {
+        fontSize: "1.2vmax",
+      },
+      subtitle1: {
+        fontSize: "1.2vmax",
         fontFamily: "Cabin",
-        fontSize: "1.5vmax",
         [breakpoints.up("sm")]: {
-          fontSize: "0.6vmax",
+          fontSize: "1vmax",
+        },
+      },
+      subtitle2: {
+        fontFamily: "Cabin",
+        fontSize: "1vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "0.80vmax",
+        },
+      },
+      caption: {
+        fontSize: "0.80vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "0.60vmax",
         },
       },
     },
     components: {
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            fontFamily: "Poppins",
+            fontSize: "0.80vmax",
+            [breakpoints.up("sm")]: {
+              fontSize: "0.60vmax",
+            },
+          },
+        },
+      },
       MuiButton: {
         variants: [
           {
@@ -57,7 +88,7 @@ export default function CustomTheme() {
           },
           input: {
             padding: "0.50vmax !important",
-            fontSize: "1vmax",
+            fontSize: "0.8vmax",
           },
         },
       },
@@ -66,7 +97,10 @@ export default function CustomTheme() {
           root: {
             minHeight: 0,
             padding: "1vmax 1.25vmax",
-            fontSize: "1vmax",
+            fontSize: "0.8vmax",
+            "& .Mui-selected": {
+              backgroundColor: "#4D515B",
+            },
           },
         },
       },
@@ -81,7 +115,19 @@ export default function CustomTheme() {
         styleOverrides: {
           root: {
             fontWeight: "bold !important",
+            fontSize: "0.8vmax !important",
             borderRadius: "20px !important",
+            "& .Mui-selected": {
+              backgroundColor: "#4D515B",
+            },
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "#485364",
+            color: "#fff",
           },
         },
       },
