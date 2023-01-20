@@ -32,6 +32,34 @@ const Profile = () => {
   const [loading, setLoading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
+  const isMyProfile = wallet === leader?.wallet;
+
+  const renderEmptyBroodDescription = () => {
+    if (!isMyProfile) {
+      return (
+        <Box sx={emptyBroodWrapper}>
+          <Typography sx={emptyBroodText}>
+            {`Hmm, looks like ${leader.username} hasn't spawned.`}
+          </Typography>
+          <Typography sx={emptyBroodText}>
+            {`You can change that by minting a Fake ID right here.`}
+          </Typography>
+          <Typography sx={emptyBroodText}>LFG!</Typography>
+        </Box>
+      );
+    }
+    return (
+      <Box sx={emptyBroodWrapper}>
+        <Typography sx={emptyBroodText}>
+          {`Hey ${leader.username}, your brood is looking kind of empty.`}
+        </Typography>
+        <Typography sx={emptyBroodText}>
+          {`Change your Twitter PFP, share this link by DM and rep the club.`}
+        </Typography>
+        <Typography sx={emptyBroodText}>{`Let's get it, let's go!`}</Typography>
+      </Box>
+    );
+  };
 
   const renderComponent = () => {
     if (wallet !== "" && missingID) {
@@ -60,17 +88,9 @@ const Profile = () => {
               allUsers={allUsers}
               setFilteredUsers={setFilteredUsers}
             />
-            {filteredUsers.length === 0 && !loading && (
-              <Box sx={emptyBroodWrapper}>
-                <Typography sx={emptyBroodText}>
-                  Hmm, looks like Arcade hasn’t spawned.
-                </Typography>
-                <Typography sx={emptyBroodText}>
-                  You can change that by minting a Fake ID right here.
-                </Typography>
-                <Typography sx={emptyBroodText}>LFG!</Typography>
-              </Box>
-            )}
+            {filteredUsers.length === 0 &&
+              !loading &&
+              renderEmptyBroodDescription()}
             {filteredUsers.length > 0 && (
               <Box>
                 <Grid container spacing={4}>

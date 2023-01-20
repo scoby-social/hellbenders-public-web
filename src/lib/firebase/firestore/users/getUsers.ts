@@ -34,7 +34,19 @@ export async function getUserByWallet(wallet: string): Promise<User> {
 }
 
 export async function getUserByUsername(username: string): Promise<User> {
-  const q = query(usersRef, where("username", "==", username));
+  const lowerCaseUsername = username.toLowerCase();
+  const upperCaseUsername = username.toUpperCase();
+  const capitalizedUsername = `${username
+    .charAt(0)
+    .toUpperCase()}${username.substring(1)}`;
+  const q = query(
+    usersRef,
+    where("username", "in", [
+      lowerCaseUsername,
+      upperCaseUsername,
+      capitalizedUsername,
+    ])
+  );
 
   const usersSnapshot = await getDocs(q);
   const queryResult = usersSnapshot.docs.map((value) => ({
