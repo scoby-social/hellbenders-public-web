@@ -45,6 +45,7 @@ export async function getUserByUsername(username: string): Promise<User> {
       lowerCaseUsername,
       upperCaseUsername,
       capitalizedUsername,
+      username,
     ])
   );
 
