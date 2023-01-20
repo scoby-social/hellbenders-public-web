@@ -4,7 +4,6 @@ import {
   avatarWrapper,
   cardContainer,
   cardContentBoxWrapper,
-  cardLinkText,
   cardTitleText,
   contentCard,
   defaultText,

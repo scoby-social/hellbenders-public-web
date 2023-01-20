@@ -1,4 +1,5 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import * as React from "react";
 import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
@@ -11,6 +12,7 @@ import {
   connectWalletText,
   emptyBroodText,
   emptyBroodWrapper,
+  loaderWrapperStyles,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import ConnectWalletButton from "components/common/ConnectWalletButton";
@@ -21,13 +23,14 @@ import {
   filteredBroodUsers,
 } from "lib/store/brood";
 import FilterBar from "components/common/FilterBar/FilterBar";
+import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroodUsers";
 
 const Profile = () => {
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [leader] = useAtom(selectedLeader);
-  const [loading] = useAtom(broodLoading);
-  const [allUsers] = useAtom(allBroodUsers);
+  const [loading, setLoading] = useAtom(broodLoading);
+  const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
 
   const renderComponent = () => {
@@ -57,7 +60,7 @@ const Profile = () => {
               allUsers={allUsers}
               setFilteredUsers={setFilteredUsers}
             />
-            {filteredUsers.length === 0 ? (
+            {filteredUsers.length === 0 && !loading && (
               <Box sx={emptyBroodWrapper}>
                 <Typography sx={emptyBroodText}>
                   Hmm, looks like Arcade hasn’t spawned.
@@ -67,13 +70,19 @@ const Profile = () => {
                 </Typography>
                 <Typography sx={emptyBroodText}>LFG!</Typography>
               </Box>
-            ) : (
+            )}
+            {filteredUsers.length > 0 && (
               <Box>
                 <Grid container spacing={4}>
                   {filteredUsers.map((val) => (
                     <UserCard key={val.id} {...val} isBroodLeader={false} />
                   ))}
                 </Grid>
+              </Box>
+            )}
+            {filteredUsers.length === 0 && loading && (
+              <Box sx={loaderWrapperStyles}>
+                <CircularProgress sx={{ alignSelf: "center" }} />
               </Box>
             )}
           </Box>
@@ -104,6 +113,24 @@ const Profile = () => {
       );
     }
   };
+
+  const fetchUsers = React.useCallback(async () => {
+    setLoading(true);
+    const users = await getUsersThatBelongsToBrood(leader.wallet);
+    setAllUsers(users);
+    setFilteredUsers(users);
+    setLoading(false);
+    // eslint-disable-next-line
+  }, [leader]);
+
+  React.useEffect(() => {
+    if (wallet !== "" && !missingID) {
+      setAllUsers([]);
+      setFilteredUsers([]);
+      fetchUsers();
+    }
+    // eslint-disable-next-line
+  }, [wallet, missingID]);
 
   return <Box>{renderComponent()}</Box>;
 };

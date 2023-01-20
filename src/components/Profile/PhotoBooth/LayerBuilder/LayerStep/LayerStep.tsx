@@ -81,7 +81,9 @@ const LayerStep = ({ step }: LayerStepProps) => {
     if (key) {
       setSelectedLayerOnStep((prev) => {
         return [...prev].map((val) => {
-          if (val.key === key) return { ...val, reverse: true };
+          if (val.key === key) {
+            return { ...val, reverse: true };
+          }
 
           return val;
         });

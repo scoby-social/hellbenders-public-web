@@ -50,14 +50,6 @@ export const cardContentBoxWrapper: SxProps = {
   flexFlow: "column",
 };
 
-export const cardLinkText: SxProps = {
-  ...defaultText,
-  color: "#A0C024",
-  textDecoration: "underline",
-
-  cursor: "pointer",
-};
-
 export const cardTitleText: SxProps = {
   ...defaultText,
   fontWeight: 800,

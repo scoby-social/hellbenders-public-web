@@ -405,10 +405,6 @@ export const mintFakeID = async (
           metadataExtended: metadataExtended,
           parentNftAccount: parentMembershipAccount,
           parentNftMetadataExtended: parentMembership.metadataExtended,
-          // grandParentNftAccount: grandParentMembershipAccount,
-          // grandGrandParentNftAccount: grandGrandParentMembershipAccount,
-          // grandGrandGrandParentNftAccount:
-            // grandGrandGrandParentMembershipAccount,
           creatorNftAccount: creatorNftAccount,
           sourceTokenAccount: sourceTokenAccount[0],
           scobyUsdcTokenAccount: scobyUsdcTokenAccount[0],

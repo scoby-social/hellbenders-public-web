@@ -6,9 +6,11 @@ export async function getNftsForOwner(
   owner: PublicKey,
   conn: Connection
 ) {
+  if (!owner) return [];
   const allTokens: any[] = [];
 
   const metaplex = new Metaplex(conn);
+
   const nfts = await metaplex.nfts().findAllByOwner({ owner });
 
   nfts.forEach((val) => {

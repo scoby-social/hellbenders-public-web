@@ -48,6 +48,7 @@ export async function getLayersForCurrentStep({
       currentLayerStepType[0]
     );
     currentLayer.exception = "";
+    currentLayer.key = nanoid();
     layersWithBlobImages.unshift(currentLayer);
   }
 

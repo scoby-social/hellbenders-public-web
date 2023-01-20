@@ -61,7 +61,7 @@ const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
   };
 
   return (
-    <Grid item md={4} sm={8}>
+    <Grid flexBasis={"100%"} item md={4} sm={8}>
       <Box sx={mintFakeIDHeaderWrapper}>
         <Box sx={mintFakeIDHeaderTitleWrapper}>
           <Typography variant="h6">

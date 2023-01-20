@@ -12,7 +12,7 @@ export const boxWrapper: SxProps = {
   justifyContent: "space-around",
 };
 
-export const contentContainerStyles: SxProps = {
+export const loaderWrapperStyles: SxProps = {
   marginTop: "1rem",
   margin: "0 3rem",
   display: "flex",

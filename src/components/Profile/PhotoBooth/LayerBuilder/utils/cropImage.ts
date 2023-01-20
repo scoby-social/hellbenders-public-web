@@ -12,10 +12,10 @@ export async function cropImage(blobImageUri: string): Promise<string> {
 
   context!.drawImage(
     bitmap,
-    1100,
-    400,
+    1000,
+    50,
     3000,
-    3100,
+    3000,
     0,
     0,
     bitmap.width,

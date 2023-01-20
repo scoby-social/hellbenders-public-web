@@ -16,6 +16,8 @@ export async function addRoyaltiesAndBroodToUsers(
   values.forEach(async (val) => {
     const user = await getUserByWallet(val.wallet);
 
+    if (!user.id) return;
+
     const reference = doc(firestore, collectionName, user.id);
 
     const updatedUser = { ...user } as Partial<User>;

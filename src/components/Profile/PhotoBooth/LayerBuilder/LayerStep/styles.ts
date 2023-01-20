@@ -28,13 +28,13 @@ export const layerExceptionCaption: SxProps = {
 };
 
 export const layerCropSquare: SxProps = {
-  padding: "4vmax 4vmax",
+  padding: "3.5vmax 3.5vmax",
   position: "absolute",
   zIndex: 2,
   border: "1px solid rgba(190, 239, 0, 1)",
   borderRadius: 2,
   top: "2px",
-  left: "2vmax",
+  left: "2.5vmax",
 };
 
 export const imageStyle: CSSProperties = {

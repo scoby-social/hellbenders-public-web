@@ -15,6 +15,7 @@ import {
 } from "lib/store";
 import { User } from "lib/models/user";
 import { getUserByWallet } from "lib/firebase/firestore/users/getUsers";
+import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
 
 interface WalletMultiButtonStyledProps {
   primaryColor: Boolean;
@@ -47,8 +48,16 @@ const ConnectWalletButton = ({
     React.useCallback(async (): Promise<void> => {
       if (publicKey) {
         setWallet(publicKey.toString());
-        const user = await getUserByWallet(publicKey.toString());
+        const [user, walletHasFakeID] = await Promise.all([
+          getUserByWallet(publicKey.toString()),
+          checkIfUserHasFakeID(publicKey.toString()),
+        ]);
         setLoadingUser(true);
+
+        if (!walletHasFakeID && Object.keys(user).length === 0) {
+          setUserHasNoID(true);
+          return;
+        }
 
         if (Object.keys(user).length === 0) {
           setUserHasNoID(true);

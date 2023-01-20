@@ -1,4 +1,4 @@
-import { Exception } from "lib/models/layer";
+import { Exception, LayerType } from "lib/models/layer";
 import { LayerInBuilder } from "../types";
 import { filterLayersToCheckNewExceptions } from "./filterLayersToCheckNewExceptions";
 
@@ -10,7 +10,9 @@ export function checkLayerExceptions(
 
   let incompatibleLayers: Array<LayerInBuilder | null> = [];
   combiningLayer.exceptions.forEach((value) => {
-    incompatibleLayers.push(checkExceptionInLayer(value, selectedLayerPerStep));
+    incompatibleLayers.push(
+      checkExceptionInLayer(value, selectedLayerPerStep, value.type)
+    );
   });
 
   return incompatibleLayers;
@@ -18,11 +20,11 @@ export function checkLayerExceptions(
 
 function checkExceptionInLayer(
   exception: Exception,
-  layers: LayerInBuilder[]
+  layers: LayerInBuilder[],
+  type: LayerType | "*"
 ): LayerInBuilder | null {
   let exceptionLayer: LayerInBuilder | null = null;
 
-  console.info("Got layers to check exceptions: ", layers);
   const filteredLayers = [...layers];
   filterLayersToCheckNewExceptions(filteredLayers);
 
@@ -62,9 +64,11 @@ function checkExceptionInLayer(
         !value.standard &&
         (value.type === exception.type || exception.type === "*")
       ) {
+        const isShirt =
+          type === LayerType.MALE_SHIRT || type === LayerType.FEMALE_TOP;
         exceptionLayer = {
           ...value,
-          reverse: exception.reverse,
+          reverse: isShirt ? false : exception.reverse,
         };
       }
     });

@@ -17,6 +17,8 @@ import { useAtom } from "jotai";
 
 import { Pronouns } from "lib/models/user";
 import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
+import { getSeniorityForUser } from "lib/firebase/firestore/users/getSeniorityForUser";
+import { createUser } from "lib/firebase/firestore/users/saveUser";
 import {
   combinedLayers,
   currentUser,
@@ -26,6 +28,10 @@ import {
   selectedLeader,
 } from "lib/store";
 import useCheckMobileScreen from "lib/hooks/useCheckMobileScreen";
+import { uploadNFT } from "lib/web3/uploadNFT";
+import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
+import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
+import { getWalletBalance } from "lib/web3/getWalletBalance";
 
 import {
   fakeIDFormContainer,
@@ -50,12 +56,6 @@ import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
 import LayerBuilder from "./LayerBuilder/LayerBuilder";
 import { getStepsLength, getTotalStepsStartingFromOne } from "./utils/getSteps";
-import { uploadNFT } from "lib/web3/uploadNFT";
-import { createUser } from "lib/firebase/firestore/users/saveUser";
-import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
-import { getSeniorityForUser } from "lib/firebase/firestore/users/getSeniorityForUser";
-import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
-import { getWalletBalance } from "lib/web3/getWalletBalance";
 
 const PhotoBooth = () => {
   const maxStepNumber = getStepsLength();
@@ -79,6 +79,7 @@ const PhotoBooth = () => {
     handleSubmit,
     setError,
     watch,
+    reset,
     formState: { errors },
   } = useForm<PhotoBoothFormInputs>({
     resolver: joiResolver(schema),
@@ -88,6 +89,7 @@ const PhotoBooth = () => {
 
   const submitForm = async (values: PhotoBoothFormInputs) => {
     try {
+      setMessage("");
       setLoading(true);
 
       const walletBalance = await getWalletBalance(
@@ -186,11 +188,13 @@ const PhotoBooth = () => {
 
   React.useEffect(() => {
     (async () => {
+      reset();
       if (wallet.publicKey) {
         const count = await getPoolMintedCount(wallet);
         setMintedCount(count);
       }
     })();
+    // eslint-disable-next-line
   }, [wallet]);
 
   return (

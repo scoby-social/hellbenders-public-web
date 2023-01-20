@@ -10,6 +10,7 @@ import {
 } from "./styles";
 import { FilterBarProps, FilterValue } from "./types";
 import { filters } from "./utils";
+import { User } from "lib/models/user";
 
 const FilterBar = ({ allUsers, setFilteredUsers }: FilterBarProps) => {
   const [filtersState, setFiltersState] = React.useState(filters);
@@ -54,14 +55,57 @@ const FilterBar = ({ allUsers, setFilteredUsers }: FilterBarProps) => {
 
       return newFilterState;
     });
-
-    filterUsers();
   };
 
   const filterUsers = React.useCallback(() => {
-    setFilteredUsers(allUsers);
+    let filtered = false;
+
+    filtersState.forEach((val) => {
+      const field = val.property as keyof User;
+      if (val.value === FilterValue.ASC) {
+        filtered = true;
+        const newUsers = [...allUsers];
+        newUsers.sort((a, b) => {
+          if (a[field] > b[field]) {
+            return -1;
+          }
+
+          if (a[field] < b[field]) {
+            return 1;
+          }
+
+          return 0;
+        });
+        setFilteredUsers(newUsers);
+      }
+
+      if (val.value === FilterValue.DESC) {
+        filtered = true;
+        const newUsers = [...allUsers];
+        newUsers.sort((a, b) => {
+          if (a[field] < b[field]) {
+            return -1;
+          }
+
+          if (a[field] > b[field]) {
+            return 1;
+          }
+
+          return 0;
+        });
+        setFilteredUsers(newUsers);
+      }
+    });
+
+    if (!filtered) setFilteredUsers(allUsers);
+
     // eslint-disable-next-line
-  }, [allUsers]);
+  }, [allUsers, filtersState]);
+
+  React.useEffect(() => {
+    filterUsers();
+    // eslint-disable-next-line
+  }, [filtersState]);
 
   return (
     <Box sx={filtersBoxWrapperStyles}>

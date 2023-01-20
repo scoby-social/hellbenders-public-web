@@ -26,8 +26,13 @@ export async function uploadNFT({
   const quarter = Math.floor((today.getMonth() + 3) / 3);
   const year = today.getFullYear();
 
+  const name = `${formResult.username} the ${formResult.amplifierRole} ${formResult.superpowerRole}`;
+  const croppedName = name.slice(0, 28);
+
+  console.info("Sending name: ", croppedName);
+
   const metadata: Metadata = {
-    name: `#${seniority} ${formResult.username} the ${formResult.amplifierRole} ${formResult.superpowerRole}`,
+    name: croppedName,
     symbol: "HELLPASS",
     description: formResult.bio,
     image: resultingLayer.image,
