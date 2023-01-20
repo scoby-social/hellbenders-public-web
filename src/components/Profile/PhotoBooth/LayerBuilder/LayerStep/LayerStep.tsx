@@ -202,12 +202,14 @@ const LayerStep = ({ step }: LayerStepProps) => {
     if (allLayers.length > 0 && step === currentStep) {
       setAllStepLayers(allLayers);
 
-      setAllCombinedLayers((prev) => {
-        const newLayers = [...prev];
-        newLayers[newLayers.length - 1].skipped = false;
+      if (allCombinedLayers.length > 0) {
+        setAllCombinedLayers((prev) => {
+          const newLayers = [...prev];
+          newLayers[newLayers.length - 1].skipped = false;
 
-        return newLayers;
-      });
+          return newLayers;
+        });
+      }
     }
     // eslint-disable-next-line
   }, [currentStep, allLayers]);
