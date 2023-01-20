@@ -150,7 +150,7 @@ const PhotoBooth = () => {
       setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
       setLoading(false);
       setMessage(
-        "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page soon."
+        "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page shortly."
       );
       setTimeout(() => {
         router.push(`/${values.username}`);
