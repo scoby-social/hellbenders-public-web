@@ -33,20 +33,6 @@ const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
             variant={missingID ? "subtitle2" : "subtitle1"}
             sx={mintFakeIDTextDescription}
           >
-            Available
-          </Typography>
-          <Typography
-            variant={missingID ? "subtitle2" : "subtitle1"}
-            sx={mintFakeIDTextDescription}
-          >
-            232/3333
-          </Typography>
-        </Box>
-        <Box sx={availabilityWrapper}>
-          <Typography
-            variant={missingID ? "subtitle2" : "subtitle1"}
-            sx={mintFakeIDTextDescription}
-          >
             Price
           </Typography>
           <Typography

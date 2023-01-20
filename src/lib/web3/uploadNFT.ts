@@ -91,8 +91,6 @@ export async function uploadNFT({
     `${metadata.username}.json`
   );
 
-  console.info("Metadata JSON: ", metadataShdwUrl);
-
   let nftAddress = "";
 
   updateMessage("Your Fake ID is being minted.");
