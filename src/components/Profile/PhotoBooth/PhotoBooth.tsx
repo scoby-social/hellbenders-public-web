@@ -12,6 +12,7 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as React from "react";
+import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { useAtom } from "jotai";
 
@@ -58,6 +59,7 @@ import LayerBuilder from "./LayerBuilder/LayerBuilder";
 import { getStepsLength, getTotalStepsStartingFromOne } from "./utils/getSteps";
 
 const PhotoBooth = () => {
+  const router = useRouter();
   const maxStepNumber = getStepsLength();
   const totalSteps = getTotalStepsStartingFromOne();
   const wallet = useWallet();
@@ -147,6 +149,12 @@ const PhotoBooth = () => {
 
       setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
       setLoading(false);
+      setMessage(
+        "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page soon."
+      );
+      setTimeout(() => {
+        router.push(`/${values.username}`);
+      }, 3000);
     } catch (err) {
       setMessage(
         "I dunno why, but the machine elves f*cked up your mint. Try again later."
