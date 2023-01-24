@@ -18,11 +18,7 @@ const converter = {
 const usersRef = collection(firestore, collectionName).withConverter(converter);
 
 export async function getUserByFakeID(fakeIDAddress: string): Promise<User> {
-  console.info("Address: ", fakeIDAddress);
-  const q = query(
-    usersRef,
-    where("fakeIDs", "array-contains-any", [fakeIDAddress])
-  );
+  const q = query(usersRef, where("fakeID", "==", fakeIDAddress));
 
   const usersSnapshot = await getDocs(q);
   const queryResult = usersSnapshot.docs.map((value) => ({
