@@ -128,7 +128,7 @@ const PhotoBooth = () => {
         resultingLayer,
         formResult: values,
         leaderWalletAddress: leader.wallet,
-        parentNftAddress: leader.fakeIDs[0],
+        parentNftAddress: leader.fakeID,
         wallet,
         seniority: 0,
         updateMessage: setMessage,
@@ -139,9 +139,9 @@ const PhotoBooth = () => {
           ...values,
           wallet: wallet.publicKey!.toString(),
           avatar: res.image,
-          fakeIDs: [res.nftAddress],
+          fakeID: res.nftAddress,
         },
-        leader.wallet
+        leader.fakeID
       );
 
       // editSeniorityInJsonMetadata(
@@ -149,7 +149,7 @@ const PhotoBooth = () => {
       // user.seniority,
       // user.username
       // );
-      setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
+      setCurrentUser({ ...user, avatar: res.image, fakeID: res.nftAddress });
       setLoading(false);
       setMessage(
         "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page shortly."
