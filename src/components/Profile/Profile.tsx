@@ -3,12 +3,7 @@ import * as React from "react";
 import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
-import {
-  currentWallet,
-  isLoadingUser,
-  selectedLeader,
-  userHasNoID,
-} from "lib/store";
+import { currentWallet, selectedLeader, userHasNoID } from "lib/store";
 
 import {
   boxContainer,
@@ -34,7 +29,6 @@ const Profile = () => {
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [leader] = useAtom(selectedLeader);
-  const [loadingUser] = useAtom(isLoadingUser);
   const [loading, setLoading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
@@ -96,7 +90,6 @@ const Profile = () => {
             />
             {filteredUsers.length === 0 &&
               !loading &&
-              !loadingUser &&
               renderEmptyBroodDescription()}
             {filteredUsers.length > 0 && (
               <Box>
@@ -107,7 +100,7 @@ const Profile = () => {
                 </Grid>
               </Box>
             )}
-            {filteredUsers.length === 0 && (loading || loadingUser) && (
+            {filteredUsers.length === 0 && loading && (
               <Box sx={loaderWrapperStyles}>
                 <CircularProgress sx={{ alignSelf: "center" }} />
               </Box>

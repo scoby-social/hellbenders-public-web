@@ -87,7 +87,7 @@ export const LeaderboardContent = () => {
 
   return (
     <Box sx={contentContainerStyles}>
-      {loading || loadingUser ? (
+      {loading ? (
         <CircularProgress sx={{ alignSelf: "center" }} />
       ) : (
         renderComponent()

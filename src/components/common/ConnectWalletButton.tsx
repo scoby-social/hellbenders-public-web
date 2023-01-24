@@ -57,7 +57,6 @@ const ConnectWalletButton = ({
           return;
         }
 
-        console.info("Wallet Fake ID: ", walletFakeID);
         const user = await getUserByFakeID(walletFakeID.mintAddress.toString());
 
         if (Object.keys(user).length === 0) {
@@ -71,6 +70,7 @@ const ConnectWalletButton = ({
         return;
       }
 
+      setLoadingUser(false);
       setWallet("");
       setCurrentUser({} as User);
       setUserHasNoID(false);
