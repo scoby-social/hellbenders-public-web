@@ -7,6 +7,7 @@ import {
   allLeaderboardUsers,
   currentWallet,
   filteredLeaderboardUsers,
+  isLoadingUser,
   leaderboardLoading,
   userHasNoID,
 } from "lib/store";
@@ -22,6 +23,7 @@ export const LeaderboardContent = () => {
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [loading] = useAtom(leaderboardLoading);
+  const [loadingUser] = useAtom(isLoadingUser);
   const [allUsers] = useAtom(allLeaderboardUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
 
@@ -85,7 +87,7 @@ export const LeaderboardContent = () => {
 
   return (
     <Box sx={contentContainerStyles}>
-      {loading ? (
+      {loading || loadingUser ? (
         <CircularProgress sx={{ alignSelf: "center" }} />
       ) : (
         renderComponent()

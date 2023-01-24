@@ -77,7 +77,7 @@ export async function saveJsonMetadata(
 
   const keypair = SECRET_KEY_ARR;
 
-  let ownerStorageAccount = new PublicKey(keypair.publicKey);
+  const ownerStorageAccount = new PublicKey(keypair.publicKey);
   const _filename = fileName;
   const fileHashSum = crypto.createHash("sha256");
   const fileNameHashSum = crypto.createHash("sha256");

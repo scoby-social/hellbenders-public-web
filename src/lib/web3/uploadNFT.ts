@@ -110,5 +110,5 @@ export async function uploadNFT({
 
   URL.revokeObjectURL(blobUri);
 
-  return { image: metadata.image, nftAddress };
+  return { image: metadata.image, nftAddress, metadataUrl: metadataShdwUrl };
 }

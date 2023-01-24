@@ -64,9 +64,11 @@ export const mintFakeID = async (
   const createTokenAccountTransaction = new Transaction();
   const instructions: TransactionInstruction[] = [];
   const signers: Keypair[] = [];
+
   const mintRent = await conn.getMinimumBalanceForRentExemption(
     MintLayout.span
   );
+
   const nftMintAddress = createMint(
     instructions,
     wallet.publicKey,
@@ -76,6 +78,7 @@ export const mintFakeID = async (
     wallet.publicKey,
     signers
   );
+
   const recipientKey = await getTokenWallet(wallet.publicKey, nftMintAddress);
   createAssociatedTokenAccountInstruction(
     instructions,
@@ -84,6 +87,7 @@ export const mintFakeID = async (
     wallet.publicKey,
     nftMintAddress
   );
+
   instructions.push(
     createMintToCheckedInstruction(
       nftMintAddress,
@@ -94,15 +98,18 @@ export const mintFakeID = async (
     )
   );
   instructions.forEach((item) => transaction.add(item));
+
   const metadata = await getMetadata(nftMintAddress, TOKEN_METADATA_PROGRAM_ID);
   const masterEdition = await getEdition(
     nftMintAddress,
     TOKEN_METADATA_PROGRAM_ID
   );
+
   const [metadataExtended, bump] = await PublicKey.findProgramAddress(
     [nftMintAddress.toBuffer(), FakeIDNFTPOOL.toBuffer()],
     FakeIDNFTProgramId
   );
+
   const royaltyList: String[] = [];
 
   const formData = {
@@ -137,7 +144,7 @@ export const mintFakeID = async (
     if (
       royaltyList.findIndex(
         (item) => item == (poolData.scobyWallet as PublicKey).toString()
-      ) == -1
+      ) === -1
     ) {
       royaltyList.push((poolData.scobyWallet as PublicKey).toString());
       createTokenAccountTransaction.add(scobyUsdcTokenAccount[1]);
@@ -191,21 +198,26 @@ export const mintFakeID = async (
       creatorMint,
       "finalized"
     );
+
     if (
       creatorResp == null ||
       creatorResp.value == null ||
       creatorResp.value.length == 0
     )
       throw new Error("Invalid creator");
+
     const creatorNftAccount = creatorResp.value[0].address;
     const creatorInfo = await conn.getAccountInfo(
       creatorNftAccount,
       "finalized"
     );
+
     if (creatorInfo == null) throw new Error("Creator NFT info failed");
+
     const accountCreatorInfo = AccountLayout.decode(creatorInfo.data);
     if (Number(accountCreatorInfo.amount) == 0)
       throw new Error("Invalid Creator Info");
+
     const creatorWallet = new PublicKey(accountCreatorInfo.owner);
 
     const creatorUsdcTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -224,18 +236,25 @@ export const mintFakeID = async (
       parentMembership.extendedData.mint,
       "finalized"
     );
+
     if (
       parentMembershipResp == null ||
       parentMembershipResp.value == null ||
       parentMembershipResp.value.length == 0
     )
       throw new Error("Invalid NFP");
+
     const parentMembershipAccount = parentMembershipResp.value[0].address;
+
     let info = await conn.getAccountInfo(parentMembershipAccount, "finalized");
+
     if (info == null) throw new Error("parent membership info failed");
+
     let accountInfo = AccountLayout.decode(info.data);
+
     if (Number(accountInfo.amount) == 0)
       throw new Error("Invalid Parent Membership Nft info");
+
     const parentMembershipOwner = new PublicKey(accountInfo.owner);
 
     const parentMembershipUsdcTokenAccount =
