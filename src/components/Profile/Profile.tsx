@@ -9,6 +9,14 @@ import {
   selectedLeader,
   userHasNoID,
 } from "lib/store";
+import ConnectWalletButton from "components/common/ConnectWalletButton";
+import {
+  allBroodUsers,
+  broodLoading,
+  filteredBroodUsers,
+} from "lib/store/brood";
+import FilterBar from "components/common/FilterBar/FilterBar";
+import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroodUsers";
 
 import {
   boxContainer,
@@ -20,15 +28,8 @@ import {
   loaderWrapperStyles,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
-import ConnectWalletButton from "components/common/ConnectWalletButton";
+import { filterBroodUsers } from "./utils/filterBroodUsers";
 import FakeIDInfo from "./FakeIDInfo/FakeIDInfo";
-import {
-  allBroodUsers,
-  broodLoading,
-  filteredBroodUsers,
-} from "lib/store/brood";
-import FilterBar from "components/common/FilterBar/FilterBar";
-import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroodUsers";
 
 const Profile = () => {
   const [wallet] = useAtom(currentWallet);
@@ -143,8 +144,10 @@ const Profile = () => {
   const fetchUsers = React.useCallback(async () => {
     setLoading(true);
     const users = await getUsersThatBelongsToBrood(leader.fakeID);
-    setAllUsers(users);
-    setFilteredUsers(users);
+    const filteredUsers = filterBroodUsers(users, leader);
+
+    setAllUsers(filteredUsers);
+    setFilteredUsers(filteredUsers);
     setLoading(false);
     // eslint-disable-next-line
   }, [leader]);
