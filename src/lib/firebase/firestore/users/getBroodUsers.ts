@@ -23,15 +23,15 @@ export async function getUsersThatBelongsToBrood(
   const queryForChildren = query(usersRef, where("parent", "==", leaderWallet));
   const queryForGrandChildren = query(
     usersRef,
-    where("grandChildren", "==", leaderWallet)
+    where("grandParent", "==", leaderWallet)
   );
   const queryForGrandGrandChildren = query(
     usersRef,
-    where("grandGrandChildren", "==", leaderWallet)
+    where("grandGrandParent", "==", leaderWallet)
   );
   const queryForGrandGrandGrandChildren = query(
     usersRef,
-    where("grandGrandGrandChildren", "==", leaderWallet)
+    where("grandGrandGrandParent", "==", leaderWallet)
   );
 
   const result = await Promise.all([

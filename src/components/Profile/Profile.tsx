@@ -142,7 +142,7 @@ const Profile = () => {
 
   const fetchUsers = React.useCallback(async () => {
     setLoading(true);
-    const users = await getUsersThatBelongsToBrood(leader.wallet);
+    const users = await getUsersThatBelongsToBrood(leader.fakeID);
     setAllUsers(users);
     setFilteredUsers(users);
     setLoading(false);
