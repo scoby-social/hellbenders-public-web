@@ -7,8 +7,7 @@ import { getUserByFakeID } from "./getUserByFakeID";
 import { collectionName } from "./userCollectionName";
 
 const collectionRef = collection(firestore, collectionName);
-const commanderSalamanderWallet = process.env
-  .NEXT_PUBLIC_COMMANDER_SALAMANDER_WALLET as string;
+const clubhouseFakeID = process.env.NEXT_PUBLIC_CLUBHOUSE_FAKE_ID as string;
 
 export async function createUser(
   user: Pick<
@@ -34,10 +33,9 @@ export async function createUser(
 
   const leaderUser = await getUserByFakeID(leaderFakeID);
   const parentWallet = leaderFakeID;
-  const grandParent = leaderUser.parent || commanderSalamanderWallet;
-  const grandGrandParent = leaderUser.grandParent || commanderSalamanderWallet;
-  const grandGrandGrandParent =
-    leaderUser.grandGrandParent || commanderSalamanderWallet;
+  const grandParent = leaderUser.parent || clubhouseFakeID;
+  const grandGrandParent = leaderUser.grandParent || clubhouseFakeID;
+  const grandGrandGrandParent = leaderUser.grandGrandParent || clubhouseFakeID;
 
   const userSeniority = await getSeniorityForUser();
 
@@ -53,6 +51,7 @@ export async function createUser(
     twitterHandle: user.twitterHandle,
     discordHandle: user.discordHandle,
     avatar: user.avatar,
+    deceased: false,
   };
 
   const docRef = await addDoc(collectionRef, {
@@ -64,7 +63,7 @@ export async function createUser(
     { fakeID: grandParent, type: Royalties.grandParent },
     { fakeID: grandGrandParent, type: Royalties.grandGrandParent },
     { fakeID: grandGrandGrandParent, type: Royalties.grandGrandGrandParent },
-    { fakeID: commanderSalamanderWallet, type: Royalties.commanderSalamander },
+    { fakeID: clubhouseFakeID, type: Royalties.commanderSalamander },
   ]);
 
   return { ...userDoc, id: docRef.id };

@@ -8,27 +8,41 @@ export default function CustomTheme() {
     typography: {
       fontFamily: ["Poppins", "Cabin", "Patched"].join(","),
       body1: {
-        fontFamily: "Cabin",
+        fontFamily: "Poppins",
         fontSize: "0.75vmax",
         [breakpoints.up("sm")]: {
           fontSize: "1vmax",
         },
       },
+      body2: {
+        fontSize: "1vmax !important",
+      },
       h1: {
         fontFamily: "Patched",
         fontSize: "3vmax",
+        fontWeight: "bold",
         [breakpoints.up("sm")]: {
           fontSize: "3.5vmax",
         },
       },
       h2: {
-        fontFamily: "Patched",
+        fontFamily: "Poppins",
+        fontWeight: "800",
+        fontSize: "1.5vmax",
         [breakpoints.up("sm")]: {
           fontSize: "2vmax",
         },
       },
+      h3: {
+        fontWeight: "500",
+        fontSize: "1.1vmax",
+        [breakpoints.up("sm")]: {
+          fontSize: "1.3vmax",
+        },
+      },
       h6: {
-        fontSize: "1.2vmax",
+        fontFamily: "Cabin",
+        fontSize: "1.1vmax",
       },
       subtitle1: {
         fontSize: "1.2vmax",
@@ -72,6 +86,11 @@ export default function CustomTheme() {
             },
           },
         ],
+        styleOverrides: {
+          root: {
+            borderRadius: "20px",
+          },
+        },
       },
       MuiInputBase: {
         styleOverrides: {
@@ -114,11 +133,15 @@ export default function CustomTheme() {
       MuiButtonBase: {
         styleOverrides: {
           root: {
+            boxShadow: "none !important",
             fontWeight: "bold !important",
             fontSize: "0.8vmax !important",
-            borderRadius: "20px !important",
-            "& .Mui-selected": {
-              backgroundColor: "#4D515B",
+            "&.Mui-selected": {
+              backgroundColor: "#5D6068 !important",
+            },
+            "&.Mui-disabled": {
+              background: "rgba(72, 83, 100, 0.5) !important",
+              color: "rgba(255, 255, 255, 0.5) !important",
             },
           },
         },
@@ -128,6 +151,32 @@ export default function CustomTheme() {
           root: {
             backgroundColor: "#485364",
             color: "#fff",
+          },
+        },
+      },
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: {
+            color: "#fff !important",
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          notchedOutline: {
+            border: "none",
+          },
+          root: {
+            background: "rgba(91, 96, 140, 0.06)",
+            border: "1px solid rgba(194, 194, 194, 0.35)",
+            "&.Mui-focused": {
+              background: "rgba(96, 101, 145, 0.4)",
+              border: "1px solid rgba(255, 255, 255, 0.6)",
+            },
+            "&.Mui-error": {
+              background: "rgba(235, 87, 87, 0.12)",
+              border: "1px solid #EB5757",
+            },
           },
         },
       },

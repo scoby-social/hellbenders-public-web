@@ -3,6 +3,9 @@ import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
 import ConnectWalletButton from "components/common/ConnectWalletButton";
+import FilterBar from "components/common/FilterBar/FilterBar";
+import CountdownTimer from "components/common/CountdownTimer/CountdownTimer";
+import HellbendersDescription from "components/common/HellbendersDescription";
 import {
   allLeaderboardUsers,
   currentWallet,
@@ -13,11 +16,11 @@ import {
 } from "lib/store";
 
 import {
+  cardsContainer,
   connectWalletMessageWrapper,
   connectWalletText,
   contentContainerStyles,
 } from "./styles";
-import FilterBar from "components/common/FilterBar/FilterBar";
 
 export const LeaderboardContent = () => {
   const [wallet] = useAtom(currentWallet);
@@ -31,9 +34,11 @@ export const LeaderboardContent = () => {
     if (wallet !== "" && !missingID) {
       return (
         <Box sx={{ flex: 1 }}>
+          <CountdownTimer />
+          <HellbendersDescription />
           <FilterBar allUsers={allUsers} setFilteredUsers={setFilteredUsers} />
           <Box>
-            <Grid container alignItems="stretch" spacing={4}>
+            <Grid sx={cardsContainer} container alignItems="stretch">
               {filteredUsers.map((val) => (
                 <UserCard key={val.id} {...val} isBroodLeader={false} />
               ))}

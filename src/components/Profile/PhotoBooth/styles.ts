@@ -4,7 +4,7 @@ import { SxProps } from "@mui/material";
 import { PhotoBoothFormStyleProps } from "./types";
 
 export const fakeIDFormArrowWrapper: SxProps = {
-  padding: "0.75vmax",
+  padding: "1.5vmax",
   display: "flex",
   justifyContent: "flex-end",
   backgroundColor: "#424E5A",
@@ -108,4 +108,28 @@ export const availabilityDescription: SxProps = {
   maxWidth: "55%",
   textAlign: "center",
   fontWeight: "900",
+};
+
+export const mintButton: SxProps = {
+  padding: "0.3vmax 2.5vmax",
+  opacity: 0.7,
+  background: "#BEEF00",
+};
+
+export const helperText: SxProps = {
+  color: "rgba(255, 255, 255, 0.4)",
+  marginBottom: "0.50vmax",
+};
+
+export const tooltip: SxProps = {
+  marginLeft: "0.2vmin",
+  alignSelf: "flex-start",
+};
+
+export const superheroIdentityWrapper: SxProps = {
+  display: "flex",
+};
+
+export const roleFormFields: SxProps = {
+  maxWidth: "33%",
 };

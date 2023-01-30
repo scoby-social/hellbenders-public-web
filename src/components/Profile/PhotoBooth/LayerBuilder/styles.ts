@@ -4,7 +4,7 @@ import { CSSProperties } from "react";
 export const layerBuilderWrapper: SxProps = {
   padding: "1.5vmax 1vmax",
   border: "1px dashed #5B608C",
-  borderRadius: 8,
+  borderRadius: "8px",
 };
 
 export const layersContainer: SxProps = {

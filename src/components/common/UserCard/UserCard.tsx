@@ -15,17 +15,14 @@ import { UserCardProps } from "./types";
 const getResponsiveParamsForGrid = (isLeader: boolean) => {
   if (isLeader) {
     return {
+      height: "100%",
       md: 4,
       sm: 8,
       xs: 12,
     };
   }
 
-  return {
-    xs: 12,
-    md: 6,
-    lg: 4,
-  };
+  return;
 };
 
 const UserCard = ({
@@ -42,8 +39,8 @@ const UserCard = ({
 }: UserCardProps) => (
   <Grid
     sx={{ height: "100%" }}
-    item
     {...getResponsiveParamsForGrid(isBroodLeader)}
+    item
     key={id}
   >
     <Box sx={cardContainer}>
@@ -62,7 +59,7 @@ const UserCard = ({
         </Box>
         <Box sx={cardContentBoxWrapper}>
           <Typography variant="h6" sx={cardTitleText}>
-            {`${username} The ${amplifierRole} ${superpowerRole}`}
+            {`${username} the ${amplifierRole} ${superpowerRole}`}
           </Typography>
           <Typography variant="caption" sx={defaultText}>
             {bio}

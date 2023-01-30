@@ -1,19 +1,19 @@
-import { Filter, FilterValue } from "./types";
+import { Filter, FilterBarType, FilterValue } from "./types";
 
 export const filters: Filter[] = [
   {
     label: "Seniority",
-    property: "seniority",
+    property: FilterBarType.SENIORITY,
     value: FilterValue.DEACTIVATED,
   },
   {
     label: "Brood Size",
-    property: "brood",
+    property: FilterBarType.BROOD,
     value: FilterValue.DEACTIVATED,
   },
   {
     label: "Royalties",
-    property: "royalties",
+    property: FilterBarType.ROYALTIES,
     value: FilterValue.DEACTIVATED,
   },
 ];

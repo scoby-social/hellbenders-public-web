@@ -1,5 +1,22 @@
 import { SxProps } from "@mui/material";
 
+export const profileContainer: SxProps = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  flexFlow: "column",
+};
+
+export const cardsContainer: SxProps = {
+  display: "grid",
+  gridTemplateColumns: {
+    xs: "auto",
+    md: "repeat(3, 1fr)",
+  },
+  gridGap: "1vmax",
+};
+
 export const boxContainer: SxProps = {
   margin: "2vmax",
   display: "flex",

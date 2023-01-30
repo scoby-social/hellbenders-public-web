@@ -32,4 +32,5 @@ export interface User {
   twitterHandle: string;
   discordHandle: string;
   telegramHandle: string;
+  deceased: boolean;
 }

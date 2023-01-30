@@ -1,7 +1,11 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Tooltip, Typography } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useAtom } from "jotai";
+import * as React from "react";
 
 import { userHasNoID } from "lib/store";
+import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
 
 import {
   availabilityContainer,
@@ -19,15 +23,33 @@ import {
   royaltyShareContainer,
   royaltyShareTitle,
   royaltyWrapper,
+  tooltip,
 } from "./styles";
 import { FakeIDInfoProps } from "./types";
 
 const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
+  const wallet = useWallet();
   const [missingID] = useAtom(userHasNoID);
+
+  const [mintedCount, setMintedCount] = React.useState(0);
 
   const renderFakeIDAvailability = () => {
     return (
       <Box sx={availabilityContainer}>
+        <Box sx={availabilityWrapper}>
+          <Typography
+            variant={missingID ? "subtitle2" : "subtitle1"}
+            sx={mintFakeIDTextDescription}
+          >
+            {`ID's minted`}
+          </Typography>
+          <Typography
+            variant={missingID ? "subtitle2" : "subtitle1"}
+            sx={mintFakeIDTextDescription}
+          >
+            {mintedCount}
+          </Typography>
+        </Box>
         <Box sx={availabilityWrapper}>
           <Typography
             variant={missingID ? "subtitle2" : "subtitle1"}
@@ -46,6 +68,10 @@ const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
     );
   };
 
+  React.useEffect(() => {
+    getPoolMintedCount(wallet).then((res) => setMintedCount(res));
+  }, [wallet]);
+
   return (
     <Grid flexBasis={"100%"} item md={4} sm={8}>
       <Box sx={mintFakeIDHeaderWrapper}>
@@ -53,13 +79,35 @@ const FakeIDInfo = ({ username }: FakeIDInfoProps) => {
           <Typography variant="h6">
             {`To join ${username}'s brood, mint a Fake ID`}
           </Typography>
+          <Tooltip
+            arrow
+            sx={tooltip}
+            title="With your Hellbenders Fake ID, we can produce a fake passport and driver's license. When minted, the Fake ID will be a permanent record of your enrollment in the club and set your status as an outlaw to society. Please consider carefully how you would like to be represented.... rest is the same."
+          >
+            <InfoIcon />
+          </Tooltip>
         </Box>
         <Box sx={mintFakeIDContentWrapper}>
           <Typography variant="h6" sx={mintFakeIDTitle}>
             {`Join ${username}'s Brood`}
           </Typography>
           {missingID ? (
-            renderFakeIDAvailability()
+            <Box sx={availabilityContainer}>
+              <Box sx={availabilityWrapper}>
+                <Typography
+                  variant={missingID ? "subtitle2" : "subtitle1"}
+                  sx={mintFakeIDTextDescription}
+                >
+                  Price
+                </Typography>
+                <Typography
+                  variant={missingID ? "subtitle2" : "subtitle1"}
+                  sx={mintFakeIDTextDescription}
+                >
+                  6.66 USDC
+                </Typography>
+              </Box>
+            </Box>
           ) : (
             <Typography variant="subtitle2" sx={mintFakeIDTextDescription}>
               You’re already holding a fake ID in your wallet. If you want to

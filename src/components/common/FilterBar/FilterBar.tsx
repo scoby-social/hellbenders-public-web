@@ -4,23 +4,29 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import * as React from "react";
 
 import {
-  filterIconStyles,
-  filtersBoxWrapperStyles,
-  filterWrapperStyles,
+  filterIcon,
+  filtersBoxWrapper,
+  filterTabsWrapper,
+  filterWrapper,
 } from "./styles";
-import { FilterBarProps, FilterValue } from "./types";
+import { FilterBarProps, FilterBarType, FilterValue } from "./types";
 import { filters } from "./utils";
 import { User } from "lib/models/user";
 
-const FilterBar = ({ allUsers, setFilteredUsers }: FilterBarProps) => {
+const FilterBar = ({
+  allUsers,
+  setFilteredUsers,
+  isProfile,
+}: FilterBarProps) => {
   const [filtersState, setFiltersState] = React.useState(filters);
+  const [currentFilterIdx, setCurrentFilterIdx] = React.useState(0);
 
   const getFilterIconByValue = (value: FilterValue) => {
     switch (value) {
       case FilterValue.DESC:
-        return <KeyboardArrowDownIcon sx={filterIconStyles} />;
+        return <KeyboardArrowDownIcon sx={filterIcon} />;
       case FilterValue.ASC:
-        return <KeyboardArrowUpIcon sx={filterIconStyles} />;
+        return <KeyboardArrowUpIcon sx={filterIcon} />;
       case FilterValue.DEACTIVATED:
         return <></>;
       default:
@@ -31,17 +37,18 @@ const FilterBar = ({ allUsers, setFilteredUsers }: FilterBarProps) => {
   const getNextFilterValue = (currentValue: FilterValue): FilterValue => {
     switch (currentValue) {
       case FilterValue.DEACTIVATED:
-        return FilterValue.DESC;
-      case FilterValue.DESC:
         return FilterValue.ASC;
-      case FilterValue.ASC:
+      case FilterValue.DESC:
         return FilterValue.DEACTIVATED;
+      case FilterValue.ASC:
+        return FilterValue.DESC;
       default:
         return FilterValue.DEACTIVATED;
     }
   };
 
   const toggleFilter = (index: number, currentValue: FilterValue) => {
+    setCurrentFilterIdx(index);
     setFiltersState((prev) => {
       const newFilterState = [...prev];
       newFilterState.forEach((val, idx) => {
@@ -108,17 +115,20 @@ const FilterBar = ({ allUsers, setFilteredUsers }: FilterBarProps) => {
   }, [filtersState]);
 
   return (
-    <Box sx={filtersBoxWrapperStyles}>
-      {filtersState.map((filter, index) => (
-        <Box
-          onClick={() => toggleFilter(index, filter.value)}
-          key={index}
-          sx={filterWrapperStyles}
-        >
-          <Typography variant="body2">{filter.label}</Typography>
-          {getFilterIconByValue(filter.value)}
-        </Box>
-      ))}
+    <Box sx={filtersBoxWrapper}>
+      <Box sx={filterTabsWrapper}>
+        {filtersState.map((filter, index) => (
+          <Box
+            onClick={() => toggleFilter(index, filter.value)}
+            key={index}
+            sx={filterWrapper}
+          >
+            <Typography variant="body2">{filter.label}</Typography>
+            {getFilterIconByValue(filter.value)}
+          </Box>
+        ))}
+      </Box>
+      {isProfile && filters[currentFilterIdx].property === FilterBarType.BROOD}
     </Box>
   );
 };

@@ -32,6 +32,7 @@ const WalletButton = styled(WalletMultiButton)<WalletMultiButtonStyledProps>`
     props.primaryColor ? "rgba(190, 239, 0, 1)" : "#5B6876"};
   line-height: 0 !important;
   padding: 1vmin 1.5vmax;
+  border-radius: 8px;
 `;
 
 const ConnectWalletButton = ({

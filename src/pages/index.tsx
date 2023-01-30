@@ -1,7 +1,7 @@
 import { Box, SxProps } from "@mui/material";
 import * as React from "react";
 
-import { Header } from "components/Home/Header/Header";
+import { Header } from "components/common/Header/Header";
 import { LeaderboardContent } from "components/Home/LeaderboardContent/LeaderboardContent";
 import { useAtom } from "jotai";
 import {

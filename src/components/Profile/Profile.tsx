@@ -3,13 +3,15 @@ import * as React from "react";
 import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
+import ConnectWalletButton from "components/common/ConnectWalletButton";
+import CountdownTimer from "components/common/CountdownTimer/CountdownTimer";
+import HellbendersDescription from "components/common/HellbendersDescription";
 import {
   currentUser,
   currentWallet,
   selectedLeader,
   userHasNoID,
 } from "lib/store";
-import ConnectWalletButton from "components/common/ConnectWalletButton";
 import {
   allBroodUsers,
   broodLoading,
@@ -21,11 +23,13 @@ import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroo
 import {
   boxContainer,
   boxWrapper,
+  cardsContainer,
   connectWalletMessageWrapper,
   connectWalletText,
   emptyBroodText,
   emptyBroodWrapper,
   loaderWrapperStyles,
+  profileContainer,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import { filterBroodUsers } from "./utils/filterBroodUsers";
@@ -39,7 +43,7 @@ const Profile = () => {
   const [loading, setLoading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
-  const isMyProfile = user.fakeID === leader?.fakeID;
+  const isMyProfile = user.fakeID === leader?.fakeID && !leader.deceased;
 
   const renderEmptyBroodDescription = () => {
     if (!isMyProfile) {
@@ -73,11 +77,12 @@ const Profile = () => {
       return (
         <>
           <Box sx={boxContainer}>
-            <Grid container spacing={2} sx={boxWrapper}>
+            <Grid container sx={boxWrapper}>
               <UserCard {...leader} isBroodLeader />
               <FakeIDInfo username={leader.username} />
             </Grid>
           </Box>
+          <HellbendersDescription />
           <PhotoBooth />
         </>
       );
@@ -91,16 +96,18 @@ const Profile = () => {
             <FakeIDInfo username={leader.username} />
           </Grid>
           <Box sx={{ flex: 1 }}>
+            <HellbendersDescription />
             <FilterBar
               allUsers={allUsers}
               setFilteredUsers={setFilteredUsers}
+              isProfile
             />
             {filteredUsers.length === 0 &&
               !loading &&
               renderEmptyBroodDescription()}
             {filteredUsers.length > 0 && (
               <Box>
-                <Grid container spacing={4}>
+                <Grid sx={cardsContainer} container>
                   {filteredUsers.map((val) => (
                     <UserCard key={val.id} {...val} isBroodLeader={false} />
                   ))}
@@ -161,7 +168,12 @@ const Profile = () => {
     // eslint-disable-next-line
   }, [wallet, missingID]);
 
-  return <Box>{renderComponent()}</Box>;
+  return (
+    <Box sx={profileContainer}>
+      {isMyProfile && <CountdownTimer />}
+      {renderComponent()}
+    </Box>
+  );
 };
 
 export default Profile;

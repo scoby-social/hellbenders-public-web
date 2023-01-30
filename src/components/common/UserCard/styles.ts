@@ -6,6 +6,7 @@ export const defaultText: SxProps = {
 };
 
 export const cardContainer: SxProps = {
+  height: "100%",
   backgroundColor: "#393C45",
   borderRadius: 5,
 };
@@ -23,6 +24,7 @@ export const unitLeaderFlag: SxProps = {
 
 export const contentCard = (isBroodLeader: boolean): SxProps => {
   const style: SxProps = {
+    height: "100%",
     padding: isBroodLeader ? "0 0 1.5vmax 0" : "1.5vmax 0",
     display: "flex",
     flexFlow: "row",
@@ -44,10 +46,11 @@ export const avatarStyles: SxProps = {
 };
 
 export const cardContentBoxWrapper: SxProps = {
-  minWidth: "45%",
+  minWidth: "60%",
   maxWidth: "60%",
   display: "flex",
   flexFlow: "column",
+  justifyContent: "space-between",
 };
 
 export const cardTitleText: SxProps = {

@@ -7,9 +7,11 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import InfoIcon from "@mui/icons-material/Info";
 import { useWallet } from "@solana/wallet-adapter-react";
 import * as React from "react";
 import { useRouter } from "next/router";
@@ -51,12 +53,16 @@ import {
   mintingMessageWrapper,
   mintingMessage,
   formWrapperWithoutMargin,
+  mintButton,
+  helperText,
+  tooltip,
+  superheroIdentityWrapper,
+  roleFormFields,
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
 import LayerBuilder from "./LayerBuilder/LayerBuilder";
 import { getStepsLength, getTotalStepsStartingFromOne } from "./utils/getSteps";
-import { editSeniorityInJsonMetadata } from "lib/web3/editShdwDriveFile";
 
 const PhotoBooth = () => {
   const router = useRouter();
@@ -155,7 +161,10 @@ const PhotoBooth = () => {
         "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page shortly."
       );
       setTimeout(() => {
-        router.push(`/${values.username}`);
+        router.push({
+          pathname: `/${values.username}`,
+          query: { recentlyCreated: true },
+        });
       }, 3000);
     } catch (err) {
       setMessage(
@@ -210,10 +219,10 @@ const PhotoBooth = () => {
   return (
     <Box sx={fakeIDFormContainer}>
       <Form isMobile={isMobile} onSubmit={handleSubmit(submitForm)}>
-        <Box sx={fakeIDFormArrowWrapper}></Box>
+        <Box sx={fakeIDFormArrowWrapper} />
         <Box sx={formContainer}>
-          <Typography variant="h6">
-            The Photobooth: Mint your Fake ID
+          <Typography align="center" variant="h6">
+            Create a New Identity
           </Typography>
 
           <Grid
@@ -224,8 +233,25 @@ const PhotoBooth = () => {
           >
             <Grid flex="1" item xs={12} md={6}>
               <Box sx={formWrapper}>
-                <Typography sx={textWithMargin}>
-                  Name<sup>*</sup>
+                <Box sx={superheroIdentityWrapper}>
+                  <Typography>
+                    Your Superhero Identity<sup>*</sup>
+                  </Typography>
+
+                  <Tooltip
+                    arrow
+                    sx={tooltip}
+                    title={
+                      <span
+                        style={{ whiteSpace: "pre-line" }}
+                      >{`Your name is how you will be addressed. It can be up to 15 characters or less, containing only letters, numbers and underscores. No spaces allowed.\n\n The Adjective and Noun represent the legendary superpowers inherent in your sovereign soul.`}</span>
+                    }
+                  >
+                    <InfoIcon />
+                  </Tooltip>
+                </Box>
+                <Typography sx={helperText} variant="caption">
+                  Example: Punky the Wonderful Spatula
                 </Typography>
                 <Controller
                   name="username"
@@ -249,9 +275,6 @@ const PhotoBooth = () => {
               </Box>
 
               <Box sx={formWrapper}>
-                <Typography sx={textWithMargin}>
-                  Role in Unit<sup>*</sup>
-                </Typography>
                 <Box sx={roleFieldWrapper}>
                   <Typography variant="h6">The</Typography>
                   <Controller
@@ -261,12 +284,13 @@ const PhotoBooth = () => {
                     render={({ field }) => (
                       <TextField
                         {...field}
-                        id="amplifier-input"
+                        id="adjective-input"
                         variant="outlined"
                         error={!!errors.amplifierRole}
-                        placeholder="Amplifier"
+                        sx={roleFormFields}
+                        placeholder="Adjective"
                         helperText={
-                          errors.amplifierRole?.message || "Example: Cybernetic"
+                          errors.amplifierRole?.message || "Example: Wonderful"
                         }
                         size="small"
                       />
@@ -280,12 +304,13 @@ const PhotoBooth = () => {
                     render={({ field }) => (
                       <TextField
                         {...field}
-                        id="superpower-input"
+                        id="noun-input"
                         variant="outlined"
                         error={!!errors.superpowerRole}
-                        placeholder="Superpower"
+                        sx={roleFormFields}
+                        placeholder="Noun"
                         helperText={
-                          errors.superpowerRole?.message || "Example: Being"
+                          errors.superpowerRole?.message || "Example: Spatula"
                         }
                         size="small"
                       />
@@ -359,7 +384,6 @@ const PhotoBooth = () => {
                       {...field}
                       id="twitter-input"
                       fullWidth
-                      onBlur={validateIfUserExists}
                       placeholder="@username"
                       size="small"
                       variant="outlined"
@@ -423,6 +447,7 @@ const PhotoBooth = () => {
                   color="primary"
                   variant="contained"
                   type="submit"
+                  sx={mintButton}
                 >
                   {loading ? <CircularProgress /> : "Mint"}
                 </Button>
