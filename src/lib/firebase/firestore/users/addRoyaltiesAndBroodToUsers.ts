@@ -2,11 +2,11 @@ import { Royalties } from "lib/models/user";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
-import { getUserByWallet } from "./getUsers";
 import { collectionName } from "./userCollectionName";
+import { getUserByFakeID } from "./getUserByFakeID";
 
 interface RoyaltyWithWalletParams {
-  wallet: string;
+  fakeID: string;
   type: Royalties;
 }
 
@@ -14,7 +14,7 @@ export async function addRoyaltiesAndBroodToUsers(
   values: RoyaltyWithWalletParams[]
 ) {
   values.forEach(async (val) => {
-    const user = await getUserByWallet(val.wallet);
+    const user = await getUserByFakeID(val.fakeID);
 
     if (!user.id) return;
 

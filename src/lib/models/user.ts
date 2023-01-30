@@ -25,7 +25,7 @@ export interface User {
   royalties: number;
   avatar: string;
   parent: string;
-  fakeIDs: string[];
+  fakeID: string;
   grandParent: string;
   grandGrandParent: string;
   grandGrandGrandParent: string;

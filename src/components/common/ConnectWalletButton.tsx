@@ -14,8 +14,8 @@ import {
   userHasNoID,
 } from "lib/store";
 import { User } from "lib/models/user";
-import { getUserByWallet } from "lib/firebase/firestore/users/getUsers";
-import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
+import { getOldestFakeIDInWallet } from "lib/web3/getOldestFakeIDInWallet";
+import { getUserByFakeID } from "lib/firebase/firestore/users/getUserByFakeID";
 
 interface WalletMultiButtonStyledProps {
   primaryColor: Boolean;
@@ -47,18 +47,19 @@ const ConnectWalletButton = ({
   const getUserByWalletOrRemoveUser =
     React.useCallback(async (): Promise<void> => {
       if (publicKey) {
-        setWallet(publicKey.toString());
-        const [user, walletHasFakeID] = await Promise.all([
-          getUserByWallet(publicKey.toString()),
-          checkIfUserHasFakeID(publicKey.toString()),
-        ]);
         setLoadingUser(true);
+        setWallet(publicKey.toString());
 
-        if (!walletHasFakeID && Object.keys(user).length === 0) {
+        const walletFakeID = await getOldestFakeIDInWallet(publicKey);
+
+        if (!walletFakeID) {
           setUserHasNoID(true);
           return;
         }
 
+        const user = await getUserByFakeID(walletFakeID.mintAddress.toString());
+
+        console.info("User: ", user);
         if (Object.keys(user).length === 0) {
           setUserHasNoID(true);
         } else {
@@ -70,6 +71,7 @@ const ConnectWalletButton = ({
         return;
       }
 
+      setLoadingUser(false);
       setWallet("");
       setCurrentUser({} as User);
       setUserHasNoID(false);

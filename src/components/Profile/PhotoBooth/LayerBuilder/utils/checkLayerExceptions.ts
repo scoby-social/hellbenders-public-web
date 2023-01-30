@@ -11,7 +11,7 @@ export function checkLayerExceptions(
   let incompatibleLayers: Array<LayerInBuilder | null> = [];
   combiningLayer.exceptions.forEach((value) => {
     incompatibleLayers.push(
-      checkExceptionInLayer(value, selectedLayerPerStep, value.type)
+      checkExceptionInLayer(value, selectedLayerPerStep, combiningLayer.type)
     );
   });
 
@@ -21,7 +21,7 @@ export function checkLayerExceptions(
 function checkExceptionInLayer(
   exception: Exception,
   layers: LayerInBuilder[],
-  type: LayerType | "*"
+  type: LayerType
 ): LayerInBuilder | null {
   let exceptionLayer: LayerInBuilder | null = null;
 
@@ -66,10 +66,13 @@ function checkExceptionInLayer(
       ) {
         const isShirt =
           type === LayerType.MALE_SHIRT || type === LayerType.FEMALE_TOP;
-        exceptionLayer = {
-          ...value,
-          reverse: isShirt ? false : exception.reverse,
-        };
+
+        if (!isShirt) {
+          exceptionLayer = {
+            ...value,
+            reverse: exception.reverse,
+          };
+        }
       }
     });
   }

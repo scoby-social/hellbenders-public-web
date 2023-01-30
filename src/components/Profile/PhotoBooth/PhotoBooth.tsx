@@ -18,7 +18,6 @@ import { useAtom } from "jotai";
 
 import { Pronouns } from "lib/models/user";
 import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
-import { getSeniorityForUser } from "lib/firebase/firestore/users/getSeniorityForUser";
 import { createUser } from "lib/firebase/firestore/users/saveUser";
 import {
   combinedLayers,
@@ -57,6 +56,7 @@ import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
 import LayerBuilder from "./LayerBuilder/LayerBuilder";
 import { getStepsLength, getTotalStepsStartingFromOne } from "./utils/getSteps";
+import { editSeniorityInJsonMetadata } from "lib/web3/editShdwDriveFile";
 
 const PhotoBooth = () => {
   const router = useRouter();
@@ -123,16 +123,14 @@ const PhotoBooth = () => {
         return;
       }
 
-      const userSeniority = await getSeniorityForUser();
-
       const res = await uploadNFT({
         selectedLayers,
         resultingLayer,
         formResult: values,
         leaderWalletAddress: leader.wallet,
-        parentNftAddress: leader.fakeIDs[0],
+        parentNftAddress: leader.fakeID,
         wallet,
-        seniority: userSeniority,
+        seniority: 0,
         updateMessage: setMessage,
       });
 
@@ -141,13 +139,17 @@ const PhotoBooth = () => {
           ...values,
           wallet: wallet.publicKey!.toString(),
           avatar: res.image,
-          fakeIDs: [res.nftAddress],
+          fakeID: res.nftAddress,
         },
-        leader.wallet,
-        userSeniority
+        leader.fakeID
       );
 
-      setCurrentUser({ ...user, avatar: res.image, fakeIDs: [res.nftAddress] });
+      // editSeniorityInJsonMetadata(
+      // res.metadataUrl,
+      // user.seniority,
+      // user.username
+      // );
+      setCurrentUser({ ...user, avatar: res.image, fakeID: res.nftAddress });
       setLoading(false);
       setMessage(
         "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page shortly."

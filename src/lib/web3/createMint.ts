@@ -26,8 +26,6 @@ export function createMint(
     signers
   );
 
-  console.log("NFT Address: ", account.toString());
-
   instructions.push(
     createInitializeMintInstruction(account, decimals, owner, freezeAuthority)
   );

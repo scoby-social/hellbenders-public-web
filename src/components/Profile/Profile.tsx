@@ -3,7 +3,12 @@ import * as React from "react";
 import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
-import { currentWallet, selectedLeader, userHasNoID } from "lib/store";
+import {
+  currentUser,
+  currentWallet,
+  selectedLeader,
+  userHasNoID,
+} from "lib/store";
 
 import {
   boxContainer,
@@ -28,11 +33,12 @@ import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroo
 const Profile = () => {
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
+  const [user] = useAtom(currentUser);
   const [leader] = useAtom(selectedLeader);
   const [loading, setLoading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
-  const isMyProfile = wallet === leader?.wallet;
+  const isMyProfile = user.fakeID === leader?.fakeID;
 
   const renderEmptyBroodDescription = () => {
     if (!isMyProfile) {

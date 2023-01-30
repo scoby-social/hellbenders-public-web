@@ -1,11 +1,11 @@
 import { Connection } from "@solana/web3.js";
-import { getNftsForOwner } from "./getNftsForOwner";
+import { getNftsForOwnerBySymbol } from "./getNftsForOwner";
 
 export async function checkIfUserHasFakeID(wallet: any): Promise<boolean> {
   const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
   const FakeIDNFTSYMBOL = "HELLPASS";
 
-  const fakeIDs = await getNftsForOwner(
+  const fakeIDs = await getNftsForOwnerBySymbol(
     FakeIDNFTSYMBOL,
     wallet.publicKey,
     conn
