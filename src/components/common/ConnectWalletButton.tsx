@@ -59,7 +59,6 @@ const ConnectWalletButton = ({
 
         const user = await getUserByFakeID(walletFakeID.mintAddress.toString());
 
-        console.info("User: ", user);
         if (Object.keys(user).length === 0) {
           setUserHasNoID(true);
         } else {
