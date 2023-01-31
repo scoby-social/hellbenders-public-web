@@ -75,6 +75,24 @@ const Profile = () => {
   };
 
   const renderComponent = () => {
+    if (leader.deceased && wallet !== "" && missingID) {
+      return (
+        <Box sx={connectWalletMessageWrapper}>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Sorry, I don't see your Fake ID.`}</Typography>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Come back when you have one.`}</Typography>
+          <ConnectWalletButton primaryColor blackText />
+        </Box>
+      );
+    }
+
     if (wallet !== "" && missingID) {
       return (
         <>

@@ -276,7 +276,7 @@ const PhotoBooth = () => {
 
               <Box sx={formWrapper}>
                 <Box sx={roleFieldWrapper}>
-                  <Typography variant="h6">The</Typography>
+                  <Typography variant="h6">the</Typography>
                   <Controller
                     name="amplifierRole"
                     defaultValue=""
