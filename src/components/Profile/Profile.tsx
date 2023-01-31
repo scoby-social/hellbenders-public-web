@@ -194,7 +194,9 @@ const Profile = () => {
 
   return (
     <Box sx={profileContainer}>
-      {isMyProfile && <CountdownTimer />}
+      {(isMyProfile || (wallet !== "" && !missingID && !leader.deceased)) && (
+        <CountdownTimer />
+      )}
       {renderComponent()}
     </Box>
   );

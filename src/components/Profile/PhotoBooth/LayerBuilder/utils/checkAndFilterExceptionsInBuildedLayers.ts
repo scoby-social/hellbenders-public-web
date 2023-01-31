@@ -16,14 +16,7 @@ export function checkAndFilterExceptionsInBuildedLayers(
 
     if (
       layer.type === LayerType.BACKGROUND ||
-      [
-        LayerType.MALE_BODY,
-        LayerType.FEMALE_BODY,
-        LayerType.MALE_SHIRT,
-        LayerType.FEMALE_TOP,
-        LayerType.FEMALE_JACKET,
-        LayerType.MALE_JACKET,
-      ].includes(layer.type)
+      [LayerType.MALE_BODY, LayerType.FEMALE_BODY].includes(layer.type)
     ) {
       firstLayers.push(layer);
       return;
@@ -45,6 +38,19 @@ export function checkAndFilterExceptionsInBuildedLayers(
 
       if (exception.name === layer.name) return true;
     });
+
+    if (
+      !hasException &&
+      [
+        LayerType.FEMALE_JACKET,
+        LayerType.MALE_JACKET,
+        LayerType.MALE_SHIRT,
+        LayerType.FEMALE_TOP,
+      ].includes(layer.type)
+    ) {
+      firstLayers.push(layer);
+      return;
+    }
 
     if (!hasException) filteredLayers.push(layer);
   });
