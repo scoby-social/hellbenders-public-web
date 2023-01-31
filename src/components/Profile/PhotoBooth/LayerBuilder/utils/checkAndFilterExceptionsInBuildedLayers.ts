@@ -21,6 +21,8 @@ export function checkAndFilterExceptionsInBuildedLayers(
         LayerType.FEMALE_BODY,
         LayerType.MALE_SHIRT,
         LayerType.FEMALE_TOP,
+        LayerType.FEMALE_JACKET,
+        LayerType.MALE_JACKET,
       ].includes(layer.type)
     ) {
       firstLayers.push(layer);

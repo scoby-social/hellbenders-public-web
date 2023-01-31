@@ -18,8 +18,15 @@ export async function mergeImageWithException(
     checkAndFilterExceptionsInBuildedLayers(buildedLayers, exceptions);
 
   if (
-    [LayerType.MALE_SHIRT, LayerType.FEMALE_TOP].includes(selectedLayer.type)
+    [
+      LayerType.MALE_SHIRT,
+      LayerType.FEMALE_TOP,
+      LayerType.MALE_JACKET,
+      LayerType.FEMALE_JACKET,
+      LayerType.ACCESORY,
+    ].includes(selectedLayer.type)
   ) {
+    console.info("First layers! ", selectedLayer.type);
     firstLayers.push(selectedLayer);
   }
 
@@ -52,7 +59,13 @@ export async function mergeImageWithException(
   }
 
   if (
-    ![LayerType.MALE_SHIRT, LayerType.FEMALE_TOP].includes(selectedLayer.type)
+    ![
+      LayerType.MALE_SHIRT,
+      LayerType.FEMALE_TOP,
+      LayerType.MALE_JACKET,
+      LayerType.FEMALE_JACKET,
+      LayerType.ACCESORY,
+    ].includes(selectedLayer.type)
   ) {
     const selectedLayerBlob = await (await fetch(selectedLayer.image)).blob();
     const selectedLayerBitmap = await createImageBitmap(selectedLayerBlob);

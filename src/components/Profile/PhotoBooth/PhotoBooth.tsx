@@ -265,7 +265,7 @@ const PhotoBooth = () => {
                       onBlur={validateIfUserExists}
                       error={!!errors.username}
                       placeholder="How you want to be addressed in one word 15 letters max"
-                      helperText={errors.username?.message || "Example: arcade"}
+                      helperText={errors.username?.message || "Example: Punky"}
                       size="small"
                       variant="outlined"
                       inputProps={{ maxLength: 15 }}

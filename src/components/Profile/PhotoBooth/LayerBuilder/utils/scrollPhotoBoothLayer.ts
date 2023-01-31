@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { doesStepHasSpecialException } from "../../utils/getSteps";
 import { ScrollPhotoBoothLayersParams } from "../LayerStep/types";
 import { LayerInBuilder, ScrollPhotoBoothReturnValues } from "../types";
 import { checkLayerExceptions } from "./checkLayerExceptions";
@@ -55,7 +56,7 @@ export async function scrollPhotoBoothLayers({
   const exceptions = checkLayerExceptions(filteredLayers, currentLayer);
   let reversedKey: string | null = null;
 
-  if (exceptions.length > 0) {
+  if (exceptions.length > 0 || doesStepHasSpecialException(step)) {
     const mergedImage = await mergeImageWithException(
       exceptions,
       currentLayer,
