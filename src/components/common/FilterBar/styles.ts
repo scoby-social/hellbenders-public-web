@@ -34,3 +34,13 @@ export const filterIcon: SxProps = {
   width: "1vmax",
   marginLeft: "1vmin",
 };
+
+export const broodFiltersWrapper: SxProps = {
+  width: "40%",
+  marginTop: "2vmax",
+  marginLeft: "2vmax",
+  display: "flex",
+  justifyContent: "space-evenly",
+  alignSelf: "start",
+  alignItems: "center",
+};

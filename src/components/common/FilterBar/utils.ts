@@ -1,4 +1,10 @@
-import { Filter, FilterBarType, FilterValue } from "./types";
+import {
+  Checkbox,
+  CheckboxProperty,
+  Filter,
+  FilterBarType,
+  FilterValue,
+} from "./types";
 
 export const filters: Filter[] = [
   {
@@ -15,5 +21,28 @@ export const filters: Filter[] = [
     label: "Royalties",
     property: FilterBarType.ROYALTIES,
     value: FilterValue.DEACTIVATED,
+  },
+];
+
+export const checkBoxes: Checkbox[] = [
+  {
+    label: "Gen 1",
+    property: CheckboxProperty.GEN1,
+    checked: true,
+  },
+  {
+    label: "Gen 2",
+    property: CheckboxProperty.GEN2,
+    checked: true,
+  },
+  {
+    label: "Gen 3",
+    property: CheckboxProperty.GEN3,
+    checked: true,
+  },
+  {
+    label: "Gen 4",
+    property: CheckboxProperty.GEN4,
+    checked: true,
   },
 ];

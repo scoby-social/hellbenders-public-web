@@ -24,3 +24,16 @@ export interface Filter {
   property: FilterBarType;
   value: FilterValue;
 }
+
+export enum CheckboxProperty {
+  GEN1 = "gen1",
+  GEN2 = "gen2",
+  GEN3 = "gen3",
+  GEN4 = "gen4",
+}
+
+export interface Checkbox {
+  label: string;
+  property: CheckboxProperty;
+  checked: boolean;
+}

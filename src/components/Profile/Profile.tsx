@@ -16,6 +16,7 @@ import {
   allBroodUsers,
   broodLoading,
   filteredBroodUsers,
+  usersByGen,
 } from "lib/store/brood";
 import FilterBar from "components/common/FilterBar/FilterBar";
 import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroodUsers";
@@ -43,6 +44,7 @@ const Profile = () => {
   const [loading, setLoading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
+  const [_, setUsersByGen] = useAtom(usersByGen);
   const isMyProfile = user.fakeID === leader?.fakeID && !leader.deceased;
 
   const renderEmptyBroodDescription = () => {
@@ -150,9 +152,13 @@ const Profile = () => {
 
   const fetchUsers = React.useCallback(async () => {
     setLoading(true);
-    const users = await getUsersThatBelongsToBrood(leader.fakeID);
+    const { gen1, gen2, gen3, gen4 } = await getUsersThatBelongsToBrood(
+      leader.fakeID
+    );
+    const users = [...gen1, ...gen2, ...gen3, ...gen4];
     const filteredUsers = filterBroodUsers(users, leader);
 
+    setUsersByGen({ gen1, gen2, gen3, gen4 });
     setAllUsers(filteredUsers);
     setFilteredUsers(filteredUsers);
     setLoading(false);
