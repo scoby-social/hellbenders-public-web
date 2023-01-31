@@ -52,6 +52,7 @@ export async function createUser(
     discordHandle: user.discordHandle,
     avatar: user.avatar,
     deceased: false,
+    createdAt: new Date().toUTCString(),
   };
 
   const docRef = await addDoc(collectionRef, {
