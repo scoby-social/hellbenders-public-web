@@ -58,6 +58,7 @@ import {
   tooltip,
   superheroIdentityWrapper,
   roleFormFields,
+  formGridGroup,
 } from "./styles";
 import { schema } from "./validator";
 import { PhotoBoothFormInputs } from "./types";
@@ -225,13 +226,8 @@ const PhotoBooth = () => {
             Create a New Identity
           </Typography>
 
-          <Grid
-            justifyContent="space-around"
-            padding="1vmax"
-            container
-            columnSpacing={4}
-          >
-            <Grid flex="1" item xs={12} md={6}>
+          <Grid justifyContent="space-around" padding="1vmax" container>
+            <Grid flex="1" sx={formGridGroup} item xs={12} md={6}>
               <Box sx={formWrapper}>
                 <Box sx={superheroIdentityWrapper}>
                   <Typography>
@@ -346,7 +342,7 @@ const PhotoBooth = () => {
               </Box>
             </Grid>
 
-            <Grid flex="1" item xs={12} md={6}>
+            <Grid flex="1" sx={formGridGroup} item xs={12} md={6}>
               <Box sx={formWrapperWithoutMargin}>
                 <Typography sx={textWithMargin}>
                   Bio<sup>*</sup>

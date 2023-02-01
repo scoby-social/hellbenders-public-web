@@ -53,6 +53,21 @@ export async function scrollPhotoBoothLayers({
 
   let reversedKey: string | null = null;
 
+  if (layerIndex === 0 && step > 1) {
+    const layers = [
+      ...leftSideLayers,
+      { ...allStepLayers[0], selected: true },
+      ...rightSideLayers,
+    ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
+
+    return {
+      layersToShow: layers,
+      combinedLayer: currentLayer,
+      stepLayer: allStepLayers[layerIndex],
+      reversedKey,
+    };
+  }
+
   const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
 
   const exceptions = checkLayerExceptions(filteredLayers, currentLayer);

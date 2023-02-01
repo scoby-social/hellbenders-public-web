@@ -133,3 +133,7 @@ export const superheroIdentityWrapper: SxProps = {
 export const roleFormFields: SxProps = {
   maxWidth: "33%",
 };
+
+export const formGridGroup: SxProps = {
+  padding: "0 0.5vmax",
+};
