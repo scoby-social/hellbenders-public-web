@@ -3,13 +3,16 @@ import { FilterExceptionsReturnValues, LayerInBuilder } from "../types";
 import { filterLayersToCheckNewExceptions } from "./filterLayersToCheckNewExceptions";
 
 export function checkAndFilterExceptionsInBuildedLayers(
-  buildedLayers: LayerInBuilder[],
+  layers: LayerInBuilder[],
   exceptions: Array<LayerInBuilder | null>
 ): FilterExceptionsReturnValues {
   const firstLayers: LayerInBuilder[] = [];
   const pendingLayers: LayerInBuilder[] = [];
   const filteredLayers: LayerInBuilder[] = [];
   let reversedLayerKey: string | null = null;
+
+  const buildedLayers = [...layers];
+  filterLayersToCheckNewExceptions(buildedLayers);
 
   buildedLayers.forEach((layer) => {
     if (layer.skipped) return;
@@ -54,8 +57,6 @@ export function checkAndFilterExceptionsInBuildedLayers(
 
     if (!hasException) filteredLayers.push(layer);
   });
-
-  filterLayersToCheckNewExceptions(filteredLayers);
 
   return { firstLayers, pendingLayers, filteredLayers, reversedLayerKey };
 }

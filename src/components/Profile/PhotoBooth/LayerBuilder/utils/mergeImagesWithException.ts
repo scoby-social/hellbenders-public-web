@@ -26,7 +26,6 @@ export async function mergeImageWithException(
       LayerType.ACCESORY,
     ].includes(selectedLayer.type)
   ) {
-    console.info("First layers! ", selectedLayer.type);
     firstLayers.push(selectedLayer);
   }
 

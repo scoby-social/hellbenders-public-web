@@ -44,7 +44,6 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
       await getNFTWithMetadata(user.fakeID);
     } catch (e) {
       setDiseased(true);
-      console.info("Marking user as diseased: ", user.id);
       markUserAsDiseased(user.id);
     }
     // eslint-disable-next-line

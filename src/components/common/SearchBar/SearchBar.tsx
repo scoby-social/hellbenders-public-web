@@ -43,6 +43,11 @@ const SearchBar = () => {
       <TextField
         variant="standard"
         onChange={(e) => setSearchText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            executeSearch();
+          }
+        }}
         placeholder="Superpower"
         sx={searchBarInput}
         InputProps={{

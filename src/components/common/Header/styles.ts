@@ -51,9 +51,8 @@ export const leaderboardText: SxProps = {
 };
 
 export const headerImageWrapper: SxProps = {
-  width: "4vmax",
+  width: "8vmax",
   height: "4vmax",
-  marginLeft: "2vmax",
   position: "relative",
 };
 
@@ -78,4 +77,8 @@ export const deceasedUserContainer: SxProps = {
 
 export const deceasedTitle: SxProps = {
   fontWeight: "900",
+};
+
+export const buttonWrapper: SxProps = {
+  width: "10vmax",
 };

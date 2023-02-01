@@ -15,6 +15,7 @@ import {
 
 import TopTabs from "./TopTabs/TopTabs";
 import {
+  buttonWrapper,
   deceasedTitle,
   deceasedUserContainer,
   headerBoxWithImageWrapper,
@@ -54,7 +55,9 @@ export const Header = ({ title, isProfile }: HeaderProps) => {
             />
           </Box>
           {isSuccessfullyLogged && <TopTabs />}
-          <ConnectWalletButton primaryColor={false} />
+          <Box sx={buttonWrapper}>
+            <ConnectWalletButton primaryColor={false} />
+          </Box>
         </Box>
 
         <Box sx={leaderboardContentWrapper(isProfile)}>

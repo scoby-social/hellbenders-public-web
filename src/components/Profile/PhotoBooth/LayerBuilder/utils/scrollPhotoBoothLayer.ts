@@ -51,10 +51,11 @@ export async function scrollPhotoBoothLayers({
 
   /* Checks for exception and build the final selected image */
 
+  let reversedKey: string | null = null;
+
   const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
 
   const exceptions = checkLayerExceptions(filteredLayers, currentLayer);
-  let reversedKey: string | null = null;
 
   if (exceptions.length > 0 || doesStepHasSpecialException(step)) {
     const mergedImage = await mergeImageWithException(
@@ -76,13 +77,13 @@ export async function scrollPhotoBoothLayers({
     currentLayer.image = mergedImage;
   }
 
-  /* ------------------------------------------------ */
-
   const layersToShow = [
     ...leftSideLayers,
     currentLayer,
     ...rightSideLayers,
   ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
+
+  /* ------------------------------------------------ */
 
   return {
     layersToShow,
