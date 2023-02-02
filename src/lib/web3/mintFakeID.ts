@@ -281,39 +281,53 @@ export const mintFakeID = async (
       parentMembership.extendedData.parentNfp,
       "finalized"
     );
+
+    let grandParentMembershipUsdcTokenAccount: any[];
+    
     if (
       grandParentMembershipResp == null ||
       grandParentMembershipResp.value == null ||
       grandParentMembershipResp.value.length == 0
-    )
-      throw new Error("Invalid NFP");
-    const grandParentMembershipAccount =
-      grandParentMembershipResp.value[0].address;
-    info = await conn.getAccountInfo(grandParentMembershipAccount, "finalized");
-    if (info == null) throw new Error("grand parent membership info failed");
-    accountInfo = AccountLayout.decode(info.data);
-    if (Number(accountInfo.amount) == 0)
-      throw new Error("Invalid Grand Parent Membership Nft info");
-    const grandParentMembershipOwner = new PublicKey(accountInfo.owner);
+    ) {
+    
+      grandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+    } else {
 
-    const grandParentMembershipUsdcTokenAccount =
-      await getOrCreateAssociatedTokenAccount(
-        conn,
-        wallet.publicKey,
-        usdcToken,
-        grandParentMembershipOwner,
-        wallet.signTransaction
-      );
+      const grandParentMembershipAccount =
+        grandParentMembershipResp.value[0].address;
+      info = await conn.getAccountInfo(grandParentMembershipAccount, "finalized");
+      if (info == null) {
+        grandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+      } else {
 
-    if (grandParentMembershipUsdcTokenAccount[1]) {
-      if (
-        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
-        -1
-      ) {
-        royaltyList.push(accountInfo.owner.toString());
-        createTokenAccountTransaction.add(
-          grandParentMembershipUsdcTokenAccount[1]
-        );
+        accountInfo = AccountLayout.decode(info.data);
+        if (Number(accountInfo.amount) == 0) {
+          grandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+        } else {
+
+          const grandParentMembershipOwner = new PublicKey(accountInfo.owner);
+  
+          grandParentMembershipUsdcTokenAccount =
+            await getOrCreateAssociatedTokenAccount(
+              conn,
+              wallet.publicKey,
+              usdcToken,
+              grandParentMembershipOwner,
+              wallet.signTransaction
+            );
+  
+          if (grandParentMembershipUsdcTokenAccount[1]) {
+            if (
+              royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+              -1
+            ) {
+              royaltyList.push(accountInfo.owner.toString());
+              createTokenAccountTransaction.add(
+                grandParentMembershipUsdcTokenAccount[1]
+              );
+            }
+          }
+        }
       }
     }
 
@@ -322,88 +336,114 @@ export const mintFakeID = async (
       parentMembership.extendedData.grandParentNfp,
       "finalized"
     );
+
+    let grandGrandParentMembershipUsdcTokenAccount :any[];
     if (
       grandGrandParentMembershipResp == null ||
       grandGrandParentMembershipResp.value == null ||
       grandGrandParentMembershipResp.value.length == 0
-    )
-      throw new Error("Invalid NFP");
-    const grandGrandParentMembershipAccount =
-      grandGrandParentMembershipResp.value[0].address;
-    info = await conn.getAccountInfo(
-      grandGrandParentMembershipAccount,
-      "finalized"
-    );
-    if (info == null) throw new Error("grand parent membership info failed");
-    accountInfo = AccountLayout.decode(info.data);
-    if (Number(accountInfo.amount) == 0)
-      throw new Error("Invalid Grand Parent Membership Nft info");
-    const grandGrandParentMembershipOwner = new PublicKey(accountInfo.owner);
+    ) {
+      grandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+    } else {
 
-    const grandGrandParentMembershipUsdcTokenAccount =
-      await getOrCreateAssociatedTokenAccount(
-        conn,
-        wallet.publicKey,
-        usdcToken,
-        grandGrandParentMembershipOwner,
-        wallet.signTransaction
+      const grandGrandParentMembershipAccount =
+        grandGrandParentMembershipResp.value[0].address;
+      info = await conn.getAccountInfo(
+        grandGrandParentMembershipAccount,
+        "finalized"
       );
+      if (info == null) {
+        grandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+      } else {
 
-    if (grandGrandParentMembershipUsdcTokenAccount[1]) {
-      if (
-        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
-        -1
-      ) {
-        royaltyList.push(accountInfo.owner.toString());
-        createTokenAccountTransaction.add(
-          grandGrandParentMembershipUsdcTokenAccount[1]
-        );
+        accountInfo = AccountLayout.decode(info.data);
+        if (Number(accountInfo.amount) == 0) {
+          grandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+        } else {
+
+          const grandGrandParentMembershipOwner = new PublicKey(accountInfo.owner);
+      
+            grandGrandParentMembershipUsdcTokenAccount =
+            await getOrCreateAssociatedTokenAccount(
+              conn,
+              wallet.publicKey,
+              usdcToken,
+              grandGrandParentMembershipOwner,
+              wallet.signTransaction
+            );
+      
+          if (grandGrandParentMembershipUsdcTokenAccount[1]) {
+            if (
+              royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+              -1
+            ) {
+              royaltyList.push(accountInfo.owner.toString());
+              createTokenAccountTransaction.add(
+                grandGrandParentMembershipUsdcTokenAccount[1]
+              );
+            }
+          }
+        }
       }
     }
+      
 
     const grandGrandGrandParentMembershipResp =
       await conn.getTokenLargestAccounts(
         parentMembership.extendedData.grandGrandParentNfp,
         "finalized"
       );
+
+    let grandGrandGrandParentMembershipUsdcTokenAccount :any[];
+
     if (
       grandGrandGrandParentMembershipResp == null ||
       grandGrandGrandParentMembershipResp.value == null ||
       grandGrandGrandParentMembershipResp.value.length == 0
-    )
-      throw new Error("Invalid NFP");
-    const grandGrandGrandParentMembershipAccount =
-      grandGrandGrandParentMembershipResp.value[0].address;
-    info = await conn.getAccountInfo(
-      grandGrandGrandParentMembershipAccount,
-      "finalized"
-    );
-    if (info == null) throw new Error("grand parent membership info failed");
-    accountInfo = AccountLayout.decode(info.data);
-    if (Number(accountInfo.amount) == 0)
-      throw new Error("Invalid Grand Parent Membership Nft info");
-    const grandGrandGrandParentMembershipOwner = new PublicKey(
-      accountInfo.owner
-    );
+    ) {
+      grandGrandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+    } else {
 
-    const grandGrandGrandParentMembershipUsdcTokenAccount =
-      await getOrCreateAssociatedTokenAccount(
-        conn,
-        wallet.publicKey,
-        usdcToken,
-        grandGrandGrandParentMembershipOwner,
-        wallet.signTransaction
+      const grandGrandGrandParentMembershipAccount =
+        grandGrandGrandParentMembershipResp.value[0].address;
+      info = await conn.getAccountInfo(
+        grandGrandGrandParentMembershipAccount,
+        "finalized"
       );
+      if (info == null) {
+        grandGrandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+      } else {
 
-    if (grandGrandGrandParentMembershipUsdcTokenAccount[1]) {
-      if (
-        royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
-        -1
-      ) {
-        royaltyList.push(accountInfo.owner.toString());
-        createTokenAccountTransaction.add(
-          grandGrandGrandParentMembershipUsdcTokenAccount[1]
-        );
+        accountInfo = AccountLayout.decode(info.data);
+        if (Number(accountInfo.amount) == 0) {
+          grandGrandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+        } else {
+
+          const grandGrandGrandParentMembershipOwner = new PublicKey(
+            accountInfo.owner
+          );
+      
+          grandGrandGrandParentMembershipUsdcTokenAccount =
+            await getOrCreateAssociatedTokenAccount(
+              conn,
+              wallet.publicKey,
+              usdcToken,
+              grandGrandGrandParentMembershipOwner,
+              wallet.signTransaction
+            );
+      
+          if (grandGrandGrandParentMembershipUsdcTokenAccount[1]) {
+            if (
+              royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
+              -1
+            ) {
+              royaltyList.push(accountInfo.owner.toString());
+              createTokenAccountTransaction.add(
+                grandGrandGrandParentMembershipUsdcTokenAccount[1]
+              );
+            }
+          }
+        }
       }
     }
 
