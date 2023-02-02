@@ -122,6 +122,8 @@ export const helperText: SxProps = {
 };
 
 export const tooltip: SxProps = {
+  width: "1.5vmax",
+  height: "1.5vmax",
   marginLeft: "0.2vmin",
   alignSelf: "flex-start",
 };
