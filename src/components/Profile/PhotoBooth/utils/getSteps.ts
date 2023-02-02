@@ -45,3 +45,13 @@ export function getStepsLength(): number {
 export function getTotalStepsStartingFromOne(): number {
   return steps.length;
 }
+
+export function doesStepHasSpecialException(step: number): boolean {
+  return !!steps[step].find((val) =>
+    [
+      LayerType.MALE_JACKET,
+      LayerType.ACCESORY,
+      LayerType.FEMALE_JACKET,
+    ].includes(val)
+  );
+}

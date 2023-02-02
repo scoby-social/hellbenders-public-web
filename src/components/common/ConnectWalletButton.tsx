@@ -31,7 +31,8 @@ const WalletButton = styled(WalletMultiButton)<WalletMultiButtonStyledProps>`
   background-color: ${(props) =>
     props.primaryColor ? "rgba(190, 239, 0, 1)" : "#5B6876"};
   line-height: 0 !important;
-  padding: 1vmin 1.5vmax;
+  padding: 1vmin 1vmax;
+  border-radius: 8px;
 `;
 
 const ConnectWalletButton = ({

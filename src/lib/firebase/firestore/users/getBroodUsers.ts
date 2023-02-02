@@ -8,6 +8,7 @@ import {
 import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
 import { combineUsersFromSnapshot } from "./extractAndCombineUsers";
+import { GetUsersThatBelongsToBroodReturnValues } from "./types";
 import { collectionName } from "./userCollectionName";
 
 const converter = {
@@ -19,7 +20,7 @@ const converter = {
 const usersRef = collection(firestore, collectionName).withConverter(converter);
 export async function getUsersThatBelongsToBrood(
   leaderWallet: string
-): Promise<User[]> {
+): Promise<GetUsersThatBelongsToBroodReturnValues> {
   const queryForChildren = query(usersRef, where("parent", "==", leaderWallet));
   const queryForGrandChildren = query(
     usersRef,

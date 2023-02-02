@@ -1,5 +1,14 @@
 import { SxProps } from "@mui/material";
 
+export const cardsContainer: SxProps = {
+  display: "grid",
+  gridTemplateColumns: {
+    xs: "auto",
+    md: "repeat(3, 1fr)",
+  },
+  gridGap: "1vmax",
+};
+
 export const defaultTextStyles: SxProps = {
   letterSpacing: "0.005em",
   lineHeight: "142%",
@@ -7,7 +16,7 @@ export const defaultTextStyles: SxProps = {
 
 export const contentContainerStyles: SxProps = {
   marginTop: "1rem",
-  margin: "0 3rem",
+  margin: "0 3vmax",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",

@@ -3,7 +3,7 @@ import { FilterExceptionsReturnValues, LayerInBuilder } from "../types";
 import { filterLayersToCheckNewExceptions } from "./filterLayersToCheckNewExceptions";
 
 export function checkAndFilterExceptionsInBuildedLayers(
-  buildedLayers: LayerInBuilder[],
+  layers: LayerInBuilder[],
   exceptions: Array<LayerInBuilder | null>
 ): FilterExceptionsReturnValues {
   const firstLayers: LayerInBuilder[] = [];
@@ -11,17 +11,15 @@ export function checkAndFilterExceptionsInBuildedLayers(
   const filteredLayers: LayerInBuilder[] = [];
   let reversedLayerKey: string | null = null;
 
+  const buildedLayers = [...layers];
+  filterLayersToCheckNewExceptions(buildedLayers);
+
   buildedLayers.forEach((layer) => {
     if (layer.skipped) return;
 
     if (
       layer.type === LayerType.BACKGROUND ||
-      [
-        LayerType.MALE_BODY,
-        LayerType.FEMALE_BODY,
-        LayerType.MALE_SHIRT,
-        LayerType.FEMALE_TOP,
-      ].includes(layer.type)
+      [LayerType.MALE_BODY, LayerType.FEMALE_BODY].includes(layer.type)
     ) {
       firstLayers.push(layer);
       return;
@@ -44,10 +42,21 @@ export function checkAndFilterExceptionsInBuildedLayers(
       if (exception.name === layer.name) return true;
     });
 
+    if (
+      !hasException &&
+      [
+        LayerType.FEMALE_JACKET,
+        LayerType.MALE_JACKET,
+        LayerType.MALE_SHIRT,
+        LayerType.FEMALE_TOP,
+      ].includes(layer.type)
+    ) {
+      firstLayers.push(layer);
+      return;
+    }
+
     if (!hasException) filteredLayers.push(layer);
   });
-
-  filterLayersToCheckNewExceptions(filteredLayers);
 
   return { firstLayers, pendingLayers, filteredLayers, reversedLayerKey };
 }

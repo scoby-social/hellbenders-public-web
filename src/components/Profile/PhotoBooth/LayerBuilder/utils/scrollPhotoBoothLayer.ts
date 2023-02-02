@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { doesStepHasSpecialException } from "../../utils/getSteps";
 import { ScrollPhotoBoothLayersParams } from "../LayerStep/types";
 import { LayerInBuilder, ScrollPhotoBoothReturnValues } from "../types";
 import { checkLayerExceptions } from "./checkLayerExceptions";
@@ -50,12 +51,28 @@ export async function scrollPhotoBoothLayers({
 
   /* Checks for exception and build the final selected image */
 
+  let reversedKey: string | null = null;
+
+  if (layerIndex === 0 && step > 1) {
+    const layers = [
+      ...leftSideLayers,
+      { ...allStepLayers[0], selected: true },
+      ...rightSideLayers,
+    ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
+
+    return {
+      layersToShow: layers,
+      combinedLayer: currentLayer,
+      stepLayer: allStepLayers[layerIndex],
+      reversedKey,
+    };
+  }
+
   const filteredLayers = getFilteredLayers(step, selectedLayersOnStep);
 
   const exceptions = checkLayerExceptions(filteredLayers, currentLayer);
-  let reversedKey: string | null = null;
 
-  if (exceptions.length > 0) {
+  if (exceptions.length > 0 || doesStepHasSpecialException(step)) {
     const mergedImage = await mergeImageWithException(
       exceptions,
       currentLayer,
@@ -75,13 +92,13 @@ export async function scrollPhotoBoothLayers({
     currentLayer.image = mergedImage;
   }
 
-  /* ------------------------------------------------ */
-
   const layersToShow = [
     ...leftSideLayers,
     currentLayer,
     ...rightSideLayers,
   ].map((val, index) => ({ ...val, key: `${nanoid()}-${index}` }));
+
+  /* ------------------------------------------------ */
 
   return {
     layersToShow,

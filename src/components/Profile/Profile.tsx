@@ -3,17 +3,20 @@ import * as React from "react";
 import { useAtom } from "jotai";
 
 import UserCard from "components/common/UserCard/UserCard";
+import ConnectWalletButton from "components/common/ConnectWalletButton";
+import CountdownTimer from "components/common/CountdownTimer/CountdownTimer";
+import HellbendersDescription from "components/common/HellbendersDescription";
 import {
   currentUser,
   currentWallet,
   selectedLeader,
   userHasNoID,
 } from "lib/store";
-import ConnectWalletButton from "components/common/ConnectWalletButton";
 import {
   allBroodUsers,
   broodLoading,
   filteredBroodUsers,
+  usersByGen,
 } from "lib/store/brood";
 import FilterBar from "components/common/FilterBar/FilterBar";
 import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroodUsers";
@@ -21,11 +24,13 @@ import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroo
 import {
   boxContainer,
   boxWrapper,
+  cardsContainer,
   connectWalletMessageWrapper,
   connectWalletText,
   emptyBroodText,
   emptyBroodWrapper,
   loaderWrapperStyles,
+  profileContainer,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import { filterBroodUsers } from "./utils/filterBroodUsers";
@@ -39,7 +44,8 @@ const Profile = () => {
   const [loading, setLoading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
-  const isMyProfile = user.fakeID === leader?.fakeID;
+  const [_, setUsersByGen] = useAtom(usersByGen);
+  const isMyProfile = user.fakeID === leader?.fakeID && !leader.deceased;
 
   const renderEmptyBroodDescription = () => {
     if (!isMyProfile) {
@@ -69,15 +75,34 @@ const Profile = () => {
   };
 
   const renderComponent = () => {
+    if (leader.deceased && wallet !== "" && missingID) {
+      return (
+        <Box sx={connectWalletMessageWrapper}>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Sorry, I don't see your Fake ID.`}</Typography>
+          <Typography
+            variant="h6"
+            component="h6"
+            sx={connectWalletText}
+          >{`Come back when you have one.`}</Typography>
+          <ConnectWalletButton primaryColor blackText />
+        </Box>
+      );
+    }
+
     if (wallet !== "" && missingID) {
       return (
         <>
           <Box sx={boxContainer}>
-            <Grid container spacing={2} sx={boxWrapper}>
+            <Grid container sx={boxWrapper}>
               <UserCard {...leader} isBroodLeader />
               <FakeIDInfo username={leader.username} />
             </Grid>
           </Box>
+          <HellbendersDescription />
           <PhotoBooth />
         </>
       );
@@ -91,16 +116,18 @@ const Profile = () => {
             <FakeIDInfo username={leader.username} />
           </Grid>
           <Box sx={{ flex: 1 }}>
+            <HellbendersDescription />
             <FilterBar
               allUsers={allUsers}
               setFilteredUsers={setFilteredUsers}
+              isProfile
             />
             {filteredUsers.length === 0 &&
               !loading &&
               renderEmptyBroodDescription()}
             {filteredUsers.length > 0 && (
               <Box>
-                <Grid container spacing={4}>
+                <Grid sx={cardsContainer} container>
                   {filteredUsers.map((val) => (
                     <UserCard key={val.id} {...val} isBroodLeader={false} />
                   ))}
@@ -143,9 +170,13 @@ const Profile = () => {
 
   const fetchUsers = React.useCallback(async () => {
     setLoading(true);
-    const users = await getUsersThatBelongsToBrood(leader.fakeID);
+    const { gen1, gen2, gen3, gen4 } = await getUsersThatBelongsToBrood(
+      leader.fakeID
+    );
+    const users = [...gen1, ...gen2, ...gen3, ...gen4];
     const filteredUsers = filterBroodUsers(users, leader);
 
+    setUsersByGen({ gen1, gen2, gen3, gen4 });
     setAllUsers(filteredUsers);
     setFilteredUsers(filteredUsers);
     setLoading(false);
@@ -161,7 +192,14 @@ const Profile = () => {
     // eslint-disable-next-line
   }, [wallet, missingID]);
 
-  return <Box>{renderComponent()}</Box>;
+  return (
+    <Box sx={profileContainer}>
+      {(isMyProfile || (wallet !== "" && !missingID && !leader.deceased)) && (
+        <CountdownTimer />
+      )}
+      {renderComponent()}
+    </Box>
+  );
 };
 
 export default Profile;

@@ -17,7 +17,7 @@ export const mintFakeIDHeaderTitleWrapper: SxProps = {
 
 export const mintFakeIDContentWrapper: SxProps = {
   width: "100%",
-  padding: "0.5vmax 0",
+  padding: "0.3vmax 0",
   backgroundColor: "#2F3841",
   display: "flex",
   justifyContent: "space-around",
@@ -27,7 +27,7 @@ export const mintFakeIDContentWrapper: SxProps = {
 
 export const royaltyShareContainer: SxProps = {
   width: "100%",
-  padding: "1vmax 0",
+  paddingBottom: "0.3vmax",
   display: "flex",
   flexFlow: "column",
   borderRadius: "15px 15px 0 0",
@@ -90,7 +90,7 @@ export const mintFakeIDTitle: SxProps = {
 };
 
 export const mintFakeIDTextDescription: SxProps = {
-  maxWidth: "55%",
+  maxWidth: "45%",
   textAlign: "center",
 };
 
@@ -102,9 +102,16 @@ export const availabilityContainer: SxProps = {
 };
 
 export const availabilityWrapper: SxProps = {
-  minWidth: "30%",
+  flex: 1,
   display: "flex",
   flexFlow: "column",
   justifyContent: "center",
   alignItems: "center",
+};
+
+export const tooltip: SxProps = {
+  width: "1.5vmax",
+  height: "1.5vmax",
+  marginLeft: "0.2vmin",
+  alignSelf: "flex-start",
 };

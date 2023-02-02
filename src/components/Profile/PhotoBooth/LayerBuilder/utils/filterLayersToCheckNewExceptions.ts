@@ -3,7 +3,8 @@ import { LayerInBuilder } from "../types";
 export function filterLayersToCheckNewExceptions(
   filteredLayers: LayerInBuilder[]
 ) {
-  filteredLayers.forEach((layer, index, arr) => {
+  const allLayers = [...filteredLayers];
+  allLayers.forEach((layer, index) => {
     if (layer.exceptions.length === 0) return;
 
     layer.exceptions.forEach((exception) => {
@@ -18,23 +19,26 @@ export function filterLayersToCheckNewExceptions(
           }
 
           for (let i = 0; i < index; i++) {
-            if (i > arr.length - 1) break;
+            if (i > filteredLayers.length - 1) break;
 
             if (
-              arr[i].name.includes(matchingString) &&
-              arr[i].type === exception.type &&
-              !arr[i].standard
+              filteredLayers[i].name.includes(matchingString) &&
+              filteredLayers[i].type === exception.type &&
+              !filteredLayers[i].standard
             ) {
-              arr.splice(i, 1);
+              filteredLayers.splice(i, 1);
             }
           }
         });
       } else {
         for (let i = 0; i < index; i++) {
-          if (i > arr.length - 1) break;
+          if (i > filteredLayers.length - 1) break;
 
-          if (arr[i].type === exception.type && !arr[i].standard) {
-            arr.splice(i, 1);
+          if (
+            filteredLayers[i].type === exception.type &&
+            !filteredLayers[i].standard
+          ) {
+            filteredLayers.splice(i, 1);
           }
         }
       }
