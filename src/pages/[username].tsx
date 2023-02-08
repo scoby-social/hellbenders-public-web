@@ -26,6 +26,8 @@ export async function getServerSideProps({ params }: ServerSidePropsParams) {
   const { username } = params;
   const user = await getUserByUsername(username);
 
+  if (Object.keys(user).length === 0) return { notFound: true };
+
   return {
     props: {
       user,
