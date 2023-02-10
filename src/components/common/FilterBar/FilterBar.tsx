@@ -101,7 +101,7 @@ const FilterBar = ({
   const filterUsers = React.useCallback(() => {
     let filtered = false;
 
-    const newUsers = !isProfile ? [...allUsers] : [];
+    const newUsers = !isProfile || currentFilterIdx !== 1 ? [...allUsers] : [];
 
     if (isProfile && currentFilterIdx === 1) {
       checkboxState.forEach((val) => {
