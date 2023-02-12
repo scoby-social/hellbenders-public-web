@@ -1,46 +1,14 @@
-import {
-  collection,
-  getDocs,
-  query,
-  QueryDocumentSnapshot,
-  where,
-} from "firebase/firestore";
-import { firestore } from "lib/firebase/appClient";
-import { User } from "lib/models/user";
-import { combineUsersFromSnapshot } from "./extractAndCombineUsers";
+import client from "lib/firebase/axiosClient";
 import { GetUsersThatBelongsToBroodReturnValues } from "./types";
-import { collectionName } from "./userCollectionName";
 
-const converter = {
-  toFirestore: (data: User) => data,
-  fromFirestore: (snap: QueryDocumentSnapshot) =>
-    snap.data() as Omit<User, "id">,
-};
+const BE_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
-const usersRef = collection(firestore, collectionName).withConverter(converter);
 export async function getUsersThatBelongsToBrood(
   leaderWallet: string
 ): Promise<GetUsersThatBelongsToBroodReturnValues> {
-  const queryForChildren = query(usersRef, where("parent", "==", leaderWallet));
-  const queryForGrandChildren = query(
-    usersRef,
-    where("grandParent", "==", leaderWallet)
-  );
-  const queryForGrandGrandChildren = query(
-    usersRef,
-    where("grandGrandParent", "==", leaderWallet)
-  );
-  const queryForGrandGrandGrandChildren = query(
-    usersRef,
-    where("grandGrandGrandParent", "==", leaderWallet)
+  const result = await client.get<GetUsersThatBelongsToBroodReturnValues>(
+    `${BE_URL}/user/brood?fakeID=${leaderWallet}`
   );
 
-  const result = await Promise.all([
-    getDocs(queryForChildren),
-    getDocs(queryForGrandChildren),
-    getDocs(queryForGrandGrandChildren),
-    getDocs(queryForGrandGrandGrandChildren),
-  ]);
-
-  return combineUsersFromSnapshot(result);
+  return result.data;
 }

@@ -1,13 +1,9 @@
-import { addDoc, collection } from "firebase/firestore";
-import { firestore } from "lib/firebase/appClient";
-import { Royalties, User } from "lib/models/user";
-import { addRoyaltiesAndBroodToUsers } from "./addRoyaltiesAndBroodToUsers";
-import { getSeniorityForUser } from "./getSeniorityForUser";
-import { getUserByFakeID } from "./getUserByFakeID";
-import { collectionName } from "./userCollectionName";
+import client from "lib/firebase/axiosClient";
+import { User } from "lib/models/user";
 
-const collectionRef = collection(firestore, collectionName);
-const clubhouseFakeID = process.env.NEXT_PUBLIC_CLUBHOUSE_FAKE_ID as string;
+import { getUserByFakeID } from "./getUserByFakeID";
+
+const BE_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 export async function createUser(
   user: Pick<
@@ -31,41 +27,22 @@ export async function createUser(
   if (Object.keys(creatingUser).length > 0)
     throw new Error("This wallet already has a Fake ID!");
 
-  const leaderUser = await getUserByFakeID(leaderFakeID);
   const parentWallet = leaderFakeID;
-  const grandParent = leaderUser.parent || clubhouseFakeID;
-  const grandGrandParent = leaderUser.grandParent || clubhouseFakeID;
-  const grandGrandGrandParent = leaderUser.grandGrandParent || clubhouseFakeID;
 
-  const userSeniority = await getSeniorityForUser();
-
-  const userDoc = {
+  const userData = {
     ...user,
     parent: parentWallet,
-    grandParent,
-    grandGrandParent,
-    grandGrandGrandParent,
     brood: 0,
-    seniority: userSeniority,
+    seniority: 0,
     royalties: 0,
     twitterHandle: user.twitterHandle,
     discordHandle: user.discordHandle,
     avatar: user.avatar,
     deceased: false,
-    createdAt: new Date().toUTCString(),
+    createdAt: new Date(),
   };
 
-  const docRef = await addDoc(collectionRef, {
-    ...userDoc,
-  });
+  const result = await client.post<User>(`${BE_URL}/user`, userData);
 
-  addRoyaltiesAndBroodToUsers([
-    { fakeID: parentWallet, type: Royalties.parent },
-    { fakeID: grandParent, type: Royalties.grandParent },
-    { fakeID: grandGrandParent, type: Royalties.grandGrandParent },
-    { fakeID: grandGrandGrandParent, type: Royalties.grandGrandGrandParent },
-    { fakeID: clubhouseFakeID, type: Royalties.commanderSalamander },
-  ]);
-
-  return { ...userDoc, id: docRef.id };
+  return result.data;
 }

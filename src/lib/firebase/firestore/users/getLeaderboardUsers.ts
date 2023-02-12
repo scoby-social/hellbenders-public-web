@@ -1,30 +1,15 @@
-import {
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  QueryDocumentSnapshot,
-} from "firebase/firestore";
-import { firestore } from "lib/firebase/appClient";
 import { User } from "lib/models/user";
-import { collectionName } from "./userCollectionName";
+import client from "lib/firebase/axiosClient";
 
-const converter = {
-  toFirestore: (data: User) => data,
-  fromFirestore: (snap: QueryDocumentSnapshot) =>
-    snap.data() as Omit<User, "id">,
-};
+const BE_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
-const usersRef = collection(firestore, collectionName).withConverter(converter);
+export async function getLeaderboardUsers(
+  skip = 0,
+  count = 0
+): Promise<User[]> {
+  const result = await client.get<User[]>(
+    `${BE_URL}/leaderboard/users?skip=${skip}&count=${count}`
+  );
 
-export async function getLeaderboardUsers(): Promise<User[]> {
-  const q = query(usersRef, orderBy("seniority", "desc"));
-
-  const usersSnapshot = await getDocs(q);
-  const queryResult = usersSnapshot.docs.map((value) => ({
-    id: value.id,
-    ...value.data(),
-  }));
-
-  return queryResult;
+  return result.data;
 }

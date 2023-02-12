@@ -33,5 +33,5 @@ export interface User {
   discordHandle: string;
   telegramHandle: string;
   deceased: boolean;
-  createdAt: string;
+  createdAt: Date;
 }

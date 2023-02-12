@@ -1,3 +1,4 @@
+import axios from "axios";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
@@ -14,3 +15,14 @@ const app = initializeApp({
 const firestore = getFirestore(app);
 
 export { firestore };
+
+const client = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  timeout: 100000,
+  headers: {
+    "content-type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  },
+});
+
+export default client;
