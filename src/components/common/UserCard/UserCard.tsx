@@ -26,7 +26,7 @@ const getResponsiveParamsForGrid = (isLeader: boolean) => {
 };
 
 const UserCard = ({
-  id,
+  _id,
   username,
   bio,
   avatar,
@@ -41,7 +41,7 @@ const UserCard = ({
     sx={{ height: "100%" }}
     {...getResponsiveParamsForGrid(isBroodLeader)}
     item
-    key={id}
+    key={_id}
   >
     <Box sx={cardContainer}>
       {isBroodLeader && (

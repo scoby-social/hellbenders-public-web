@@ -13,7 +13,7 @@ export enum Royalties {
 }
 
 export interface User {
-  id: string;
+  _id: string;
   username: string; // ID Card name
   amplifierRole: string;
   superpowerRole: string;

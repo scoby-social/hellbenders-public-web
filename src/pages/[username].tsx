@@ -6,8 +6,8 @@ import { useAtom } from "jotai";
 import { Header } from "components/common/Header/Header";
 import Profile from "components/Profile/Profile";
 
-import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
-import { markUserAsDiseased } from "lib/firebase/firestore/users/markUserAsDiseased";
+import { getUserByUsername } from "lib/axios/requests/users/getUsers";
+import { markUserAsDiseased } from "lib/axios/requests/users/markUserAsDiseased";
 import { getNFTWithMetadata } from "lib/web3/getNFTWithMetadata";
 import { selectedLeader, userDeceased } from "lib/store";
 
@@ -46,7 +46,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
       await getNFTWithMetadata(user.fakeID);
     } catch (e) {
       setDiseased(true);
-      markUserAsDiseased(user.id);
+      markUserAsDiseased(user._id);
     }
     // eslint-disable-next-line
   }, []);

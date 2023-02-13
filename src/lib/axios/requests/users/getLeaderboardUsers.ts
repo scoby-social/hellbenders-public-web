@@ -1,14 +1,12 @@
 import { User } from "lib/models/user";
-import client from "lib/firebase/axiosClient";
-
-const BE_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
+import client from "lib/axios/axiosClient";
 
 export async function getLeaderboardUsers(
   skip = 0,
-  count = 0
+  limit = 15
 ): Promise<User[]> {
   const result = await client.get<User[]>(
-    `${BE_URL}/leaderboard/users?skip=${skip}&count=${count}`
+    `/leaderboard/users?skip=${skip}&limit=${limit}`
   );
 
   return result.data;

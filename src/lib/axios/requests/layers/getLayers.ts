@@ -1,5 +1,5 @@
 import { Layer } from "lib/models/layer";
-import client from "lib/firebase/axiosClient";
+import client from "lib/axios/axiosClient";
 
 const BE_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 

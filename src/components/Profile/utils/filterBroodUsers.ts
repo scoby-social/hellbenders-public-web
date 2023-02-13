@@ -5,8 +5,8 @@ export function filterBroodUsers(users: User[], currentUser: User): User[] {
   const usersMap = new Map<string, User>();
 
   users.forEach((user) => {
-    if (user.id !== currentUser.id) {
-      usersMap.set(user.id, user);
+    if (user._id !== currentUser._id) {
+      usersMap.set(user._id, user);
     }
   });
 

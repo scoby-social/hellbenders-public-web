@@ -1,4 +1,6 @@
 import { filterLayersToCheckNewExceptions } from "components/Profile/PhotoBooth/LayerBuilder/utils/filterLayersToCheckNewExceptions";
+import { OrderedSelectedLayers } from "lib/axios/requests/users/types/orderedSelectedLayers";
+import { uploadImages } from "lib/axios/requests/users/uploadImages";
 import { deleteShadowDriveFile } from "./deleteShadowDriveFile";
 import { mintFakeID } from "./mintFakeID";
 import { MetadataAttributes, Metadata } from "./types/metadata";
@@ -17,6 +19,10 @@ export async function uploadNFT({
   updateMessage,
 }: UploadNftParams): Promise<UploadNFTReturnType> {
   const attributes: MetadataAttributes[] = [];
+  const orderedLayers: OrderedSelectedLayers = {
+    selectedLayers: [],
+    name: formResult.username,
+  };
 
   const today = new Date();
   const UTCDate = today.toJSON();
@@ -60,15 +66,19 @@ export async function uploadNFT({
         trait_type: layer.type.toString(),
         value: layer.name.split(".")[0],
       });
+
+      orderedLayers.selectedLayers.push({
+        type: layer.type,
+        name: layer.name,
+      });
     }
   });
 
   updateMessage("Your image is being deployed to the blockchain.");
 
-  metadata.image = await saveMetadataImage(
-    metadata.image,
-    `${metadata.username}.png`
-  );
+  const resultingImages = await uploadImages(orderedLayers);
+
+  metadata.image = resultingImages.nftImageURL;
 
   const contentType = "application/json;charset=utf-8;";
 
@@ -110,5 +120,9 @@ export async function uploadNFT({
 
   URL.revokeObjectURL(blobUri);
 
-  return { image: metadata.image, nftAddress, metadataUrl: metadataShdwUrl };
+  return {
+    image: resultingImages.profileImageURL,
+    nftAddress,
+    metadataUrl: metadataShdwUrl,
+  };
 }

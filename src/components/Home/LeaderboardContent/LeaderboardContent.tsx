@@ -1,5 +1,6 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { useAtom } from "jotai";
+import * as React from "react";
 
 import UserCard from "components/common/UserCard/UserCard";
 import ConnectWalletButton from "components/common/ConnectWalletButton";
@@ -40,7 +41,7 @@ export const LeaderboardContent = () => {
           <Box>
             <Grid sx={cardsContainer} container alignItems="stretch">
               {filteredUsers.map((val) => (
-                <UserCard key={val.id} {...val} isBroodLeader={false} />
+                <UserCard key={val._id} {...val} isBroodLeader={false} />
               ))}
             </Grid>
           </Box>

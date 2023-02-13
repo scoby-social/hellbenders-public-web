@@ -1,4 +1,4 @@
-import { getLayersByType } from "lib/firebase/firestore/layers/getLayers";
+import { getLayersByType } from "lib/axios/requests/layers/getLayers";
 import { nanoid } from "nanoid";
 import { getStepLayers } from "../../utils/getSteps";
 import { GetLayersForCurrentStepParams } from "../LayerStep/types";

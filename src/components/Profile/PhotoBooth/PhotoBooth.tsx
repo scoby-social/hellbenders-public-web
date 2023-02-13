@@ -19,8 +19,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useAtom } from "jotai";
 
 import { Pronouns } from "lib/models/user";
-import { getUserByUsername } from "lib/firebase/firestore/users/getUsers";
-import { createUser } from "lib/firebase/firestore/users/saveUser";
+import { getUserByUsername } from "lib/axios/requests/users/getUsers";
+import { createUser } from "lib/axios/requests/users/saveUser";
 import {
   combinedLayers,
   currentUser,

@@ -1,9 +1,7 @@
-import client from "lib/firebase/axiosClient";
+import client from "lib/axios/axiosClient";
 import { User } from "lib/models/user";
 
 import { getUserByFakeID } from "./getUserByFakeID";
-
-const BE_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 export async function createUser(
   user: Pick<
@@ -42,7 +40,7 @@ export async function createUser(
     createdAt: new Date(),
   };
 
-  const result = await client.post<User>(`${BE_URL}/user`, userData);
+  const result = await client.post<User>("/user", userData);
 
   return result.data;
 }
