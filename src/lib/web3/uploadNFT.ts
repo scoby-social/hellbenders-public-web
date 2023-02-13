@@ -27,7 +27,7 @@ export async function uploadNFT({
   const year = today.getFullYear();
 
   const name = `${formResult.username} the ${formResult.amplifierRole} ${formResult.superpowerRole}`;
-  const croppedName = name.slice(0, 28);
+  const croppedName = name.slice(0, 27);
 
   const metadata: Metadata = {
     name: croppedName,
