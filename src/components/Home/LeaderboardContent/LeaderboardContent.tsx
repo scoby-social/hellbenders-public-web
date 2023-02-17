@@ -57,8 +57,6 @@ export const LeaderboardContent = () => {
     }
   }, [currentPage, setAllUsers, setFilteredUsers]);
 
-  console.log("Filtered users: ", filteredUsers);
-
   const renderComponent = () => {
     if (wallet !== "" && !missingID) {
       return (
