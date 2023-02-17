@@ -11,8 +11,8 @@ export async function mergeImageWithException(
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
-  canvas.width = 5100;
-  canvas.height = 5100;
+  canvas.width = 512;
+  canvas.height = 512;
 
   const { firstLayers, pendingLayers, filteredLayers, reversedLayerKey } =
     checkAndFilterExceptionsInBuildedLayers(buildedLayers, exceptions);

@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 
 import { User } from "lib/models/user";
 import { usersByGen } from "lib/store/brood";
+import { AllGenerationValues } from "lib/axios/requests/users/types";
 
 import {
   broodFiltersWrapper,
@@ -21,7 +22,6 @@ import {
   FilterValue,
 } from "./types";
 import { checkBoxes, filters } from "./utils";
-import { AllGenerationValues } from "lib/firebase/firestore/users/types";
 
 const FilterBar = ({
   allUsers,

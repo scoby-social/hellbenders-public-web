@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { AllGenerationValues } from "lib/firebase/firestore/users/types";
+import { AllGenerationValues } from "lib/axios/requests/users/types";
 import { User } from "lib/models/user";
 
 export const allBroodUsers = atom<User[]>([]);
