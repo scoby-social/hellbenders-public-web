@@ -19,7 +19,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useAtom } from "jotai";
 
 import { Pronouns } from "lib/models/user";
-import { getUserByUsername } from "lib/axios/requests/users/getUsers";
+import { checkIfUsernameExists } from "lib/axios/requests/users/checkIfUsernameExists";
 import { createUser } from "lib/axios/requests/users/saveUser";
 import {
   combinedLayers,
@@ -185,7 +185,7 @@ const PhotoBooth = () => {
       return;
     }
 
-    const user = await getUserByUsername(username);
+    const user = await checkIfUsernameExists(username);
     if (Object.keys(user).length > 0) {
       setError(
         "username",

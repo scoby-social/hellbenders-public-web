@@ -12,4 +12,6 @@ export interface UserCardProps
     | "twitterTokenConnection"
   > {
   isBroodLeader: boolean;
+  isLast?: boolean;
+  paginate?: () => void;
 }

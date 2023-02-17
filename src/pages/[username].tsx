@@ -47,6 +47,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
     } catch (e) {
       setDiseased(true);
       markUserAsDiseased(user._id);
+      setSelectedLeader((prev) => ({ ...prev, deceased: true }));
     }
     // eslint-disable-next-line
   }, []);
