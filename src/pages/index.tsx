@@ -27,7 +27,7 @@ const Home = () => {
 
   const fetchAllBroodUsers = React.useCallback(
     async () => {
-      if (!missingID) {
+      if (!missingID && wallet !== "") {
         setLoading(true);
 
         const users = await getLeaderboardUsers(0, 15);
@@ -37,7 +37,7 @@ const Home = () => {
       }
     },
     // eslint-disable-next-line
-    [missingID]
+    [missingID, wallet]
   );
 
   React.useEffect(() => {
