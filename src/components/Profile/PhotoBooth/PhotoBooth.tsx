@@ -185,8 +185,8 @@ const PhotoBooth = () => {
       return;
     }
 
-    const user = await checkIfUsernameExists(username);
-    if (Object.keys(user).length > 0) {
+    const exists = await checkIfUsernameExists(username);
+    if (exists) {
       setError(
         "username",
         {
