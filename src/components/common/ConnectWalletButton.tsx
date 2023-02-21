@@ -4,8 +4,8 @@ import { Typography } from "@mui/material";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import * as React from "react";
-
 import { useAtom } from "jotai";
+
 import { walletAddressShortener } from "lib/helpers/walletAddressShortener";
 import {
   currentUser,
@@ -15,7 +15,7 @@ import {
 } from "lib/store";
 import { User } from "lib/models/user";
 import { getOldestFakeIDInWallet } from "lib/web3/getOldestFakeIDInWallet";
-import { getUserByFakeID } from "lib/firebase/firestore/users/getUserByFakeID";
+import { getUserByFakeID } from "lib/axios/requests/users/getUserByFakeID";
 
 interface WalletMultiButtonStyledProps {
   primaryColor: Boolean;

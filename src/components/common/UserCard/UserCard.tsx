@@ -1,4 +1,6 @@
 import { Avatar, Box, Divider, Grid, Link, Typography } from "@mui/material";
+import * as React from "react";
+
 import {
   avatarStyles,
   avatarWrapper,
@@ -26,7 +28,7 @@ const getResponsiveParamsForGrid = (isLeader: boolean) => {
 };
 
 const UserCard = ({
-  id,
+  _id,
   username,
   bio,
   avatar,
@@ -36,50 +38,74 @@ const UserCard = ({
   superpowerRole,
   royalties,
   isBroodLeader,
-}: UserCardProps) => (
-  <Grid
-    sx={{ height: "100%" }}
-    {...getResponsiveParamsForGrid(isBroodLeader)}
-    item
-    key={id}
-  >
-    <Box sx={cardContainer}>
-      {isBroodLeader && (
-        <Box sx={unitLeaderFlag}>
-          <Typography variant="subtitle2">Brood Leader</Typography>
-        </Box>
-      )}
-      <Box sx={contentCard(isBroodLeader)}>
-        <Box sx={avatarWrapper}>
-          <Avatar
-            alt={`${username}'s profile image`}
-            src={avatar}
-            sx={avatarStyles}
-          />
-        </Box>
-        <Box sx={cardContentBoxWrapper}>
-          <Typography variant="h6" sx={cardTitleText}>
-            {`${username} the ${amplifierRole} ${superpowerRole}`}
-          </Typography>
-          <Typography variant="caption" sx={defaultText}>
-            {bio}
-          </Typography>
-          <Link
-            href={`/${username}`}
-          >{`www.hellbenders.world/${username}`}</Link>
-          <Box sx={userRankWrapper}>
-            <Typography variant="caption">{`Seniority: ${seniority}`}</Typography>
-            <Divider orientation="vertical" flexItem />
-            <Typography variant="caption">{`Brood Size: ${brood}`}</Typography>
-            <Divider orientation="vertical" flexItem />
-            <Typography variant="caption">{`Royalties: $${royalties.toFixed(
-              2
-            )}`}</Typography>
+  isLast = false,
+  paginate,
+}: UserCardProps) => {
+  const cardRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!cardRef?.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (isLast && entry.isIntersecting && paginate) {
+        paginate();
+        observer.unobserve(entry.target);
+      }
+    });
+
+    observer.observe(cardRef.current);
+  }, [isLast, paginate]);
+
+  return (
+    <Grid
+      sx={{ height: "100%" }}
+      {...getResponsiveParamsForGrid(isBroodLeader)}
+      item
+      key={_id}
+      ref={cardRef}
+    >
+      <Box sx={cardContainer}>
+        {isBroodLeader && (
+          <Box sx={unitLeaderFlag}>
+            <Typography variant="subtitle2">Brood Leader</Typography>
+          </Box>
+        )}
+        <Box sx={contentCard(isBroodLeader)}>
+          <Box sx={avatarWrapper}>
+            <Avatar
+              alt={`${username}'s profile image`}
+              src={avatar}
+              sx={avatarStyles}
+            />
+          </Box>
+          <Box sx={cardContentBoxWrapper}>
+            <Typography variant="h6" sx={cardTitleText}>
+              {`${username} the ${amplifierRole} ${superpowerRole}`}
+            </Typography>
+            <Typography variant="caption" sx={defaultText}>
+              {bio}
+            </Typography>
+            <Link
+              href={`/${username}`}
+            >{`www.hellbenders.world/${username}`}</Link>
+            <Box sx={userRankWrapper}>
+              <Typography variant="caption">{`Seniority: ${
+                seniority || 0
+              }`}</Typography>
+              <Divider orientation="vertical" flexItem />
+              <Typography variant="caption">{`Brood Size: ${
+                brood || 0
+              }`}</Typography>
+              <Divider orientation="vertical" flexItem />
+              <Typography variant="caption">{`Royalties: $${
+                royalties?.toFixed(2) || 0.0
+              }`}</Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
-  </Grid>
-);
+    </Grid>
+  );
+};
 
 export default UserCard;

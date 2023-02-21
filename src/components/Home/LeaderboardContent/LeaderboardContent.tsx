@@ -1,5 +1,6 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { useAtom } from "jotai";
+import * as React from "react";
 
 import UserCard from "components/common/UserCard/UserCard";
 import ConnectWalletButton from "components/common/ConnectWalletButton";
@@ -21,14 +22,40 @@ import {
   connectWalletText,
   contentContainerStyles,
 } from "./styles";
+import { getLeaderboardUsers } from "lib/axios/requests/users/getLeaderboardUsers";
+
+const ITEMS_PER_PAGE = 15;
 
 export const LeaderboardContent = () => {
+  const fetchingRef = React.useRef(false);
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [loading] = useAtom(leaderboardLoading);
   const [loadingUser] = useAtom(isLoadingUser);
-  const [allUsers] = useAtom(allLeaderboardUsers);
+  const [allUsers, setAllUsers] = useAtom(allLeaderboardUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [finishedPaginate, setFinishedPaginate] = React.useState(false);
+
+  const paginateUsers = React.useCallback(async () => {
+    if (!fetchingRef.current) {
+      fetchingRef.current = true;
+
+      const page = currentPage + 1;
+      const users = await getLeaderboardUsers(
+        currentPage * ITEMS_PER_PAGE,
+        ITEMS_PER_PAGE
+      );
+
+      if (users.length === 0) setFinishedPaginate(true);
+
+      setCurrentPage(page);
+      setAllUsers((prevUsers) => [...prevUsers, ...users]);
+      setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
+
+      fetchingRef.current = false;
+    }
+  }, [currentPage, setAllUsers, setFilteredUsers]);
 
   const renderComponent = () => {
     if (wallet !== "" && !missingID) {
@@ -39,8 +66,16 @@ export const LeaderboardContent = () => {
           <FilterBar allUsers={allUsers} setFilteredUsers={setFilteredUsers} />
           <Box>
             <Grid sx={cardsContainer} container alignItems="stretch">
-              {filteredUsers.map((val) => (
-                <UserCard key={val.id} {...val} isBroodLeader={false} />
+              {filteredUsers.map((val, index) => (
+                <UserCard
+                  paginate={paginateUsers}
+                  isLast={
+                    filteredUsers.length - 1 === index && !finishedPaginate
+                  }
+                  key={val._id}
+                  {...val}
+                  isBroodLeader={false}
+                />
               ))}
             </Grid>
           </Box>

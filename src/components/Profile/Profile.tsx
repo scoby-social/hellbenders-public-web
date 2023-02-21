@@ -19,7 +19,7 @@ import {
   usersByGen,
 } from "lib/store/brood";
 import FilterBar from "components/common/FilterBar/FilterBar";
-import { getUsersThatBelongsToBrood } from "lib/firebase/firestore/users/getBroodUsers";
+import { getUsersThatBelongsToBrood } from "lib/axios/requests/users/getBroodUsers";
 
 import {
   boxContainer,
@@ -129,7 +129,7 @@ const Profile = () => {
               <Box>
                 <Grid sx={cardsContainer} container>
                   {filteredUsers.map((val) => (
-                    <UserCard key={val.id} {...val} isBroodLeader={false} />
+                    <UserCard key={val._id} {...val} isBroodLeader={false} />
                   ))}
                 </Grid>
               </Box>

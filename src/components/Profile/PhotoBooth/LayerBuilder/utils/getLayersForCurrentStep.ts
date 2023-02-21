@@ -1,4 +1,4 @@
-import { getLayersByType } from "lib/firebase/firestore/layers/getLayers";
+import { getLayersByType } from "lib/axios/requests/layers/getLayers";
 import { nanoid } from "nanoid";
 import { getStepLayers } from "../../utils/getSteps";
 import { GetLayersForCurrentStepParams } from "../LayerStep/types";
@@ -22,7 +22,7 @@ export async function getLayersForCurrentStep({
   bodyType,
 }: GetLayersForCurrentStepParams): Promise<GetAllLayersForCurrentStepReturnValues> {
   const currentLayerStepType = getStepLayers(currentStep, bodyType);
-  const layers = await getLayersByType(currentLayerStepType, bodyType);
+  const layers = await getLayersByType(currentStep, bodyType);
 
   const completeLayers = layers.map((val, index) => ({
     ...val,
