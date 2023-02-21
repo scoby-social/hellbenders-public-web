@@ -89,13 +89,17 @@ const UserCard = ({
               href={`/${username}`}
             >{`www.hellbenders.world/${username}`}</Link>
             <Box sx={userRankWrapper}>
-              <Typography variant="caption">{`Seniority: ${seniority}`}</Typography>
+              <Typography variant="caption">{`Seniority: ${
+                seniority || 0
+              }`}</Typography>
               <Divider orientation="vertical" flexItem />
-              <Typography variant="caption">{`Brood Size: ${brood}`}</Typography>
+              <Typography variant="caption">{`Brood Size: ${
+                brood || 0
+              }`}</Typography>
               <Divider orientation="vertical" flexItem />
-              <Typography variant="caption">{`Royalties: $${royalties.toFixed(
-                2
-              )}`}</Typography>
+              <Typography variant="caption">{`Royalties: $${
+                royalties?.toFixed(2) || 0.0
+              }`}</Typography>
             </Box>
           </Box>
         </Box>
