@@ -5,7 +5,7 @@ import * as React from "react";
 import { countdownContainer, timerContainer, timerWrapper } from "./styles";
 
 const CountdownTimer = () => {
-  const deadline = "Feb 24 2023 4:00 PM EST";
+  const deadline = "Mar 03 2023 4:00 PM EST";
   const { days, hours, minutes, seconds } = useCountdownTimer(deadline);
 
   return (
