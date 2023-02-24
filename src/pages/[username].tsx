@@ -44,10 +44,12 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
   const checkIfLeaderHasFakeID = React.useCallback(async () => {
     try {
       await getNFTWithMetadata(user.fakeID);
-    } catch (e) {
-      setDiseased(true);
-      markUserAsDiseased(user._id);
-      setSelectedLeader((prev) => ({ ...prev, deceased: true }));
+    } catch (e: any) {
+      if (e?.toString()?.includes("AccountNotFoundError")) {
+        setDiseased(true);
+        markUserAsDiseased(user._id);
+        setSelectedLeader((prev) => ({ ...prev, deceased: true }));
+      }
     }
     // eslint-disable-next-line
   }, []);
