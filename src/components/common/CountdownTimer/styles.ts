@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material";
 
 export const countdownContainer: SxProps = {
-  margin: "2vmax 0",
+  margin: "1.5vmax 0",
   display: "flex",
   flexFlow: "column",
   justifyContent: "center",
@@ -9,7 +9,6 @@ export const countdownContainer: SxProps = {
 };
 
 export const timerContainer: SxProps = {
-  marginTop: "1vmax",
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
