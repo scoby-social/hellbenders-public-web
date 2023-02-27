@@ -29,6 +29,7 @@ import {
   cardsContainer,
   connectWalletMessageWrapper,
   connectWalletText,
+  countdownWrapper,
   emptyBroodText,
   emptyBroodWrapper,
   loaderWrapperStyles,
@@ -37,6 +38,7 @@ import {
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import { filterBroodUsers } from "./utils/filterBroodUsers";
 import FakeIDInfo from "./FakeIDInfo/FakeIDInfo";
+import NotConnectedWallet from "components/common/NotConnectedWallet/NotConnectedWallet";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -214,24 +216,11 @@ const Profile = () => {
 
     if (wallet === "") {
       return (
-        <Box sx={connectWalletMessageWrapper}>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={connectWalletText}
-          >{`Congratulations!`}</Typography>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={connectWalletText}
-          >{`You've been recruited to join ${leader.username}'s brood in the Hellbenders Motorcycle Club`}</Typography>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={connectWalletText}
-          >{`To get in quick, connect a wallet holding your Fake ID or use a burner wallet holding nothing at all. We don't need to be digging through your sh*t.`}</Typography>
-          <ConnectWalletButton primaryColor blackText />
-        </Box>
+        <NotConnectedWallet
+          title={`Congratulations!`}
+          subtitle={`You've been recruited to join ${leader.username}'s brood in the Hellbenders Motorcycle Club`}
+          footer={`To get in quick, connect a wallet holding your Fake ID or use a burner wallet holding nothing at all. We don't need to be digging through your sh*t.`}
+        />
       );
     }
   };
@@ -256,7 +245,10 @@ const Profile = () => {
   return (
     <Box sx={profileContainer}>
       {(isMyProfile || (wallet !== "" && !missingID && !leader.deceased)) && (
-        <CountdownTimer />
+        <Box sx={countdownWrapper}>
+          <Typography>{`Hellbenders DAO or DIE minting starts in`}</Typography>
+          <CountdownTimer />
+        </Box>
       )}
       {renderComponent()}
     </Box>

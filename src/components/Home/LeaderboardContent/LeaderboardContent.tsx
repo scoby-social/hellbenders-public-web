@@ -7,6 +7,9 @@ import ConnectWalletButton from "components/common/ConnectWalletButton";
 import FilterBar from "components/common/FilterBar/FilterBar";
 import CountdownTimer from "components/common/CountdownTimer/CountdownTimer";
 import HellbendersDescription from "components/common/HellbendersDescription";
+import NotConnectedWallet from "components/common/NotConnectedWallet/NotConnectedWallet";
+import { getLeaderboardUsers } from "lib/axios/requests/users/getLeaderboardUsers";
+import { searchTextFilter, selectedSortFilter } from "lib/store/filters";
 import {
   allLeaderboardUsers,
   currentWallet,
@@ -21,9 +24,8 @@ import {
   connectWalletMessageWrapper,
   connectWalletText,
   contentContainerStyles,
+  countdownWrapper,
 } from "./styles";
-import { getLeaderboardUsers } from "lib/axios/requests/users/getLeaderboardUsers";
-import { searchTextFilter, selectedSortFilter } from "lib/store/filters";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -96,7 +98,10 @@ export const LeaderboardContent = () => {
     if (wallet !== "" && !missingID) {
       return (
         <Box sx={{ flex: 1 }}>
-          <CountdownTimer />
+          <Box sx={countdownWrapper}>
+            <Typography>{`Hellbenders DAO or DIE minting starts in`}</Typography>
+            <CountdownTimer />
+          </Box>
           <HellbendersDescription />
           <FilterBar allUsers={allUsers} setFilteredUsers={setFilteredUsers} />
           <Box>
@@ -120,24 +125,11 @@ export const LeaderboardContent = () => {
 
     if (wallet === "" && !missingID) {
       return (
-        <Box sx={connectWalletMessageWrapper}>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={connectWalletText}
-          >{`Only Members Admitted`}</Typography>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={connectWalletText}
-          >{`Connect your Wallet to show your Fake ID at the door`}</Typography>
-          <Typography
-            variant="h6"
-            component="h6"
-            sx={connectWalletText}
-          >{`To get in quick, connect with a wallet holding only your Fake ID. We don't need to be digging through your sh*t.`}</Typography>
-          <ConnectWalletButton primaryColor blackText />
-        </Box>
+        <NotConnectedWallet
+          title={`Only Members Admitted`}
+          subtitle={`Connect your Wallet to show your Fake ID at the door`}
+          footer={`To get in quick, connect with a wallet holding only your Fake ID. We don't need to be digging through your sh*t.`}
+        />
       );
     }
 

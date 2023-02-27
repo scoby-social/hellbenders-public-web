@@ -63,3 +63,11 @@ export const connectWalletText: SxProps = {
 export const emptyBroodText: SxProps = {
   margin: "1vmin 0",
 };
+
+export const countdownWrapper: SxProps = {
+  marginTop: "2vmax",
+  display: "flex",
+  flexFlow: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};

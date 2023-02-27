@@ -37,3 +37,11 @@ export const connectWalletText: SxProps = {
   textAlign: "center",
   maxWidth: "50%",
 };
+
+export const countdownWrapper: SxProps = {
+  marginTop: "2vmax",
+  display: "flex",
+  flexFlow: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};
