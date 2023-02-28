@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 
 import { User } from "lib/models/user";
 import { usersByGen } from "lib/store/brood";
+import { selectedSortFilter } from "lib/store/filters";
 import { AllGenerationValues } from "lib/axios/requests/users/types";
 
 import {
@@ -29,6 +30,7 @@ const FilterBar = ({
   isProfile,
 }: FilterBarProps) => {
   const [allGenUsers] = useAtom(usersByGen);
+  const [_, setSortFilter] = useAtom(selectedSortFilter);
   const [filtersState, setFiltersState] = React.useState(filters);
   const [checkboxState, setCheckboxState] = React.useState(checkBoxes);
   const [currentFilterIdx, setCurrentFilterIdx] = React.useState(0);
@@ -99,56 +101,17 @@ const FilterBar = ({
   );
 
   const filterUsers = React.useCallback(() => {
-    let filtered = false;
-
-    const newUsers = !isProfile || currentFilterIdx !== 1 ? [...allUsers] : [];
-
-    if (isProfile && currentFilterIdx === 1) {
-      checkboxState.forEach((val) => {
-        if (val.checked) {
-          newUsers.push(
-            ...allGenUsers[val.property as unknown as keyof AllGenerationValues]
-          );
-        }
-      });
-    }
+    const defaultFilter = { name: "seniority", value: -1 };
+    const filter = { ...defaultFilter };
 
     filtersState.forEach((val) => {
-      const field = val.property as keyof User;
-      if (val.value === FilterValue.ASC) {
-        filtered = true;
-        newUsers.sort((a, b) => {
-          if (a[field] > b[field]) {
-            return -1;
-          }
-
-          if (a[field] < b[field]) {
-            return 1;
-          }
-
-          return 0;
-        });
-        setFilteredUsers(newUsers);
-      }
-
-      if (val.value === FilterValue.DESC) {
-        filtered = true;
-        newUsers.sort((a, b) => {
-          if (a[field] < b[field]) {
-            return -1;
-          }
-
-          if (a[field] > b[field]) {
-            return 1;
-          }
-
-          return 0;
-        });
-        setFilteredUsers(newUsers);
+      if (val.value !== FilterValue.DEACTIVATED) {
+        filter.name = val.property;
+        filter.value = val.value;
       }
     });
 
-    if (!filtered) setFilteredUsers(allUsers);
+    setSortFilter(filter);
 
     // eslint-disable-next-line
   }, [allUsers, filtersState, checkboxState]);

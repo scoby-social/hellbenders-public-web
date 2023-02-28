@@ -23,6 +23,7 @@ import {
   contentContainerStyles,
 } from "./styles";
 import { getLeaderboardUsers } from "lib/axios/requests/users/getLeaderboardUsers";
+import { searchTextFilter, selectedSortFilter } from "lib/store/filters";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -31,20 +32,25 @@ export const LeaderboardContent = () => {
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [loading] = useAtom(leaderboardLoading);
+  const [searchText] = useAtom(searchTextFilter);
+  const [selectedSort] = useAtom(selectedSortFilter);
   const [loadingUser] = useAtom(isLoadingUser);
   const [allUsers, setAllUsers] = useAtom(allLeaderboardUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [finishedPaginate, setFinishedPaginate] = React.useState(false);
 
-  const paginateUsers = React.useCallback(async () => {
+  const paginate = React.useCallback(async () => {
     if (!fetchingRef.current) {
       fetchingRef.current = true;
 
       const page = currentPage + 1;
       const users = await getLeaderboardUsers(
         currentPage * ITEMS_PER_PAGE,
-        ITEMS_PER_PAGE
+        ITEMS_PER_PAGE,
+        searchText,
+        selectedSort.name,
+        selectedSort.value
       );
 
       if (users.length === 0) setFinishedPaginate(true);
@@ -55,7 +61,36 @@ export const LeaderboardContent = () => {
 
       fetchingRef.current = false;
     }
-  }, [currentPage, setAllUsers, setFilteredUsers]);
+    // eslint-disable-next-line
+  }, [currentPage, searchText, selectedSort]);
+
+  const filterUsers = React.useCallback(async () => {
+    if (!fetchingRef.current) {
+      fetchingRef.current = true;
+
+      const users = await getLeaderboardUsers(
+        0,
+        ITEMS_PER_PAGE,
+        searchText,
+        selectedSort.name,
+        selectedSort.value
+      );
+
+      if (users.length === 0) setFinishedPaginate(true);
+
+      setCurrentPage(1);
+      setAllUsers([...users]);
+      setFilteredUsers([...users]);
+
+      fetchingRef.current = false;
+    }
+    // eslint-disable-next-line
+  }, [searchText, selectedSort]);
+
+  React.useEffect(() => {
+    filterUsers();
+    // eslint-disable-next-line
+  }, [searchText, selectedSort]);
 
   const renderComponent = () => {
     if (wallet !== "" && !missingID) {
@@ -68,11 +103,11 @@ export const LeaderboardContent = () => {
             <Grid sx={cardsContainer} container alignItems="stretch">
               {filteredUsers.map((val, index) => (
                 <UserCard
-                  paginate={paginateUsers}
+                  paginate={paginate}
                   isLast={
                     filteredUsers.length - 1 === index && !finishedPaginate
                   }
-                  key={val._id}
+                  key={`${val._id}-${index}`}
                   {...val}
                   isBroodLeader={false}
                 />

@@ -12,6 +12,7 @@ import {
   selectedLeader,
   userHasNoID,
 } from "lib/store";
+import { selectedSortFilter } from "lib/store/filters";
 import {
   allBroodUsers,
   broodLoading,
@@ -19,6 +20,7 @@ import {
   usersByGen,
 } from "lib/store/brood";
 import FilterBar from "components/common/FilterBar/FilterBar";
+import { getBroodTotalCount } from "lib/axios/requests/users/getBroodTotalCount";
 import { getUsersThatBelongsToBrood } from "lib/axios/requests/users/getBroodUsers";
 
 import {
@@ -36,7 +38,10 @@ import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import { filterBroodUsers } from "./utils/filterBroodUsers";
 import FakeIDInfo from "./FakeIDInfo/FakeIDInfo";
 
+const ITEMS_PER_PAGE = 15;
+
 const Profile = () => {
+  const fetchingRef = React.useRef(false);
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [user] = useAtom(currentUser);
@@ -45,7 +50,10 @@ const Profile = () => {
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
   const [_, setUsersByGen] = useAtom(usersByGen);
+  const [selectedSort] = useAtom(selectedSortFilter);
   const isMyProfile = user.fakeID === leader?.fakeID && !leader.deceased;
+  const [finishedPaginate, setFinishedPaginate] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
 
   const renderEmptyBroodDescription = () => {
     if (!isMyProfile) {
@@ -73,6 +81,58 @@ const Profile = () => {
       </Box>
     );
   };
+
+  const paginate = React.useCallback(async () => {
+    if (!fetchingRef.current) {
+      fetchingRef.current = true;
+
+      const users = await getUsersThatBelongsToBrood(
+        leader.fakeID,
+        currentPage * ITEMS_PER_PAGE,
+        ITEMS_PER_PAGE,
+        selectedSort.name,
+        selectedSort.value
+      );
+
+      if (users.length === 0) setFinishedPaginate(true);
+
+      setCurrentPage(1);
+      setAllUsers([...users]);
+      setFilteredUsers([...users]);
+
+      fetchingRef.current = false;
+    }
+    // eslint-disable-next-line
+  }, [currentPage, selectedSort, leader.fakeID]);
+
+  const filterUsers = React.useCallback(async () => {
+    if (!fetchingRef.current) {
+      fetchingRef.current = true;
+
+      const users = await getUsersThatBelongsToBrood(
+        leader.fakeID,
+        0,
+        ITEMS_PER_PAGE,
+        selectedSort.name,
+        selectedSort.value
+      );
+
+      if (users.length === 0) setFinishedPaginate(true);
+
+      setCurrentPage(1);
+      setAllUsers([...users]);
+      setFilteredUsers([...users]);
+
+      fetchingRef.current = false;
+    }
+
+    // eslint-disable-next-line
+  }, [selectedSort, leader.fakeID]);
+
+  React.useEffect(() => {
+    filterUsers();
+    // eslint-disable-next-line
+  }, [selectedSort]);
 
   const renderComponent = () => {
     if (leader.deceased && wallet !== "" && missingID) {
@@ -128,8 +188,16 @@ const Profile = () => {
             {filteredUsers.length > 0 && (
               <Box>
                 <Grid sx={cardsContainer} container>
-                  {filteredUsers.map((val) => (
-                    <UserCard key={val._id} {...val} isBroodLeader={false} />
+                  {filteredUsers.map((val, index) => (
+                    <UserCard
+                      paginate={paginate}
+                      isLast={
+                        filteredUsers.length - 1 === index && !finishedPaginate
+                      }
+                      key={val._id}
+                      {...val}
+                      isBroodLeader={false}
+                    />
                   ))}
                 </Grid>
               </Box>
@@ -168,18 +236,10 @@ const Profile = () => {
     }
   };
 
-  const fetchUsers = React.useCallback(async () => {
-    setLoading(true);
-    const { gen1, gen2, gen3, gen4 } = await getUsersThatBelongsToBrood(
-      leader.fakeID
-    );
-    const users = [...gen1, ...gen2, ...gen3, ...gen4];
-    const filteredUsers = filterBroodUsers(users, leader);
+  const getTotalBrood = React.useCallback(async () => {
+    const { gen1, gen2, gen3, gen4 } = await getBroodTotalCount(leader.fakeID);
 
     setUsersByGen({ gen1, gen2, gen3, gen4 });
-    setAllUsers(filteredUsers);
-    setFilteredUsers(filteredUsers);
-    setLoading(false);
     // eslint-disable-next-line
   }, [leader]);
 
@@ -187,7 +247,8 @@ const Profile = () => {
     if (wallet !== "" && !missingID) {
       setAllUsers([]);
       setFilteredUsers([]);
-      fetchUsers();
+      paginate();
+      getTotalBrood();
     }
     // eslint-disable-next-line
   }, [wallet, missingID]);
