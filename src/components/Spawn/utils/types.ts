@@ -13,3 +13,12 @@ export interface Group {
   hasFakeIDDiscount: boolean;
   redlist: PublicKey | null;
 }
+
+export interface Groups {
+  legendary: Group;
+  gold: Group;
+  steel: Group;
+  black: Group;
+  fake: Group;
+  open: Group;
+}
