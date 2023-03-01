@@ -368,7 +368,6 @@ export async function mintSpawn(wallet: any, redlist: PublicKey | null) {
             grandParentNftOwner: grandParentMembershipOwner,
             grandGrandParentNftOwner: grandGrandParentMembershipOwner,
             grandGrandGrandParentNftOwner: grandGrandGrandParentMembershipOwner,
-
             scobyWallet: spawnPoolData.scobyWallet,
             creatorNftAccount: creatorNftAccount,
             creatorWallet: creatorWallet,
