@@ -1,4 +1,4 @@
-import { getNFTWithMetadata } from "./getNFTWithMetadata";
+import { getNFTWithMetadata } from "../common/getNFTWithMetadata";
 
 export async function checkIfFakeIDExists(
   fakeIDAddress: string | undefined

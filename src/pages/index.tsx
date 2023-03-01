@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 
 import { Header } from "components/common/Header/Header";
 import { LeaderboardContent } from "components/Home/LeaderboardContent/LeaderboardContent";
+import Spawn from "components/Spawn/Spawn";
 import {
   allLeaderboardUsers,
   currentWallet,
@@ -18,12 +19,24 @@ const headerBoxContainerStyle: SxProps = {
   overflow: "auto",
 };
 
-const Home = () => {
+export async function getServerSideProps({ req }: any) {
+  const subdomain = req.headers.host.split(".")[0];
+
+  return {
+    props: {
+      spawn: subdomain === "spawn",
+    },
+  };
+}
+
+const Home = ({ spawn }: { spawn: boolean }) => {
   const [missingID] = useAtom(userHasNoID);
   const [wallet] = useAtom(currentWallet);
   const [_, setLoading] = useAtom(leaderboardLoading);
   const [__, setAllUsers] = useAtom(allLeaderboardUsers);
   const [___, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
+
+  const headerTitle = spawn ? "Spawn" : "The Club";
 
   const fetchAllBroodUsers = React.useCallback(
     async () => {
@@ -50,8 +63,8 @@ const Home = () => {
   return (
     <div>
       <Box sx={headerBoxContainerStyle}>
-        <Header title="The Club" isProfile={false} />
-        <LeaderboardContent />
+        <Header spawn={spawn} title={headerTitle} isProfile={false} />
+        {spawn ? <Spawn /> : <LeaderboardContent />}
       </Box>
     </div>
   );

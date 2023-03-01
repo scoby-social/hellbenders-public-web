@@ -89,6 +89,7 @@ export default function CustomTheme() {
         styleOverrides: {
           root: {
             borderRadius: "20px",
+            padding: "0.5vmax 1vmax",
           },
         },
       },

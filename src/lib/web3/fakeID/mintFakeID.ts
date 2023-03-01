@@ -7,6 +7,7 @@ import {
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js";
+import { AnchorProvider } from "@project-serum/anchor";
 import * as anchor from "@project-serum/anchor";
 import FakeIDNFTIdl from "./usdc-fake-id.json";
 import {
@@ -15,27 +16,14 @@ import {
   TOKEN_PROGRAM_ID,
   createMintToCheckedInstruction,
 } from "@solana/spl-token";
-import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
-import { createAssociatedTokenAccountInstruction } from "./createAssociatedTokenAccountInstruction";
-import { getTokenWallet } from "./getTokenWallet";
-import { getMetadata } from "./getMetadata";
-import { getEdition } from "./getEdition";
-import { createMint } from "./createMint";
-import { AnchorProvider } from "@project-serum/anchor";
-import { sendTransaction } from "./sendTransaction";
+import { getOrCreateAssociatedTokenAccount } from "../common/getOrCreateAssociatedTokenAccount";
+import { createAssociatedTokenAccountInstruction } from "../common/createAssociatedTokenAccountInstruction";
+import { getTokenWallet } from "../common/getTokenWallet";
+import { getMetadata } from "../common/getMetadata";
+import { getEdition } from "../common/getEdition";
+import { createMint } from "../common/createMint";
+import { sendTransaction } from "../common/sendTransaction";
 import { checkIfUserHasFakeID } from "./checkIfUserHasFakeID";
-
-const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-  process.env.NEXT_PUBLIC_TOKEN_METADATA_PROGRAM_ID!
-);
-
-// membership kind smart contract address and IDL
-const FakeIDNFTProgramId = new PublicKey(
-  process.env.NEXT_PUBLIC_FAKE_ID_PROGRAM_ID!
-);
-
-// meta data for scoby nft
-const FakeIDNFTPOOL = new PublicKey(process.env.NEXT_PUBLIC_FAKE_ID_NFT_POOL!);
 
 export const mintFakeID = async (
   wallet: any,
@@ -43,6 +31,20 @@ export const mintFakeID = async (
   name: string,
   leaderNftAddress: string
 ): Promise<string> => {
+  const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
+    process.env.NEXT_PUBLIC_TOKEN_METADATA_PROGRAM_ID!
+  );
+
+  // membership kind smart contract address and IDL
+  const FakeIDNFTProgramId = new PublicKey(
+    process.env.NEXT_PUBLIC_FAKE_ID_PROGRAM_ID!
+  );
+
+  // meta data for scoby nft
+  const FakeIDNFTPOOL = new PublicKey(
+    process.env.NEXT_PUBLIC_FAKE_ID_NFT_POOL!
+  );
+
   const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
 
   const parentNFT = new PublicKey(leaderNftAddress);
@@ -283,30 +285,29 @@ export const mintFakeID = async (
     );
 
     let grandParentMembershipUsdcTokenAccount: any[];
-    
+
     if (
       grandParentMembershipResp == null ||
       grandParentMembershipResp.value == null ||
       grandParentMembershipResp.value.length == 0
     ) {
-    
       grandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
     } else {
-
       const grandParentMembershipAccount =
         grandParentMembershipResp.value[0].address;
-      info = await conn.getAccountInfo(grandParentMembershipAccount, "finalized");
+      info = await conn.getAccountInfo(
+        grandParentMembershipAccount,
+        "finalized"
+      );
       if (info == null) {
         grandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
       } else {
-
         accountInfo = AccountLayout.decode(info.data);
         if (Number(accountInfo.amount) == 0) {
           grandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
         } else {
-
           const grandParentMembershipOwner = new PublicKey(accountInfo.owner);
-  
+
           grandParentMembershipUsdcTokenAccount =
             await getOrCreateAssociatedTokenAccount(
               conn,
@@ -315,11 +316,12 @@ export const mintFakeID = async (
               grandParentMembershipOwner,
               wallet.signTransaction
             );
-  
+
           if (grandParentMembershipUsdcTokenAccount[1]) {
             if (
-              royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
-              -1
+              royaltyList.findIndex(
+                (item) => item == accountInfo.owner.toString()
+              ) == -1
             ) {
               royaltyList.push(accountInfo.owner.toString());
               createTokenAccountTransaction.add(
@@ -337,7 +339,7 @@ export const mintFakeID = async (
       "finalized"
     );
 
-    let grandGrandParentMembershipUsdcTokenAccount :any[];
+    let grandGrandParentMembershipUsdcTokenAccount: any[];
     if (
       grandGrandParentMembershipResp == null ||
       grandGrandParentMembershipResp.value == null ||
@@ -345,7 +347,6 @@ export const mintFakeID = async (
     ) {
       grandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
     } else {
-
       const grandGrandParentMembershipAccount =
         grandGrandParentMembershipResp.value[0].address;
       info = await conn.getAccountInfo(
@@ -353,17 +354,21 @@ export const mintFakeID = async (
         "finalized"
       );
       if (info == null) {
-        grandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+        grandGrandParentMembershipUsdcTokenAccount = [
+          creatorUsdcTokenAccount[0],
+        ];
       } else {
-
         accountInfo = AccountLayout.decode(info.data);
         if (Number(accountInfo.amount) == 0) {
-          grandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+          grandGrandParentMembershipUsdcTokenAccount = [
+            creatorUsdcTokenAccount[0],
+          ];
         } else {
+          const grandGrandParentMembershipOwner = new PublicKey(
+            accountInfo.owner
+          );
 
-          const grandGrandParentMembershipOwner = new PublicKey(accountInfo.owner);
-      
-            grandGrandParentMembershipUsdcTokenAccount =
+          grandGrandParentMembershipUsdcTokenAccount =
             await getOrCreateAssociatedTokenAccount(
               conn,
               wallet.publicKey,
@@ -371,11 +376,12 @@ export const mintFakeID = async (
               grandGrandParentMembershipOwner,
               wallet.signTransaction
             );
-      
+
           if (grandGrandParentMembershipUsdcTokenAccount[1]) {
             if (
-              royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
-              -1
+              royaltyList.findIndex(
+                (item) => item == accountInfo.owner.toString()
+              ) == -1
             ) {
               royaltyList.push(accountInfo.owner.toString());
               createTokenAccountTransaction.add(
@@ -386,7 +392,6 @@ export const mintFakeID = async (
         }
       }
     }
-      
 
     const grandGrandGrandParentMembershipResp =
       await conn.getTokenLargestAccounts(
@@ -394,16 +399,17 @@ export const mintFakeID = async (
         "finalized"
       );
 
-    let grandGrandGrandParentMembershipUsdcTokenAccount :any[];
+    let grandGrandGrandParentMembershipUsdcTokenAccount: any[];
 
     if (
       grandGrandGrandParentMembershipResp == null ||
       grandGrandGrandParentMembershipResp.value == null ||
       grandGrandGrandParentMembershipResp.value.length == 0
     ) {
-      grandGrandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+      grandGrandGrandParentMembershipUsdcTokenAccount = [
+        creatorUsdcTokenAccount[0],
+      ];
     } else {
-
       const grandGrandGrandParentMembershipAccount =
         grandGrandGrandParentMembershipResp.value[0].address;
       info = await conn.getAccountInfo(
@@ -411,18 +417,20 @@ export const mintFakeID = async (
         "finalized"
       );
       if (info == null) {
-        grandGrandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+        grandGrandGrandParentMembershipUsdcTokenAccount = [
+          creatorUsdcTokenAccount[0],
+        ];
       } else {
-
         accountInfo = AccountLayout.decode(info.data);
         if (Number(accountInfo.amount) == 0) {
-          grandGrandGrandParentMembershipUsdcTokenAccount = [creatorUsdcTokenAccount[0]];
+          grandGrandGrandParentMembershipUsdcTokenAccount = [
+            creatorUsdcTokenAccount[0],
+          ];
         } else {
-
           const grandGrandGrandParentMembershipOwner = new PublicKey(
             accountInfo.owner
           );
-      
+
           grandGrandGrandParentMembershipUsdcTokenAccount =
             await getOrCreateAssociatedTokenAccount(
               conn,
@@ -431,11 +439,12 @@ export const mintFakeID = async (
               grandGrandGrandParentMembershipOwner,
               wallet.signTransaction
             );
-      
+
           if (grandGrandGrandParentMembershipUsdcTokenAccount[1]) {
             if (
-              royaltyList.findIndex((item) => item == accountInfo.owner.toString()) ==
-              -1
+              royaltyList.findIndex(
+                (item) => item == accountInfo.owner.toString()
+              ) == -1
             ) {
               royaltyList.push(accountInfo.owner.toString());
               createTokenAccountTransaction.add(

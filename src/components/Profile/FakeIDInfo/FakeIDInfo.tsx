@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import * as React from "react";
 
 import { userHasNoID } from "lib/store";
-import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
+import { getPoolMintedCount } from "lib/web3/fakeID/getPoolMintedCount";
 
 import {
   availabilityContainer,
