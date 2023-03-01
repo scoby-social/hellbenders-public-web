@@ -8,7 +8,7 @@ import Profile from "components/Profile/Profile";
 
 import { getUserByUsername } from "lib/axios/requests/users/getUsers";
 import { markUserAsDiseased } from "lib/axios/requests/users/markUserAsDiseased";
-import { getNFTWithMetadata } from "lib/web3/getNFTWithMetadata";
+import { getNFTWithMetadata } from "lib/web3/common/getNFTWithMetadata";
 import { selectedLeader, userDeceased } from "lib/store";
 
 import { ProfilePageProps } from "../components/Profile/types";

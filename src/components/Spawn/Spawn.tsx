@@ -20,7 +20,7 @@ import SpawnMint from "./SpawnMint/SpawnMint";
 const Spawn = () => {
   const [soldOut, setSoldOut] = React.useState(false);
   const [started, setStarted] = React.useState(true);
-  const [finished, setFinished] = React.useState(true);
+  const [finished, setFinished] = React.useState(false);
   const [wallet] = useAtom(currentWallet);
 
   const renderComponent = () => {
@@ -69,7 +69,7 @@ const Spawn = () => {
       );
     }
 
-    if (wallet !== "") {
+    if (wallet === "") {
       return (
         <NotConnectedWallet
           title={`To get in quick, connect with a wallet holding only your`}

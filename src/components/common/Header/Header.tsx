@@ -29,7 +29,7 @@ import {
 } from "./styles";
 import { HeaderProps } from "./types";
 
-export const Header = ({ title, isProfile }: HeaderProps) => {
+export const Header = ({ title, isProfile, spawn }: HeaderProps) => {
   const [missingID] = useAtom(userHasNoID);
   const [user] = useAtom(currentUser);
   const [leaderDeceased] = useAtom(userDeceased);
@@ -76,7 +76,7 @@ export const Header = ({ title, isProfile }: HeaderProps) => {
             </Typography>
           )}
         </Box>
-        {isSuccessfullyLogged && !isProfile && (
+        {isSuccessfullyLogged && !spawn && !isProfile && (
           <Box sx={searchBarWrapper}>
             <SearchBar />
           </Box>

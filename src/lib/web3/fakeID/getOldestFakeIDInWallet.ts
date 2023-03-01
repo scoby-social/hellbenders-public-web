@@ -1,6 +1,6 @@
 import { JsonMetadata, Metadata } from "@metaplex-foundation/js";
 import { Connection, PublicKey } from "@solana/web3.js";
-import { getNftsForOwnerBySymbol } from "./getNftsForOwner";
+import { getNftsForOwnerBySymbol } from "../common/getNftsForOwner";
 
 export async function getOldestFakeIDInWallet(
   wallet: PublicKey
