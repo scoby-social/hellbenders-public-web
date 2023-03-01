@@ -72,6 +72,9 @@ const GroupCard = ({
       setMessage("Please be patient, our machine elves are minting your Spawn");
       await mintSpawn(wallet, redlist);
       setLoading(false);
+      setMessage(
+        "Congrats! Your Spawn has been minted. Keep your eyes on this page to redeem your Spawn. 👀"
+      );
     } catch (err) {
       setLoading(false);
       setMessage(

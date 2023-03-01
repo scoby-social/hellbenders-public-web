@@ -64,6 +64,11 @@ export const imageAndButtonWrapper: SxProps = {
   alignItems: "center",
 };
 
+export const statusText: SxProps = {
+  maxWidth: "50%",
+  textAlign: "center",
+};
+
 export const button: SxProps = {
   margin: "1vmax 0",
 };
