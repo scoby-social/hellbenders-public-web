@@ -29,7 +29,7 @@ const SpawnMint = () => {
 
   const getGroups = React.useCallback(async () => {
     setLoading(true);
-    const groupsData = await getGroupsWithData(wallet, missingID);
+    const groupsData = await getGroupsWithData(wallet, !missingID);
     setGroups(groupsData);
     setLoading(false);
   }, [missingID, wallet]);
@@ -49,7 +49,7 @@ const SpawnMint = () => {
 
   React.useEffect(() => {
     getGroups();
-  }, [wallet, getGroups]);
+  }, [wallet, getGroups, missingID]);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
