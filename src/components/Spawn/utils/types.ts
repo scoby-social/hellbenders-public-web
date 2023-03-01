@@ -1,13 +1,13 @@
 import { PublicKey } from "@solana/web3.js";
 
-export interface GroupCardProps {
-  highlight: boolean;
+export interface Group {
   title: string;
+  highlight: boolean;
   supply: number;
   tokensMinted: number;
   imageURL: string;
-  available: boolean;
   soldOut: boolean;
+  available: boolean;
   discount: number;
   tokenName: string;
   hasFakeIDDiscount: boolean;

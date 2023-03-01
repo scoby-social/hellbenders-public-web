@@ -8,7 +8,7 @@ const { withSentryConfig } = require("@sentry/nextjs");
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["storage.googleapis.com"],
+    domains: ["storage.googleapis.com", "shdw-drive.genesysgo.net"],
     minimumCacheTTL: 1500000,
   },
   i18n: {

@@ -29,7 +29,7 @@ export async function getServerSideProps({ req }: any) {
   };
 }
 
-const Home = ({ spawn }: any) => {
+const Home = ({ spawn }: { spawn: boolean }) => {
   const [missingID] = useAtom(userHasNoID);
   const [wallet] = useAtom(currentWallet);
   const [_, setLoading] = useAtom(leaderboardLoading);
@@ -63,7 +63,7 @@ const Home = ({ spawn }: any) => {
   return (
     <div>
       <Box sx={headerBoxContainerStyle}>
-        <Header title={headerTitle} isProfile={false} />
+        <Header spawn={spawn} title={headerTitle} isProfile={false} />
         {spawn ? <Spawn /> : <LeaderboardContent />}
       </Box>
     </div>

@@ -44,3 +44,10 @@ export const supplyInfoItemWrapper: SxProps = {
   backgroundColor: "rgba(52, 55, 65, 0.8)",
   borderRadius: "20px",
 };
+
+export const loaderContainer: SxProps = {
+  marginTop: "2vmax",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};

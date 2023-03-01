@@ -1,12 +1,12 @@
 import { filterLayersToCheckNewExceptions } from "components/Profile/PhotoBooth/LayerBuilder/utils/filterLayersToCheckNewExceptions";
 import { OrderedSelectedLayers } from "lib/axios/requests/users/types/orderedSelectedLayers";
 import { uploadImages } from "lib/axios/requests/users/uploadImages";
-import { deleteShadowDriveFile } from "./deleteShadowDriveFile";
+import { deleteShadowDriveFile } from "../deleteShadowDriveFile";
 import { mintFakeID } from "./mintFakeID";
-import { MetadataAttributes, Metadata } from "./types/metadata";
-import { UploadNftParams } from "./types/uploadNftParams";
-import { UploadNFTReturnType } from "./types/uploadNFTReturnType";
-import { saveJsonMetadata, saveMetadataImage } from "./uploadFileToShdwDrive";
+import { MetadataAttributes, Metadata } from "../types/metadata";
+import { UploadNftParams } from "../types/uploadNftParams";
+import { UploadNFTReturnType } from "../types/uploadNFTReturnType";
+import { saveJsonMetadata } from "../uploadFileToShdwDrive";
 
 export async function uploadNFT({
   selectedLayers,
