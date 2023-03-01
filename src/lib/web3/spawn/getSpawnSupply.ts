@@ -1,9 +1,11 @@
 import { AnchorProvider } from "@project-serum/anchor";
 import * as anchor from "@project-serum/anchor";
-import SpawnNFTIdl from "./hellbenders-spawn.json";
 import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
 
-export async function getSpawnMintedCount(wallet: any) {
+import SpawnNFTIdl from "./hellbenders-spawn.json";
+import { SpawnSupply } from "../types/spawnSupply";
+
+export async function getSpawnMintedCount(wallet: any): Promise<SpawnSupply> {
   const conn = new Connection(process.env.NEXT_PUBLIC_SOLANA_CLUSTER!);
   const confirmOption: ConfirmOptions = {
     commitment: "finalized",

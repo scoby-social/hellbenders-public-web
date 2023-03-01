@@ -2,12 +2,14 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useAtom } from "jotai";
 import { userHasNoID } from "lib/store";
-import { getSpawnMintedCount } from "lib/web3/spawn/getSpawnSupply";
 import * as React from "react";
+
+import { getSpawnMintedCount } from "lib/web3/spawn/getSpawnSupply";
+import { SpawnSupply } from "lib/web3/types/spawnSupply";
 
 import GroupCard from "../GroupCard/GroupCard";
 import { getGroupsWithData } from "../utils/getGroupsWithData";
-import { Group } from "../utils/types";
+import { Groups } from "../utils/types";
 import {
   cardsContainer,
   loaderContainer,
@@ -18,12 +20,12 @@ import {
   supplyInfoItemWrapper,
 } from "./styles";
 
-const SUPPLY = 1969;
+const SUPPLY = 3333;
 
 const SpawnMint = () => {
   const wallet = useWallet();
   const [missingID] = useAtom(userHasNoID);
-  const [groups, setGroups] = React.useState<Group[]>([]);
+  const [groups, setGroups] = React.useState<Groups>({} as Groups);
   const [totalMintedCount, setTotalMintedCount] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
 
@@ -35,14 +37,25 @@ const SpawnMint = () => {
   }, [missingID, wallet]);
 
   const getSupplyInfo = React.useCallback(async () => {
-    const data = await getSpawnMintedCount(wallet);
+    const spawnSupply = await getSpawnMintedCount(wallet);
     const mintedCount =
-      data.black +
-      data.fake +
-      data.steel +
-      data.legendary +
-      data.gold +
-      data.open;
+      spawnSupply.black +
+      spawnSupply.fake +
+      spawnSupply.steel +
+      spawnSupply.legendary +
+      spawnSupply.gold +
+      spawnSupply.open;
+
+    setGroups((prevGroups) => {
+      const newGroups = { ...prevGroups };
+
+      for (const key in spawnSupply) {
+        newGroups[key as keyof Groups].tokensMinted =
+          spawnSupply[key as keyof SpawnSupply];
+      }
+
+      return newGroups;
+    });
 
     setTotalMintedCount(mintedCount);
   }, [wallet]);
@@ -92,7 +105,7 @@ const SpawnMint = () => {
         </Box>
       ) : (
         <Box sx={cardsContainer}>
-          {groups.map((group, index) => (
+          {Object.values(groups).map((group, index) => (
             <GroupCard key={index} {...group} />
           ))}
         </Box>

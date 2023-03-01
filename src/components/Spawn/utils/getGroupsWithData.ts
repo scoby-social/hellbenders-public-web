@@ -1,28 +1,28 @@
 import { checkIfUserHasRedlistTokens } from "lib/web3/spawn/checkIfUserHasRedlistToken";
 import { getSpawnMintedCount } from "lib/web3/spawn/getSpawnSupply";
-import { Group } from "./types";
+import { Groups } from "./types";
 
 export async function getGroupsWithData(
   wallet: any,
   hasFakeID: boolean
-): Promise<Group[]> {
+): Promise<Groups> {
   const { legendary, gold, steel, black } = await checkIfUserHasRedlistTokens(
     wallet
   );
 
   const supply = {
-    legendary: 103,
-    gold: 103,
-    steel: 103,
-    black: 103,
-    fake: 103,
-    open: 103,
+    legendary: 100,
+    gold: 200,
+    steel: 300,
+    black: 400,
+    fake: 500,
+    open: 1833,
   };
 
   const counts = await getSpawnMintedCount(wallet);
 
-  const groups = [
-    {
+  const groups = {
+    legendary: {
       title: "Group 1: Legendary",
       highlight: !!legendary,
       supply: supply.legendary,
@@ -36,7 +36,7 @@ export async function getGroupsWithData(
       hasFakeIDDiscount: false,
       redlist: legendary,
     },
-    {
+    gold: {
       title: "Group 2: Redlist Gold",
       highlight: !!gold,
       supply: supply.gold,
@@ -50,7 +50,7 @@ export async function getGroupsWithData(
       hasFakeIDDiscount: true,
       redlist: gold,
     },
-    {
+    steel: {
       title: "Group 3: Redlist Steel",
       highlight: !!steel,
       supply: supply.steel,
@@ -64,7 +64,7 @@ export async function getGroupsWithData(
       hasFakeIDDiscount: true,
       redlist: steel,
     },
-    {
+    black: {
       title: "Group 4: Redlist Black",
       highlight: !!black,
       supply: supply.black,
@@ -78,7 +78,7 @@ export async function getGroupsWithData(
       hasFakeIDDiscount: true,
       redlist: black,
     },
-    {
+    fake: {
       title: "Group 5: Fake ID Holders",
       highlight: false,
       supply: supply.fake,
@@ -92,7 +92,7 @@ export async function getGroupsWithData(
       hasFakeIDDiscount: false,
       redlist: null,
     },
-    {
+    open: {
       title: "Group 6: Open Mint",
       highlight: false,
       supply: supply.open,
@@ -106,7 +106,7 @@ export async function getGroupsWithData(
       hasFakeIDDiscount: false,
       redlist: null,
     },
-  ];
+  };
 
   return groups;
 }
