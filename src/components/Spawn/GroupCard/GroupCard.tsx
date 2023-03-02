@@ -12,6 +12,8 @@ import {
   groupCardContent,
   groupCardTitle,
   imageAndButtonWrapper,
+  imageStyle,
+  imageWrapper,
   statusText,
   supplyItem,
   supplyWrapper,
@@ -107,12 +109,10 @@ const GroupCard = ({
           </Box>
         </Box>
         <Box sx={imageAndButtonWrapper}>
-          <Image
-            src={imageURL}
-            width={isMobile ? 35 : 130}
-            height={isMobile ? 35 : 130}
-            alt={title}
-          />
+          <Box sx={imageWrapper}>
+            <Image src={imageURL} fill alt={title} style={imageStyle} />
+          </Box>
+
           <Button
             variant="contained"
             disabled={soldOut || !available || loading}

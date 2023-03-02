@@ -1,4 +1,5 @@
 import { SxProps } from "@mui/material";
+import { CSSProperties } from "react";
 
 export const groupCardContainer = (highlight: boolean): SxProps => {
   const styles: SxProps = {
@@ -71,4 +72,15 @@ export const statusText: SxProps = {
 
 export const button: SxProps = {
   margin: "1vmax 0",
+};
+
+export const imageWrapper: SxProps = {
+  width: "8vmax",
+  height: "8vmax",
+  position: "relative",
+};
+
+export const imageStyle: CSSProperties = {
+  width: "100%",
+  height: "100%",
 };
