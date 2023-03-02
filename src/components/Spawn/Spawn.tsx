@@ -20,7 +20,7 @@ import SpawnMint from "./SpawnMint/SpawnMint";
 const Spawn = () => {
   const [soldOut, setSoldOut] = React.useState(false);
   const [finished, setFinished] = React.useState(false);
-  const [started, setStarted] = React.useState(true);
+  const [started, setStarted] = React.useState(false);
   const [wallet] = useAtom(currentWallet);
 
   const renderComponent = () => {
