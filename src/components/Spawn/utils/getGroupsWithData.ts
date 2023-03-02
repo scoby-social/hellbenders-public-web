@@ -47,7 +47,7 @@ export async function getGroupsWithData(
       available: !!gold,
       discount: 20,
       tokenName: "Redlist Gold",
-      hasFakeIDDiscount: true,
+      hasFakeIDDiscount: hasFakeID,
       redlist: gold,
     },
     steel: {
@@ -61,7 +61,7 @@ export async function getGroupsWithData(
       available: !!steel,
       discount: 15,
       tokenName: "Redlist Steel",
-      hasFakeIDDiscount: true,
+      hasFakeIDDiscount: hasFakeID,
       redlist: steel,
     },
     black: {
@@ -75,7 +75,7 @@ export async function getGroupsWithData(
       available: !!black,
       discount: 10,
       tokenName: "Redlist Black",
-      hasFakeIDDiscount: true,
+      hasFakeIDDiscount: hasFakeID,
       redlist: black,
     },
     fake: {
