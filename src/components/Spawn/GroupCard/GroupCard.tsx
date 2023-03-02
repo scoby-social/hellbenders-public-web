@@ -66,11 +66,16 @@ const GroupCard = ({
         setMessage(
           "Hey! We checked your wallet and you don't have enough crypto to mint. Come back later when you've earned some bread and try again."
         );
+        setLoading(false);
         return;
       }
 
       setMessage("Please be patient, our machine elves are minting your Spawn");
-      await mintSpawn(wallet, redlist);
+      await mintSpawn(
+        wallet,
+        redlist,
+        tokenName === "Fake ID" ? true : hasFakeIDDiscount
+      );
       setLoading(false);
       setMessage(
         "Congrats! Your Spawn has been minted. Keep your eyes on this page to redeem your Spawn. 👀"
