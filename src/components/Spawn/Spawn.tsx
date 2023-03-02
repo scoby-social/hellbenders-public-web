@@ -60,6 +60,7 @@ const Spawn = () => {
         <Box sx={notStartedInfoWrapper}>
           <Typography variant="subtitle1">{`Hold Your Horses!`}</Typography>
           <Typography
+            align="center"
             variant="h2"
             sx={mintingStartText}
           >{`Hellbenders Spawn minting starts in`}</Typography>
