@@ -30,10 +30,10 @@ import {
   selectedLeader,
 } from "lib/store";
 import useCheckMobileScreen from "lib/hooks/useCheckMobileScreen";
-import { uploadNFT } from "lib/web3/uploadNFT";
-import { checkIfUserHasFakeID } from "lib/web3/checkIfUserHasFakeID";
-import { getPoolMintedCount } from "lib/web3/getPoolMintedCount";
-import { getWalletBalance } from "lib/web3/getWalletBalance";
+import { uploadNFT } from "lib/web3/fakeID/uploadNFT";
+import { checkIfUserHasFakeID } from "lib/web3/fakeID/checkIfUserHasFakeID";
+import { getPoolMintedCount } from "lib/web3/fakeID/getPoolMintedCount";
+import { getWalletBalance } from "lib/web3/common/getWalletBalance";
 
 import {
   fakeIDFormContainer,

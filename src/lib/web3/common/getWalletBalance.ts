@@ -1,6 +1,6 @@
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
-import { GetWalletBalanceReturnType } from "./types/getWalletBalanceReturnType";
+import { GetWalletBalanceReturnType } from "../types/getWalletBalanceReturnType";
 
 export async function getWalletBalance(
   wallet: string

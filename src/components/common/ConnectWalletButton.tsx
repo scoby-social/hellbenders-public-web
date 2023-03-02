@@ -14,7 +14,7 @@ import {
   userHasNoID,
 } from "lib/store";
 import { User } from "lib/models/user";
-import { getOldestFakeIDInWallet } from "lib/web3/getOldestFakeIDInWallet";
+import { getOldestFakeIDInWallet } from "lib/web3/fakeID/getOldestFakeIDInWallet";
 import { getUserByFakeID } from "lib/axios/requests/users/getUserByFakeID";
 
 interface WalletMultiButtonStyledProps {

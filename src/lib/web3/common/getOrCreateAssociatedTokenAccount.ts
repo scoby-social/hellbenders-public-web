@@ -9,11 +9,12 @@ import {
   PublicKey,
   Transaction,
 } from "@solana/web3.js";
-import { getAccountInfo } from "./getAccountInfo";
 import {
   getAssociatedTokenAddress,
   createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
+
+import { getAccountInfo } from "./getAccountInfo";
 
 export async function getOrCreateAssociatedTokenAccount(
   connection: Connection,
@@ -29,7 +30,12 @@ export async function getOrCreateAssociatedTokenAccount(
   const associatedToken = await getAssociatedTokenAddress(mint, owner);
   let instruction;
   try {
-    await getAccountInfo(connection, associatedToken, commitment, programId);
+    const info = await getAccountInfo(
+      connection,
+      associatedToken,
+      commitment,
+      programId
+    );
   } catch (error: any) {
     if (
       error.message === "TokenAccountNotFoundError" ||
