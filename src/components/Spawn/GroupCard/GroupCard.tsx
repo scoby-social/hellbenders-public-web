@@ -81,6 +81,7 @@ const GroupCard = ({
         "Congrats! Your Spawn has been minted. Keep your eyes on this page to redeem your Spawn. 👀"
       );
     } catch (err) {
+      console.error(err);
       setLoading(false);
       setMessage(
         "I dunno why, but the machine elves f*cked up your mint. Try again later"
