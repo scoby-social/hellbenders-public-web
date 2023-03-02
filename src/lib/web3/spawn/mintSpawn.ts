@@ -29,7 +29,11 @@ import { sendTransaction } from "../common/sendTransaction";
 import FakeIDNFTIdl from "../fakeID/usdc-fake-id.json";
 import SpawnNFTIdl from "./hellbenders-spawn.json";
 
-export async function mintSpawn(wallet: any, redlist: PublicKey | null) {
+export async function mintSpawn(
+  wallet: any,
+  redlist: PublicKey | null,
+  withFakeID: boolean
+) {
   const FakeIDNFTProgramId = new PublicKey(
     process.env.NEXT_PUBLIC_FAKE_ID_PROGRAM_ID!
   );
@@ -321,9 +325,13 @@ export async function mintSpawn(wallet: any, redlist: PublicKey | null) {
   // }
   // }
 
+  console.log("Redlist token: ", redlist?.toString());
+  console.log("Has Fake iD: ", withFakeID);
+
   if (!redlist) {
+    console.log("Sending transaction without redlist token");
     transaction.add(
-      spawnProgram.instruction.mint(new anchor.BN(bump), holdingFakeID, {
+      spawnProgram.instruction.mint(new anchor.BN(bump), withFakeID, {
         accounts: {
           owner: wallet.publicKey,
           pool: SpawnNFTPOOL,
@@ -349,10 +357,11 @@ export async function mintSpawn(wallet: any, redlist: PublicKey | null) {
       })
     );
   } else {
+    console.log("Sending transaction with redlist token");
     transaction.add(
       spawnProgram.instruction.mintWithRedlist(
         new anchor.BN(bump),
-        holdingFakeID,
+        withFakeID,
         {
           accounts: {
             owner: wallet.publicKey,
