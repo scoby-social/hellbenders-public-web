@@ -12,6 +12,7 @@ import {
   groupCardContent,
   groupCardTitle,
   imageAndButtonWrapper,
+  statusText,
   supplyItem,
   supplyWrapper,
 } from "./styles";
@@ -121,7 +122,11 @@ const GroupCard = ({
           >
             {getButtonLabel()}
           </Button>
-          {message && <Typography variant="caption">{message}</Typography>}
+          {message && (
+            <Typography sx={statusText} variant="caption">
+              {message}
+            </Typography>
+          )}
         </Box>
         {!soldOut && (
           <FooterCardInfo
