@@ -182,7 +182,7 @@ export async function mintSpawn(
     holdingFakeID = true;
     // parent
     const parentMembershipResp = await conn.getTokenLargestAccounts(
-      parentMembershipMetadata.mint,
+      parentMembershipMetadata.parentNfp,
       "finalized"
     );
 
@@ -207,7 +207,7 @@ export async function mintSpawn(
 
     // grand parent
     const grandParentMembershipResp = await conn.getTokenLargestAccounts(
-      parentMembershipMetadata.parentNfp,
+      parentMembershipMetadata.grandParentNfp,
       "finalized"
     );
     if (
@@ -231,7 +231,7 @@ export async function mintSpawn(
 
     // grand grand parent
     const grandGrandParentMembershipResp = await conn.getTokenLargestAccounts(
-      parentMembershipMetadata.grandParentNfp,
+      parentMembershipMetadata.grandGrandParentNfp,
       "finalized"
     );
     if (
@@ -255,7 +255,7 @@ export async function mintSpawn(
 
     const grandGrandGrandParentMembershipResp =
       await conn.getTokenLargestAccounts(
-        parentMembershipMetadata.grandGrandParentNfp,
+        parentMembershipMetadata.grandGrandGrandParentNfp,
         "finalized"
       );
     if (
