@@ -60,6 +60,7 @@ const FooterCardInfo = ({
             sx={highlightText}
             variant="caption"
           >{`${resultingPrice.toFixed(4)} SOL`}</Typography>
+          <Typography variant="caption">{`+ about .01 SOL in tx fees`}</Typography>
         </Box>
       </Box>
     );
@@ -69,6 +70,7 @@ const FooterCardInfo = ({
     <Box sx={defaultInfoContainer}>
       <Typography variant="subtitle2">{`Mint Price`}</Typography>
       <Typography variant="subtitle2">{`6.66 SOL`}</Typography>
+      <Typography variant="caption">{`+ about .01 SOL in tx fees`}</Typography>
     </Box>
   );
 };
