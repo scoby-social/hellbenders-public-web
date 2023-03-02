@@ -167,7 +167,6 @@ export async function mintSpawn(
   let grandParentMembershipOwner = creatorWallet;
   let grandGrandParentMembershipOwner = creatorWallet;
   let grandGrandGrandParentMembershipOwner = creatorWallet;
-  let holdingFakeID = false;
 
   if (parentMembership) {
     const parentMembershipMetadata = await getMetadataExtended(
@@ -178,8 +177,6 @@ export async function mintSpawn(
       conn
     );
 
-    // with fake ID case
-    holdingFakeID = true;
     // parent
     const parentMembershipResp = await conn.getTokenLargestAccounts(
       parentMembershipMetadata.parentNfp,
@@ -283,53 +280,7 @@ export async function mintSpawn(
     }
   }
 
-  // const legendaryToken = new PublicKey(spawnPoolData.legendary);
-
-  // let redlistTokenAccount = await getOrCreateAssociatedTokenAccount(
-  // conn,
-  // wallet.pubkey,
-  // legendaryToken,
-  // wallet.publicKey,
-  // wallet.signedTransaction
-  // );
-
-  // if (redlistTokenAccount[1]) {
-  // const redlistGoldToken = new PublicKey(spawnPoolData.redlistGold);
-  // redlistTokenAccount = await getOrCreateAssociatedTokenAccount(
-  // conn,
-  // wallet.pubkey,
-  // redlistGoldToken,
-  // wallet.publicKey,
-  // wallet.signedTransaction
-  // );
-
-  // if (redlistTokenAccount[1]) {
-  // const redlistSteelToken = new PublicKey(spawnPoolData.redlistSteel);
-  // redlistTokenAccount = await getOrCreateAssociatedTokenAccount(
-  // conn,
-  // wallet.pubkey,
-  // redlistSteelToken,
-  // wallet.publicKey,
-  // wallet.signedTransaction
-  // );
-  // if (redlistTokenAccount[1]) {
-  // const redlistBlackToken = new PublicKey(spawnPoolData.redlistSteel);
-  // redlistTokenAccount = await getOrCreateAssociatedTokenAccount(
-  // conn,
-  // wallet.pubkey,
-  // redlistBlackToken,
-  // wallet.publicKey,
-  // wallet.signedTransaction
-  // );
-  // }
-  // }
-  // }
-
-  console.log("Redlist token: ", redlist?.toString());
-  console.log("Has Fake iD: ", withFakeID);
-
   if (!redlist) {
-    console.log("Sending transaction without redlist token");
     transaction.add(
       spawnProgram.instruction.mint(new anchor.BN(bump), withFakeID, {
         accounts: {
@@ -357,7 +308,6 @@ export async function mintSpawn(
       })
     );
   } else {
-    console.log("Sending transaction with redlist token");
     transaction.add(
       spawnProgram.instruction.mintWithRedlist(
         new anchor.BN(bump),
