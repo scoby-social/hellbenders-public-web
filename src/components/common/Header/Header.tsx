@@ -54,7 +54,7 @@ export const Header = ({ title, isProfile, spawn }: HeaderProps) => {
               onClick={goToHome}
             />
           </Box>
-          {isSuccessfullyLogged && <TopTabs />}
+          <TopTabs isLoggedIn={isSuccessfullyLogged} />
           <Box sx={buttonWrapper}>
             <ConnectWalletButton primaryColor={false} />
           </Box>

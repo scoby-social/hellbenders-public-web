@@ -4,9 +4,13 @@ import * as React from "react";
 
 import { countdownContainer, timerContainer, timerWrapper } from "./styles";
 
-const CountdownTimer = () => {
+const CountdownTimer = ({ callback }: { callback?: () => void }) => {
   const deadline = "Mar 03 2023 3:33 PM EST";
   const { days, hours, minutes, seconds } = useCountdownTimer(deadline);
+
+  if (days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0 && callback) {
+    callback();
+  }
 
   return (
     <Box sx={countdownContainer}>

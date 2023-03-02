@@ -19,8 +19,8 @@ import SpawnMint from "./SpawnMint/SpawnMint";
 
 const Spawn = () => {
   const [soldOut, setSoldOut] = React.useState(false);
-  const [started, setStarted] = React.useState(true);
   const [finished, setFinished] = React.useState(false);
+  const [started, setStarted] = React.useState(true);
   const [wallet] = useAtom(currentWallet);
 
   const renderComponent = () => {
@@ -63,7 +63,7 @@ const Spawn = () => {
             variant="h4"
             sx={mintingStartText}
           >{`Hellbenders Spawn minting starts in`}</Typography>
-          <CountdownTimer />
+          <CountdownTimer callback={() => setStarted(true)} />
           <Typography variant="subtitle1">{`3/3/23 at 3:33:33 pm EST`}</Typography>
         </Box>
       );

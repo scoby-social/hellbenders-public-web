@@ -3,7 +3,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import * as React from "react";
 import Image from "next/image";
 
-import useCheckMobileScreen from "lib/hooks/useCheckMobileScreen";
+import { mintSpawn } from "lib/web3/spawn/mintSpawn";
+import { getWalletBalance } from "lib/web3/common/getWalletBalance";
 
 import FooterCardInfo from "./FooterCardInfo/FooterCardInfo";
 import {
@@ -19,8 +20,6 @@ import {
   supplyWrapper,
 } from "./styles";
 import { GroupCardProps } from "./types";
-import { mintSpawn } from "lib/web3/spawn/mintSpawn";
-import { getWalletBalance } from "lib/web3/common/getWalletBalance";
 
 const GroupCard = ({
   highlight,
@@ -35,7 +34,6 @@ const GroupCard = ({
   hasFakeIDDiscount,
   redlist,
 }: GroupCardProps) => {
-  const isMobile = useCheckMobileScreen();
   const wallet = useWallet();
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
