@@ -80,7 +80,7 @@ export async function getGroupsWithData(
     },
     fake: {
       title: "Group 5: Fake ID Holders",
-      highlight: false,
+      highlight: hasFakeID,
       supply: supply.fake,
       tokensMinted: counts.fake,
       imageURL:
@@ -94,7 +94,7 @@ export async function getGroupsWithData(
     },
     open: {
       title: "Group 6: Open Mint",
-      highlight: false,
+      highlight: true,
       supply: supply.open,
       tokensMinted: counts.open,
       imageURL:
