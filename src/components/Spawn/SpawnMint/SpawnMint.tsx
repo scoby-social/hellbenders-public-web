@@ -52,6 +52,12 @@ const SpawnMint = () => {
       for (const key in spawnSupply) {
         newGroups[key as keyof Groups].tokensMinted =
           spawnSupply[key as keyof SpawnSupply];
+        if (
+          newGroups[key as keyof Groups].tokensMinted >=
+          newGroups[key as keyof Groups].supply
+        ) {
+          newGroups[key as keyof Groups].soldOut = true;
+        }
       }
 
       return newGroups;
