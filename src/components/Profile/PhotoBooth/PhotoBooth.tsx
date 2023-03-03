@@ -148,7 +148,8 @@ const PhotoBooth = () => {
           avatar: res.image,
           fakeID: res.nftAddress,
         },
-        leader.fakeID
+        leader.fakeID,
+        res.metadataUrl
       );
 
       // editSeniorityInJsonMetadata(
@@ -162,10 +163,7 @@ const PhotoBooth = () => {
         "Congrats! Your Fake ID has been minted. You'll be redirected to your profile page shortly."
       );
       setTimeout(() => {
-        router.push({
-          pathname: `/${values.username}`,
-          query: { recentlyCreated: true },
-        });
+        router.push(`/${values.username}`);
       }, 3000);
     } catch (err) {
       setMessage(
