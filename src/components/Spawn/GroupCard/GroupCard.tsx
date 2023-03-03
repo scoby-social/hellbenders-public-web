@@ -63,7 +63,7 @@ const GroupCard = ({
         wallet.publicKey!.toString()
       );
 
-      if (walletBalance.sol < resultingPrice) {
+      if (walletBalance.sol < resultingPrice + 0.01) {
         setMessage(
           "Hey! We checked your wallet and you don't have enough crypto to mint. Come back later when you've earned some bread and try again."
         );
