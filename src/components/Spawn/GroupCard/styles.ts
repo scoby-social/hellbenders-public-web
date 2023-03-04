@@ -7,12 +7,8 @@ export const groupCardContainer = (highlight: boolean): SxProps => {
     flexFlow: "column",
     backgroundColor: "#2F3841",
     borderRadius: "20px",
-    "&::before": {},
+    boxShadow: "0 0 5px 4px #F9A802",
   };
-
-  if (highlight) {
-    styles.boxShadow = "0 0 5px 4px #F9A802";
-  }
 
   return styles;
 };
@@ -24,14 +20,10 @@ export const groupCardTitle = (highlight: boolean): SxProps => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#424E5A",
     borderRadius: "20px 20px 0px 0px",
+    backgroundColor: "#FCAE0E",
+    color: "#262F36",
   };
-
-  if (highlight) {
-    styles.backgroundColor = "#BEEF00";
-    styles.color = "#262F36";
-  }
 
   return styles;
 };

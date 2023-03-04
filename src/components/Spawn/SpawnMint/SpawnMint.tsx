@@ -20,14 +20,13 @@ import {
   supplyInfoItemWrapper,
 } from "./styles";
 
-const SUPPLY = 3333;
-
 const SpawnMint = () => {
   const wallet = useWallet();
   const [missingID] = useAtom(userHasNoID);
   const [groups, setGroups] = React.useState<Groups>({} as Groups);
   const [totalMintedCount, setTotalMintedCount] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [supply, setSupply] = React.useState(0);
 
   const getGroups = React.useCallback(async () => {
     setLoading(true);
@@ -46,12 +45,20 @@ const SpawnMint = () => {
       spawnSupply.gold +
       spawnSupply.open;
 
+    setSupply(mintedCount);
+
     setGroups((prevGroups) => {
       const newGroups = { ...prevGroups };
 
       for (const key in spawnSupply) {
         newGroups[key as keyof Groups].tokensMinted =
           spawnSupply[key as keyof SpawnSupply];
+        if (
+          newGroups[key as keyof Groups].tokensMinted >=
+          newGroups[key as keyof Groups].supply
+        ) {
+          newGroups[key as keyof Groups].soldOut = true;
+        }
       }
 
       return newGroups;
@@ -75,11 +82,11 @@ const SpawnMint = () => {
   return (
     <Box sx={spawnContainer}>
       <Box sx={spawnTitleWrapper}>
-        <Typography variant="h2">{`Mint your Hellbenders Spawn`}</Typography>
         <Typography
           sx={spawnSubtitle}
           variant="subtitle2"
-        >{`In the Available Groups Below`}</Typography>
+        >{`You're too late MFer...`}</Typography>
+        <Typography variant="h2">{`We're SOLD OUT!`}</Typography>
       </Box>
 
       <Box sx={supplyInfoContainer}>
@@ -89,12 +96,12 @@ const SpawnMint = () => {
         </Box>
 
         <Box sx={supplyInfoItemWrapper}>
-          <Typography variant="h2">{SUPPLY}</Typography>
+          <Typography variant="h2">{supply}</Typography>
           <Typography variant="subtitle2">Supply</Typography>
         </Box>
 
         <Box sx={supplyInfoItemWrapper}>
-          <Typography variant="h2">{SUPPLY - totalMintedCount}</Typography>
+          <Typography variant="h2">{supply - totalMintedCount}</Typography>
           <Typography variant="subtitle2">Available</Typography>
         </Box>
       </Box>
