@@ -82,11 +82,11 @@ const SpawnMint = () => {
   return (
     <Box sx={spawnContainer}>
       <Box sx={spawnTitleWrapper}>
-        <Typography variant="h2">{`We're SOLD OUT!`}</Typography>
         <Typography
           sx={spawnSubtitle}
           variant="subtitle2"
         >{`You're too late MFer...`}</Typography>
+        <Typography variant="h2">{`We're SOLD OUT!`}</Typography>
       </Box>
 
       <Box sx={supplyInfoContainer}>

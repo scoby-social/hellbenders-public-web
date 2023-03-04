@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material";
 
 export const spawnTitleWrapper: SxProps = {
-  marginTop: "2vmax",
+  margin: "2vmax 0",
   display: "flex",
   flexFlow: "column",
   justifyContent: "center",
@@ -19,7 +19,7 @@ export const cardsContainer: SxProps = {
 };
 
 export const spawnSubtitle: SxProps = {
-  marginTop: "0.7vmax",
+  marginBottom: "0.7vmax",
   letterSpacing: "0.035em",
 };
 
