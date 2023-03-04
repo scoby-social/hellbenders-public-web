@@ -20,14 +20,13 @@ import {
   supplyInfoItemWrapper,
 } from "./styles";
 
-const SUPPLY = 3333;
-
 const SpawnMint = () => {
   const wallet = useWallet();
   const [missingID] = useAtom(userHasNoID);
   const [groups, setGroups] = React.useState<Groups>({} as Groups);
   const [totalMintedCount, setTotalMintedCount] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [supply, setSupply] = React.useState(0);
 
   const getGroups = React.useCallback(async () => {
     setLoading(true);
@@ -45,6 +44,8 @@ const SpawnMint = () => {
       spawnSupply.legendary +
       spawnSupply.gold +
       spawnSupply.open;
+
+    setSupply(mintedCount);
 
     setGroups((prevGroups) => {
       const newGroups = { ...prevGroups };
@@ -95,12 +96,12 @@ const SpawnMint = () => {
         </Box>
 
         <Box sx={supplyInfoItemWrapper}>
-          <Typography variant="h2">{SUPPLY}</Typography>
+          <Typography variant="h2">{supply}</Typography>
           <Typography variant="subtitle2">Supply</Typography>
         </Box>
 
         <Box sx={supplyInfoItemWrapper}>
-          <Typography variant="h2">{SUPPLY - totalMintedCount}</Typography>
+          <Typography variant="h2">{supply - totalMintedCount}</Typography>
           <Typography variant="subtitle2">Available</Typography>
         </Box>
       </Box>

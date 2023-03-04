@@ -10,26 +10,17 @@ export async function getGroupsWithData(
     wallet
   );
 
-  const supply = {
-    legendary: 100,
-    gold: 200,
-    steel: 300,
-    black: 400,
-    fake: 500,
-    open: 1833,
-  };
-
   const counts = await getSpawnMintedCount(wallet);
 
   const groups = {
     legendary: {
       title: "Group 1: Legendary",
       highlight: !!legendary,
-      supply: supply.legendary,
+      supply: counts.legendary,
       tokensMinted: counts.legendary,
       imageURL:
         "https://shdw-drive.genesysgo.net/GUbAgSbgsg35ddrGN8vCuNBZ4tvEtZDmPasRL4hTTwVJ/0.png",
-      soldOut: supply.legendary <= counts.legendary,
+      soldOut: true,
       available: !!legendary,
       discount: 50,
       tokenName: "Legendary",
@@ -39,11 +30,11 @@ export async function getGroupsWithData(
     gold: {
       title: "Group 2: Redlist Gold",
       highlight: !!gold,
-      supply: supply.gold,
+      supply: counts.gold,
       tokensMinted: counts.gold,
       imageURL:
         "https://shdw-drive.genesysgo.net/GUbAgSbgsg35ddrGN8vCuNBZ4tvEtZDmPasRL4hTTwVJ/1.png",
-      soldOut: supply.gold <= counts.gold,
+      soldOut: true,
       available: !!gold,
       discount: 20,
       tokenName: "Redlist Gold",
@@ -53,11 +44,11 @@ export async function getGroupsWithData(
     steel: {
       title: "Group 3: Redlist Steel",
       highlight: !!steel,
-      supply: supply.steel,
+      supply: counts.steel,
       tokensMinted: counts.steel,
       imageURL:
         "https://shdw-drive.genesysgo.net/GUbAgSbgsg35ddrGN8vCuNBZ4tvEtZDmPasRL4hTTwVJ/2.png",
-      soldOut: supply.steel <= counts.steel,
+      soldOut: true,
       available: !!steel,
       discount: 15,
       tokenName: "Redlist Steel",
@@ -67,11 +58,11 @@ export async function getGroupsWithData(
     black: {
       title: "Group 4: Redlist Black",
       highlight: !!black,
-      supply: supply.black,
+      supply: counts.black,
       tokensMinted: counts.black,
       imageURL:
         "https://shdw-drive.genesysgo.net/GUbAgSbgsg35ddrGN8vCuNBZ4tvEtZDmPasRL4hTTwVJ/3.png",
-      soldOut: supply.black <= counts.black,
+      soldOut: true,
       available: !!black,
       discount: 10,
       tokenName: "Redlist Black",
@@ -81,11 +72,11 @@ export async function getGroupsWithData(
     fake: {
       title: "Group 5: Fake ID Holders",
       highlight: hasFakeID,
-      supply: supply.fake,
+      supply: counts.fake,
       tokensMinted: counts.fake,
       imageURL:
         "https://shdw-drive.genesysgo.net/GUbAgSbgsg35ddrGN8vCuNBZ4tvEtZDmPasRL4hTTwVJ/4.png",
-      soldOut: supply.fake <= counts.fake,
+      soldOut: true,
       available: hasFakeID,
       discount: 10,
       tokenName: "Fake ID",
@@ -95,11 +86,11 @@ export async function getGroupsWithData(
     open: {
       title: "Group 6: Open Mint",
       highlight: true,
-      supply: supply.open,
+      supply: counts.open,
       tokensMinted: counts.open,
       imageURL:
         "https://shdw-drive.genesysgo.net/GUbAgSbgsg35ddrGN8vCuNBZ4tvEtZDmPasRL4hTTwVJ/5.png",
-      soldOut: supply.open <= counts.open,
+      soldOut: true,
       available: true,
       discount: 0,
       tokenName: "",
