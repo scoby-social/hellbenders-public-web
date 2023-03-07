@@ -19,7 +19,7 @@ export const cardsContainer: SxProps = {
 };
 
 export const spawnSubtitle: SxProps = {
-  marginBottom: "0.7vmax",
+  marginTop: "0.7vmax",
   letterSpacing: "0.035em",
 };
 

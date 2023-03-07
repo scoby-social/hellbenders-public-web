@@ -3,29 +3,16 @@ import SearchIcon from "@mui/icons-material/Search";
 import * as React from "react";
 import { useAtom } from "jotai";
 
-import { allLeaderboardUsers, filteredLeaderboardUsers } from "lib/store";
+import { searchTextFilter } from "lib/store/filters";
 
 import { searchBarButton, searchBarInput, searchBarWrapper } from "./styles";
 
 const SearchBar = () => {
-  const [allUsers] = useAtom(allLeaderboardUsers);
-  const [_, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
+  const [__, setSearchTextOnFilter] = useAtom(searchTextFilter);
   const [searchText, setSearchText] = React.useState("");
 
   const executeSearch = React.useCallback(() => {
-    if (searchText === "") {
-      setFilteredUsers(allUsers);
-      return;
-    }
-
-    const filteredUsers = allUsers.filter((val) => {
-      const fullName = `${val.username} The ${val.amplifierRole} ${val.superpowerRole}`;
-
-      return fullName.includes(searchText);
-    });
-
-    setFilteredUsers(filteredUsers);
-
+    setSearchTextOnFilter(searchText);
     // eslint-disable-next-line
   }, [searchText]);
 

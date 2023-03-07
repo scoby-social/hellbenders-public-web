@@ -12,7 +12,6 @@ import { getNFTWithMetadata } from "lib/web3/common/getNFTWithMetadata";
 import { selectedLeader, userDeceased } from "lib/store";
 
 import { ProfilePageProps } from "../components/Profile/types";
-import { useRouter } from "next/router";
 
 const headerBoxContainerStyle: SxProps = {
   paddingBottom: "1rem",
@@ -38,8 +37,6 @@ export async function getServerSideProps({ params }: ServerSidePropsParams) {
 const ProfilePage = ({ user }: ProfilePageProps) => {
   const [_, setSelectedLeader] = useAtom(selectedLeader);
   const [__, setDiseased] = useAtom(userDeceased);
-  const router = useRouter();
-  const query = router.query;
 
   const checkIfLeaderHasFakeID = React.useCallback(async () => {
     try {
@@ -55,7 +52,9 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
   }, []);
 
   React.useEffect(() => {
-    const hasBeenRecenlyCreated = query.recentlyCreated === "true";
+    const userDate = new Date(user.createdAt);
+    userDate.setMinutes(userDate.getMinutes() + 5);
+    const hasBeenRecenlyCreated = userDate > new Date();
     setSelectedLeader(user);
     if (!user.deceased && !hasBeenRecenlyCreated) {
       checkIfLeaderHasFakeID();

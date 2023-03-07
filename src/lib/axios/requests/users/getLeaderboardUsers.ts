@@ -3,11 +3,23 @@ import client from "lib/axios/axiosClient";
 
 export async function getLeaderboardUsers(
   skip = 0,
-  limit = 15
+  limit = 15,
+  searchText?: string,
+  filterProperty?: string,
+  filterValue?: number
 ): Promise<User[]> {
-  const result = await client.get<User[]>(
-    `/leaderboard/users?skip=${skip}&limit=${limit}`
-  );
+  let url = `/leaderboard/users?skip=${skip}&limit=${limit}`;
+
+  if (searchText) {
+    url += `&search=${searchText}`;
+  }
+
+  if (filterValue && filterProperty) {
+    url += `&filter=${filterProperty}`;
+    url += `&order=${filterValue}`;
+  }
+
+  const result = await client.get<User[]>(url);
 
   return result.data;
 }

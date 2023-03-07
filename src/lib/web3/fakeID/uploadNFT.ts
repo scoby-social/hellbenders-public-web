@@ -37,9 +37,9 @@ export async function uploadNFT({
 
   const metadata: Metadata = {
     name: croppedName,
-    symbol: "HELLPASS",
     description: formResult.bio,
     image: resultingLayer.image,
+    symbol: "HELLPASS",
     seniority,
     pronouns: formResult.pronouns,
     external_link: `www.hellbenders.world/${formResult.username}`,

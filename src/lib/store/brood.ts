@@ -1,13 +1,13 @@
 import { atom } from "jotai";
-import { AllGenerationValues } from "lib/axios/requests/users/types";
 import { User } from "lib/models/user";
 
 export const allBroodUsers = atom<User[]>([]);
-export const usersByGen = atom<AllGenerationValues>({
-  gen1: [],
-  gen2: [],
-  gen3: [],
-  gen4: [],
-});
 export const filteredBroodUsers = atom<User[]>([]);
 export const broodLoading = atom(false);
+
+export const selectedGenFilter = atom({
+  gen1: true,
+  gen2: true,
+  gen3: true,
+  gen4: true,
+});
