@@ -75,6 +75,7 @@ export const LeaderboardContent = () => {
   }, [executeBroodSearch, currentPage]);
 
   const filterUsers = React.useCallback(async () => {
+    setFinishedPaginate(false);
     const users = await executeBroodSearch(0);
     setAllUsers([...users]);
     setFilteredUsers([...users]);
