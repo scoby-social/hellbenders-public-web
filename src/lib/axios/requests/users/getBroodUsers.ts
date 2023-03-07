@@ -5,10 +5,11 @@ export async function getUsersThatBelongsToBrood(
   leaderWallet: string,
   skip = 0,
   limit = 15,
+  generations: string,
   filterProperty?: string,
   filterValue?: number
 ): Promise<User[]> {
-  let url = `/user/brood?fakeID=${leaderWallet}&skip=${skip}&limit=${limit}`;
+  let url = `/user/brood?fakeID=${leaderWallet}&skip=${skip}&limit=${limit}&generations=${generations}`;
 
   if (filterValue && filterProperty) {
     url += `&filter=${filterProperty}`;

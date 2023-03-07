@@ -42,52 +42,44 @@ export const LeaderboardContent = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [finishedPaginate, setFinishedPaginate] = React.useState(false);
 
-  const paginate = React.useCallback(async () => {
-    if (!fetchingRef.current) {
-      fetchingRef.current = true;
+  const executeBroodSearch = React.useCallback(
+    async (page: number) => {
+      if (!fetchingRef.current) {
+        fetchingRef.current = true;
 
-      const page = currentPage + 1;
-      const users = await getLeaderboardUsers(
-        currentPage * ITEMS_PER_PAGE,
-        ITEMS_PER_PAGE,
-        searchText,
-        selectedSort.name,
-        selectedSort.value
-      );
+        const users = await getLeaderboardUsers(
+          page * ITEMS_PER_PAGE,
+          ITEMS_PER_PAGE,
+          searchText,
+          selectedSort.name,
+          selectedSort.value
+        );
 
-      if (users.length === 0) setFinishedPaginate(true);
+        if (users.length === 0) setFinishedPaginate(true);
 
-      setCurrentPage(page);
-      setAllUsers((prevUsers) => [...prevUsers, ...users]);
-      setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
-
-      fetchingRef.current = false;
-    }
+        setCurrentPage(page + 1);
+        fetchingRef.current = false;
+        return users;
+      }
+      return [];
+    },
     // eslint-disable-next-line
-  }, [currentPage, searchText, selectedSort]);
+    [selectedSort, searchText]
+  );
+
+  const paginate = React.useCallback(async () => {
+    const users = await executeBroodSearch(currentPage);
+    setAllUsers((prevUsers) => [...prevUsers, ...users]);
+    setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
+    // eslint-disable-next-line
+  }, [executeBroodSearch, currentPage]);
 
   const filterUsers = React.useCallback(async () => {
-    if (!fetchingRef.current) {
-      fetchingRef.current = true;
-
-      const users = await getLeaderboardUsers(
-        0,
-        ITEMS_PER_PAGE,
-        searchText,
-        selectedSort.name,
-        selectedSort.value
-      );
-
-      if (users.length === 0) setFinishedPaginate(true);
-
-      setCurrentPage(1);
-      setAllUsers([...users]);
-      setFilteredUsers([...users]);
-
-      fetchingRef.current = false;
-    }
+    const users = await executeBroodSearch(0);
+    setAllUsers([...users]);
+    setFilteredUsers([...users]);
     // eslint-disable-next-line
-  }, [searchText, selectedSort]);
+  }, [executeBroodSearch]);
 
   React.useEffect(() => {
     filterUsers();

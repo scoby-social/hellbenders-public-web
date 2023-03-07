@@ -17,10 +17,9 @@ import {
   allBroodUsers,
   broodLoading,
   filteredBroodUsers,
-  usersByGen,
+  selectedGenFilter,
 } from "lib/store/brood";
 import FilterBar from "components/common/FilterBar/FilterBar";
-import { getBroodTotalCount } from "lib/axios/requests/users/getBroodTotalCount";
 import { getUsersThatBelongsToBrood } from "lib/axios/requests/users/getBroodUsers";
 
 import {
@@ -36,7 +35,6 @@ import {
   profileContainer,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
-import { filterBroodUsers } from "./utils/filterBroodUsers";
 import FakeIDInfo from "./FakeIDInfo/FakeIDInfo";
 import NotConnectedWallet from "components/common/NotConnectedWallet/NotConnectedWallet";
 
@@ -48,14 +46,14 @@ const Profile = () => {
   const [missingID] = useAtom(userHasNoID);
   const [user] = useAtom(currentUser);
   const [leader] = useAtom(selectedLeader);
-  const [loading, setLoading] = useAtom(broodLoading);
+  const [loading] = useAtom(broodLoading);
   const [allUsers, setAllUsers] = useAtom(allBroodUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredBroodUsers);
-  const [_, setUsersByGen] = useAtom(usersByGen);
   const [selectedSort] = useAtom(selectedSortFilter);
+  const [selectedGen] = useAtom(selectedGenFilter);
   const isMyProfile = user.fakeID === leader?.fakeID && !leader.deceased;
   const [finishedPaginate, setFinishedPaginate] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [currentPage, setCurrentPage] = React.useState(0);
 
   const renderEmptyBroodDescription = () => {
     if (!isMyProfile) {
@@ -84,57 +82,56 @@ const Profile = () => {
     );
   };
 
+  const executeBroodSearch = React.useCallback(
+    async (page: number) => {
+      if (!fetchingRef.current) {
+        fetchingRef.current = true;
+        const generations: string[] = [];
+
+        Object.entries(selectedGen).forEach(([key, value]) => {
+          if (value) generations.push(key);
+        });
+
+        const users = await getUsersThatBelongsToBrood(
+          leader.fakeID,
+          page * ITEMS_PER_PAGE,
+          ITEMS_PER_PAGE,
+          generations.join(","),
+          selectedSort.name,
+          selectedSort.value
+        );
+
+        if (users.length === 0) setFinishedPaginate(true);
+
+        setCurrentPage(page + 1);
+
+        fetchingRef.current = false;
+        return users;
+      }
+      return [];
+      // eslint-disable-next-line
+    },
+    [selectedSort, selectedGen, leader.fakeID]
+  );
+
   const paginate = React.useCallback(async () => {
-    if (!fetchingRef.current) {
-      fetchingRef.current = true;
-
-      const users = await getUsersThatBelongsToBrood(
-        leader.fakeID,
-        currentPage * ITEMS_PER_PAGE,
-        ITEMS_PER_PAGE,
-        selectedSort.name,
-        selectedSort.value
-      );
-
-      if (users.length === 0) setFinishedPaginate(true);
-
-      setCurrentPage(1);
-      setAllUsers([...users]);
-      setFilteredUsers([...users]);
-
-      fetchingRef.current = false;
-    }
+    const users = await executeBroodSearch(currentPage + 1);
+    setAllUsers((prevUsers) => [...prevUsers, ...users]);
+    setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
     // eslint-disable-next-line
-  }, [currentPage, selectedSort, leader.fakeID]);
+  }, [executeBroodSearch, currentPage]);
 
   const filterUsers = React.useCallback(async () => {
-    if (!fetchingRef.current) {
-      fetchingRef.current = true;
-
-      const users = await getUsersThatBelongsToBrood(
-        leader.fakeID,
-        0,
-        ITEMS_PER_PAGE,
-        selectedSort.name,
-        selectedSort.value
-      );
-
-      if (users.length === 0) setFinishedPaginate(true);
-
-      setCurrentPage(1);
-      setAllUsers([...users]);
-      setFilteredUsers([...users]);
-
-      fetchingRef.current = false;
-    }
-
+    const users = await executeBroodSearch(0);
+    setAllUsers([...users]);
+    setFilteredUsers([...users]);
     // eslint-disable-next-line
-  }, [selectedSort, leader.fakeID]);
+  }, [executeBroodSearch]);
 
   React.useEffect(() => {
     filterUsers();
     // eslint-disable-next-line
-  }, [selectedSort]);
+  }, [selectedSort, selectedGen]);
 
   const renderComponent = () => {
     if (leader.deceased && wallet !== "" && missingID) {
@@ -225,19 +222,11 @@ const Profile = () => {
     }
   };
 
-  const getTotalBrood = React.useCallback(async () => {
-    const { gen1, gen2, gen3, gen4 } = await getBroodTotalCount(leader.fakeID);
-
-    setUsersByGen({ gen1, gen2, gen3, gen4 });
-    // eslint-disable-next-line
-  }, [leader]);
-
   React.useEffect(() => {
     if (wallet !== "" && !missingID) {
       setAllUsers([]);
       setFilteredUsers([]);
       paginate();
-      getTotalBrood();
     }
     // eslint-disable-next-line
   }, [wallet, missingID]);

@@ -4,10 +4,10 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import * as React from "react";
 import { useAtom } from "jotai";
 
-import { User } from "lib/models/user";
-import { usersByGen } from "lib/store/brood";
 import { selectedSortFilter } from "lib/store/filters";
+import { selectedLeader } from "lib/store";
 import { AllGenerationValues } from "lib/axios/requests/users/types";
+import { getBroodCount } from "lib/axios/requests/users/getBroodCount";
 
 import {
   broodFiltersWrapper,
@@ -22,18 +22,26 @@ import {
   FilterBarType,
   FilterValue,
 } from "./types";
-import { checkBoxes, filters } from "./utils";
+import { checkBoxes, filters, genByIndex } from "./utils";
+import { selectedGenFilter } from "lib/store/brood";
 
 const FilterBar = ({
   allUsers,
   setFilteredUsers,
   isProfile,
 }: FilterBarProps) => {
-  const [allGenUsers] = useAtom(usersByGen);
+  const [currentLeader] = useAtom(selectedLeader);
   const [_, setSortFilter] = useAtom(selectedSortFilter);
+  const [__, setGenFilter] = useAtom(selectedGenFilter);
   const [filtersState, setFiltersState] = React.useState(filters);
   const [checkboxState, setCheckboxState] = React.useState(checkBoxes);
   const [currentFilterIdx, setCurrentFilterIdx] = React.useState(0);
+  const [broodCount, setBroodCount] = React.useState({
+    gen1: 0,
+    gen2: 0,
+    gen3: 0,
+    gen4: 0,
+  });
 
   const getFilterIconByValue = React.useCallback((value: FilterValue) => {
     switch (value) {
@@ -96,8 +104,14 @@ const FilterBar = ({
         newCheckboxState[index].checked = checked;
         return newCheckboxState;
       });
+
+      setGenFilter((prev) => {
+        const newFilters = { ...prev };
+        newFilters[genByIndex[index]] = checked;
+        return newFilters;
+      });
     },
-    []
+    [setGenFilter]
   );
 
   const filterUsers = React.useCallback(() => {
@@ -116,18 +130,29 @@ const FilterBar = ({
     // eslint-disable-next-line
   }, [allUsers, filtersState, checkboxState]);
 
+  const getBroodTotalCount = React.useCallback(async () => {
+    const res = await getBroodCount(currentLeader.fakeID);
+
+    setBroodCount(res);
+    // eslint-disable-next-line
+  }, [currentLeader.fakeID]);
+
   const getTotalGenNumber = React.useCallback(
     (property: CheckboxProperty) => {
-      return allGenUsers[property as unknown as keyof AllGenerationValues]
-        .length;
+      return broodCount[property as unknown as keyof AllGenerationValues];
     },
-    [allGenUsers]
+    [broodCount]
   );
 
   React.useEffect(() => {
     filterUsers();
     // eslint-disable-next-line
   }, [filtersState, checkboxState]);
+
+  React.useEffect(() => {
+    if (!currentLeader.fakeID) return;
+    getBroodTotalCount();
+  }, [getBroodTotalCount, currentLeader.fakeID]);
 
   return (
     <Box sx={filtersBoxWrapper}>
