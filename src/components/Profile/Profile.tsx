@@ -84,7 +84,7 @@ const Profile = () => {
 
   const executeBroodSearch = React.useCallback(
     async (page: number) => {
-      if (!fetchingRef.current) {
+      if (!fetchingRef.current && leader.fakeID) {
         fetchingRef.current = true;
         const generations: string[] = [];
 
@@ -115,7 +115,7 @@ const Profile = () => {
   );
 
   const paginate = React.useCallback(async () => {
-    const users = await executeBroodSearch(currentPage + 1);
+    const users = await executeBroodSearch(currentPage);
     setAllUsers((prevUsers) => [...prevUsers, ...users]);
     setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
     // eslint-disable-next-line
