@@ -341,11 +341,6 @@
           "isSigner": false
         },
         {
-          "name": "parentNftAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "parentNftMetadataExtended",
           "isMut": true,
           "isSigner": false
