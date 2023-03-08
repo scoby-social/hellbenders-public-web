@@ -46,3 +46,10 @@ export const checkBoxes: Checkbox[] = [
     checked: true,
   },
 ];
+
+export const genByIndex: ("gen1" | "gen2" | "gen3" | "gen4")[] = [
+  "gen1",
+  "gen2",
+  "gen3",
+  "gen4",
+];

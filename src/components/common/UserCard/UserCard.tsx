@@ -54,7 +54,8 @@ const UserCard = ({
     });
 
     observer.observe(cardRef.current);
-  }, [isLast, paginate]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Grid

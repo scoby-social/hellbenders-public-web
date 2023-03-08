@@ -27,7 +27,7 @@ const SoldOut = () => {
       const groupData = await getGroupsWithData(wallet, false);
       setGroups(groupData);
     })();
-  }, []);
+  }, [wallet]);
 
   return (
     <Box sx={spawnContainer}>

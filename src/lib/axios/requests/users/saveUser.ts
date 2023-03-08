@@ -18,7 +18,8 @@ export async function createUser(
     | "discordHandle"
     | "telegramHandle"
   >,
-  leaderFakeID: string
+  leaderFakeID: string,
+  metadataShdwUrl: string
 ): Promise<User> {
   const creatingUser = await getUserByFakeID(user.fakeID);
 
@@ -30,14 +31,10 @@ export async function createUser(
   const userData = {
     ...user,
     parent: parentWallet,
-    brood: 0,
-    seniority: 0,
-    royalties: 0,
     twitterHandle: user.twitterHandle,
     discordHandle: user.discordHandle,
     avatar: user.avatar,
-    deceased: false,
-    createdAt: new Date(),
+    metadataUrl: metadataShdwUrl,
   };
 
   const result = await client.post<User>("/user", userData);

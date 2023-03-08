@@ -7,6 +7,9 @@ import ConnectWalletButton from "components/common/ConnectWalletButton";
 import FilterBar from "components/common/FilterBar/FilterBar";
 import CountdownTimer from "components/common/CountdownTimer/CountdownTimer";
 import HellbendersDescription from "components/common/HellbendersDescription";
+import NotConnectedWallet from "components/common/NotConnectedWallet/NotConnectedWallet";
+import { getLeaderboardUsers } from "lib/axios/requests/users/getLeaderboardUsers";
+import { searchTextFilter, selectedSortFilter } from "lib/store/filters";
 import {
   allLeaderboardUsers,
   currentWallet,
@@ -23,8 +26,6 @@ import {
   contentContainerStyles,
   countdownWrapper,
 } from "./styles";
-import { getLeaderboardUsers } from "lib/axios/requests/users/getLeaderboardUsers";
-import NotConnectedWallet from "components/common/NotConnectedWallet/NotConnectedWallet";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -33,31 +34,58 @@ export const LeaderboardContent = () => {
   const [wallet] = useAtom(currentWallet);
   const [missingID] = useAtom(userHasNoID);
   const [loading] = useAtom(leaderboardLoading);
+  const [searchText] = useAtom(searchTextFilter);
+  const [selectedSort] = useAtom(selectedSortFilter);
   const [loadingUser] = useAtom(isLoadingUser);
   const [allUsers, setAllUsers] = useAtom(allLeaderboardUsers);
   const [filteredUsers, setFilteredUsers] = useAtom(filteredLeaderboardUsers);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [finishedPaginate, setFinishedPaginate] = React.useState(false);
 
-  const paginateUsers = React.useCallback(async () => {
-    if (!fetchingRef.current) {
-      fetchingRef.current = true;
+  const executeBroodSearch = React.useCallback(
+    async (page: number) => {
+      if (!fetchingRef.current) {
+        fetchingRef.current = true;
 
-      const page = currentPage + 1;
-      const users = await getLeaderboardUsers(
-        currentPage * ITEMS_PER_PAGE,
-        ITEMS_PER_PAGE
-      );
+        const users = await getLeaderboardUsers(
+          page * ITEMS_PER_PAGE,
+          ITEMS_PER_PAGE,
+          searchText,
+          selectedSort.name,
+          selectedSort.value
+        );
 
-      if (users.length === 0) setFinishedPaginate(true);
+        if (users.length === 0) setFinishedPaginate(true);
 
-      setCurrentPage(page);
-      setAllUsers((prevUsers) => [...prevUsers, ...users]);
-      setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
+        setCurrentPage(page + 1);
+        fetchingRef.current = false;
+        return users;
+      }
+      return [];
+    },
+    // eslint-disable-next-line
+    [selectedSort, searchText]
+  );
 
-      fetchingRef.current = false;
-    }
-  }, [currentPage, setAllUsers, setFilteredUsers]);
+  const paginate = React.useCallback(async () => {
+    const users = await executeBroodSearch(currentPage);
+    setAllUsers((prevUsers) => [...prevUsers, ...users]);
+    setFilteredUsers((prevUsers) => [...prevUsers, ...users]);
+    // eslint-disable-next-line
+  }, [executeBroodSearch, currentPage]);
+
+  const filterUsers = React.useCallback(async () => {
+    setFinishedPaginate(false);
+    const users = await executeBroodSearch(0);
+    setAllUsers([...users]);
+    setFilteredUsers([...users]);
+    // eslint-disable-next-line
+  }, [executeBroodSearch]);
+
+  React.useEffect(() => {
+    filterUsers();
+    // eslint-disable-next-line
+  }, [searchText, selectedSort]);
 
   const renderComponent = () => {
     if (wallet !== "" && !missingID) {
@@ -73,11 +101,11 @@ export const LeaderboardContent = () => {
             <Grid sx={cardsContainer} container alignItems="stretch">
               {filteredUsers.map((val, index) => (
                 <UserCard
-                  paginate={paginateUsers}
+                  paginate={paginate}
                   isLast={
                     filteredUsers.length - 1 === index && !finishedPaginate
                   }
-                  key={val._id}
+                  key={`${val._id}-${index}`}
                   {...val}
                   isBroodLeader={false}
                 />

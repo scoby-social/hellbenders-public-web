@@ -8,8 +8,8 @@ export const groupCardContainer = (highlight: boolean): SxProps => {
     backgroundColor: "#2F3841",
     borderRadius: "20px",
     boxShadow: "0 0 5px 4px #F9A802",
+    "&::before": {},
   };
-
   return styles;
 };
 

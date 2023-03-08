@@ -8,9 +8,9 @@ export interface FilterBarProps {
 }
 
 export enum FilterValue {
-  DEACTIVATED,
-  ASC,
-  DESC,
+  DEACTIVATED = 0,
+  ASC = 1,
+  DESC = -1,
 }
 
 export enum FilterBarType {
