@@ -132,7 +132,7 @@ const Profile = () => {
   React.useEffect(() => {
     filterUsers();
     // eslint-disable-next-line
-  }, [selectedSort, selectedGen]);
+  }, [selectedSort, selectedGen, leader.fakeID]);
 
   const renderComponent = () => {
     if (leader.deceased && wallet !== "" && missingID) {

@@ -467,7 +467,6 @@ export const mintFakeID = async (
           metadata: metadata,
           masterEdition: masterEdition,
           metadataExtended: metadataExtended,
-          parentNftAccount: parentMembershipAccount,
           parentNftMetadataExtended: parentMembership.metadataExtended,
           creatorNftAccount: creatorNftAccount,
           sourceTokenAccount: sourceTokenAccount[0],
