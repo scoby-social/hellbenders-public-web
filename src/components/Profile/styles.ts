@@ -71,3 +71,8 @@ export const countdownWrapper: SxProps = {
   justifyContent: "center",
   alignItems: "center",
 };
+
+export const soldOutSubtitle: SxProps = {
+  margin: "0.7vmax 0",
+  letterSpacing: "0.035em",
+};

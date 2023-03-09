@@ -33,6 +33,7 @@ import {
   emptyBroodWrapper,
   loaderWrapperStyles,
   profileContainer,
+  soldOutSubtitle,
 } from "./styles";
 import PhotoBooth from "./PhotoBooth/PhotoBooth";
 import FakeIDInfo from "./FakeIDInfo/FakeIDInfo";
@@ -236,8 +237,12 @@ const Profile = () => {
     <Box sx={profileContainer}>
       {(isMyProfile || (wallet !== "" && !missingID && !leader.deceased)) && (
         <Box sx={countdownWrapper}>
-          <Typography>{`Hellbenders DAO or DIE minting starts in`}</Typography>
-          <CountdownTimer />
+          <Typography>{`Hellbenders DAO or DIE`}</Typography>
+          <Typography
+            sx={soldOutSubtitle}
+            variant="subtitle2"
+          >{`You're too late MFer...`}</Typography>
+          <Typography variant="h2">{`We're SOLD OUT!`}</Typography>
         </Box>
       )}
       {renderComponent()}

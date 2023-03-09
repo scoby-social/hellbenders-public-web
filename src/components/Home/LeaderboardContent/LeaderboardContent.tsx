@@ -25,6 +25,7 @@ import {
   connectWalletText,
   contentContainerStyles,
   countdownWrapper,
+  soldOutSubtitle,
 } from "./styles";
 
 const ITEMS_PER_PAGE = 15;
@@ -92,8 +93,12 @@ export const LeaderboardContent = () => {
       return (
         <Box sx={{ flex: 1 }}>
           <Box sx={countdownWrapper}>
-            <Typography>{`Hellbenders DAO or DIE minting starts in`}</Typography>
-            <CountdownTimer />
+            <Typography>{`Hellbenders DAO or DIE`}</Typography>
+            <Typography
+              sx={soldOutSubtitle}
+              variant="subtitle2"
+            >{`You're too late MFer...`}</Typography>
+            <Typography variant="h2">{`We're SOLD OUT!`}</Typography>
           </Box>
           <HellbendersDescription />
           <FilterBar allUsers={allUsers} setFilteredUsers={setFilteredUsers} />
